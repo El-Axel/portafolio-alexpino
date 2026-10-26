@@ -518,3 +518,16 @@ main{overflow-x:clip}
 .swipe-hint i::after{content:"";position:absolute;right:0;top:-3px;border:3.5px solid transparent;border-left:5px solid currentColor;border-right:0}
 @media (hover:none){.mock-table .hint{display:none}}
 @media (max-width:760px){.swipe-hint{display:flex}.mock-table .hint{display:none}}
+
+/* hablador: la sombra vive pegada a la base del hablador, siempre debajo */
+.mock-table .stand{position:relative;width:52%;aspect-ratio:396/595;margin-bottom:6%;z-index:1;perspective:900px}
+.mock-table .stand .tent{position:absolute;inset:0;width:100%;margin:0;z-index:2}
+.mock-table .stand .shadow{position:absolute;z-index:1;left:4%;right:4%;bottom:-14px;top:auto;height:22px;border-radius:50%;background:rgba(0,0,0,.55);filter:blur(10px)}
+@media (max-width:760px){
+  .mock-table .stand{width:44%;margin-bottom:8%}
+  /* cifras: tamaño que cabe con Krona One */
+  .stat{min-width:0;overflow:hidden}
+  .stat .v{font-size:clamp(13px,3.9vw,17px);letter-spacing:-.02em;white-space:nowrap}
+  .stat .t{min-width:0;overflow-wrap:anywhere;hyphens:auto}
+  .stat::after{width:16%}
+}

@@ -100,7 +100,7 @@
     var badge = g.modo === "libro" ? '<span class="count">Hojear · ' + n + " págs.</span>" : (n > 1 ? '<span class="count">' + n + " piezas</span>" : "");
     if (g.mockup === "hablador") {
       var im = g.imagenes || [];
-      return '<div class="card mock-table" style="--ar:' + esc(g.ar || "4/5") + '"><div class="tent"><div class="face front"><img src="' + esc(im[0]) + '" alt="Cara 1 del hablador" loading="lazy"></div><div class="face back"><img src="' + esc(im[1] || im[0]) + '" alt="Cara 2 del hablador" loading="lazy"></div></div><span class="shadow"></span>' + badge + '<span class="hint">Mueve el cursor para girarlo</span></div>';
+      return '<div class="card mock-table" style="--ar:' + esc(g.ar || "4/5") + '"><div class="stand"><span class="shadow"></span><div class="tent"><div class="face front"><img src="' + esc(im[0]) + '" alt="Cara 1 del hablador" loading="lazy"></div><div class="face back"><img src="' + esc(im[1] || im[0]) + '" alt="Cara 2 del hablador" loading="lazy"></div></div></div>' + badge + '<span class="hint">Mueve el cursor para girarlo</span></div>';
     }
     if (g.mockup === "menu") {
       var p = g.paginas || [];
