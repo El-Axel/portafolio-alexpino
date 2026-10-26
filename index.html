@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Alex Pino · Portafolio</title>
+  <meta name="description" content="Alexander Pino Caro · Diseñador Crossmedia y Creador Audiovisual. Grabo, edito y diseño contenido que retiene y vende. Pereira, Colombia.">
+  <meta name="theme-color" content="#0B1315">
+  <meta property="og:title" content="Alex Pino · Portafolio">
+  <meta property="og:description" content="¿Quién soy? Depende del proyecto. Edición, cámara, color, diseño gráfico y editorial.">
+  <meta property="og:image" content="assets/img/hero-glass.jpg">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Krona+One&family=Figtree:wght@300;400;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- fondo: degradados deformados con eco -->
+  <div class="bg" aria-hidden="true">
+    <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="gA" gradientUnits="userSpaceOnUse" x1="0" x2="1600"><stop offset="0" stop-color="#2EA690"/><stop offset=".55" stop-color="#2A5159"/><stop offset="1" stop-color="#2EA690"/></linearGradient>
+        <linearGradient id="gB" gradientUnits="userSpaceOnUse" x1="0" x2="1600"><stop offset="0" stop-color="#2A5159"/><stop offset=".6" stop-color="#2EA690"/><stop offset="1" stop-color="#1E3D44"/></linearGradient>
+        <linearGradient id="gD" gradientUnits="userSpaceOnUse" x1="0" x2="1600"><stop offset="0" stop-color="#2A5159" stop-opacity="0"/><stop offset=".45" stop-color="#D9674E"/><stop offset="1" stop-color="#F29863"/></linearGradient>
+        <filter id="smear" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.0035 0.011" numOctaves="2" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="190" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation="46 9"/></filter>
+      </defs>
+      <g filter="url(#smear)" class="bg-ribbons">
+        <path d="M-150 760 C 250 760, 480 180, 880 240 S 1450 640, 1760 330" transform="translate(-140,24)" stroke="url(#gA)" stroke-width="190" fill="none" stroke-linecap="round" opacity=".12"/>
+        <path d="M-150 760 C 250 760, 480 180, 880 240 S 1450 640, 1760 330" transform="translate(-70,12)" stroke="url(#gA)" stroke-width="190" fill="none" stroke-linecap="round" opacity=".27"/>
+        <path d="M-150 760 C 250 760, 480 180, 880 240 S 1450 640, 1760 330" stroke="url(#gA)" stroke-width="190" fill="none" stroke-linecap="round" opacity=".55"/>
+        <path d="M120 -80 C 380 280, 760 330, 1180 110" stroke="url(#gB)" stroke-width="130" fill="none" stroke-linecap="round" opacity=".45"/>
+        <path d="M900 520 C 1100 420, 1350 470, 1750 380" transform="translate(-55,6)" stroke="url(#gD)" stroke-width="90" fill="none" stroke-linecap="round" opacity=".19"/>
+        <path d="M900 520 C 1100 420, 1350 470, 1750 380" stroke="url(#gD)" stroke-width="90" fill="none" stroke-linecap="round" opacity=".38"/>
+      </g>
+    </svg>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- barra superior: marca, capas y línea de tiempo -->
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="Inicio">
+      <svg viewBox="70 50 360 370" class="iso" aria-hidden="true"><path d="M117 384 Q106 384 111 374 L246 104 Q262 72 278 104 L331 230 C368 244 389 288 387 322 C385 362 357 389 319 389 C288 389 263 373 257 352 C254 340 262 333 271 341 C283 351 300 355 317 351 C337 345 345 323 341 300 C337 276 323 259 304 259 C279 259 259 285 247 318 C239 340 233 362 227 375 C200 383 150 384 117 384 Z"/></svg>
+      <span>Alex Pino</span>
+    </a>
+    <nav class="layers" aria-label="Secciones">
+      <a href="#audiovisual" data-sec="audiovisual"><i></i>Audiovisual</a>
+      <a href="#grafico" data-sec="grafico"><i></i>Gráfico</a>
+      <a href="#editorial" data-sec="editorial"><i></i>Editorial</a>
+      <a href="#contacto" data-sec="contacto"><i></i>Contacto</a>
+    </nav>
+    <span class="tc" aria-hidden="true"><b class="rec"></b><span id="timecode">00:00:00:00</span></span>
+    <div class="playline" aria-hidden="true"><span id="playhead"></span></div>
+  </header>
+
+  <main id="inicio">
+    <!-- PORTADA -->
+    <section class="hero">
+      <picture>
+        <source media="(max-width: 760px)" srcset="assets/img/hero-glass-movil.jpg">
+        <img class="hero-img" src="assets/img/hero-glass.jpg" alt="Alex Pino de perfil, con gafas, a contraluz teal; un vidrio estriado refracta la luz frente a su rostro">
+      </picture>
+      <div class="guides" aria-hidden="true"></div>
+      <div class="glass-edge" aria-hidden="true"></div>
+      <div class="hero-text">
+        <div class="sel"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b>
+          <h1>¿Quién soy?</h1>
+        </div>
+        <p class="sub">Depende del <span class="uw">proyecto<svg viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C60 30 140 30 196 6"/></svg></span>.</p>
+      </div>
+      <div class="prompt" aria-live="polite">
+        <span class="in"><span id="typed">Editor de video</span><span class="caret"></span></span>
+        <a class="go" href="#audiovisual">Ver trabajo</a>
+      </div>
+    </section>
+
+    <!-- CIFRAS -->
+    <section class="stats wrap" aria-label="Resultados">
+      <div class="stat reveal"><span class="v" data-count="80000">80.000</span><span class="t">seguidores en 4 meses<br><small>Austin Marchese · edición</small></span></div>
+      <div class="stat reveal"><span class="v">+40%</span><span class="t">en reservas<br><small>Hotel Pinares Plaza · contenido para Meta</small></span></div>
+      <div class="stat reveal"><span class="v">Al aire</span><span class="t">en Telecafé<br><small>Por encima de la mesa · serie documental</small></span></div>
+    </section>
+
+    <!-- AUDIOVISUAL -->
+    <section id="audiovisual" class="block wrap">
+      <header class="bhead reveal"><span class="kf"></span><h2>Audiovisual</h2><p class="label">Edición · cámara · color</p><span class="tcode">01</span></header>
+      <div class="ruler" aria-hidden="true"></div>
+      <div id="destacados" class="projects"></div>
+
+      <div id="videoclips-wrap" hidden>
+        <h3 class="subhead reveal"><span class="kf"></span>Videoclips</h3>
+        <div id="videoclips" class="projects"></div>
+      </div>
+
+      <div id="reels-wrap" hidden>
+        <h3 class="subhead reveal"><span class="kf"></span>Reels</h3>
+        <div id="reels" class="reels"></div>
+      </div>
+      <div id="corto-wrap" hidden>
+        <h3 class="subhead reveal"><span class="kf"></span>Formato corto</h3>
+        <div id="corto" class="reels small"></div>
+      </div>
+    </section>
+
+    <!-- GRÁFICO -->
+    <section id="grafico" class="block wrap">
+      <header class="bhead reveal"><span class="kf"></span><h2>Gráfico</h2><p class="label">Piezas · identidad · redes</p><span class="tcode">02</span></header>
+      <div class="ruler" aria-hidden="true"></div>
+      <div id="grafico-grid" class="pieces"></div>
+    </section>
+
+    <!-- EDITORIAL -->
+    <section id="editorial" class="block wrap">
+      <header class="bhead reveal"><span class="kf"></span><h2>Editorial</h2><p class="label">Publicaciones para hojear</p><span class="tcode">03</span></header>
+      <div class="ruler" aria-hidden="true"></div>
+      <div id="editorial-grid" class="books"></div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto" class="contact wrap">
+      <div class="contact-card glass reveal">
+        <svg viewBox="70 50 360 370" class="super" aria-hidden="true"><path d="M117 384 Q106 384 111 374 L246 104 Q262 72 278 104 L331 230 C368 244 389 288 387 322 C385 362 357 389 319 389 C288 389 263 373 257 352 C254 340 262 333 271 341 C283 351 300 355 317 351 C337 345 345 323 341 300 C337 276 323 259 304 259 C279 259 259 285 247 318 C239 340 233 362 227 375 C200 383 150 384 117 384 Z"/></svg>
+        <p class="label rec-label"><b class="rec"></b>Fin de la secuencia</p>
+        <h2>Ahora ya sabes quién soy.<br><span>Hablemos.</span></h2>
+        <p class="bio">Soy Alexander Pino Caro, Diseñador Crossmedia y Creador Audiovisual en Pereira. Grabo, edito y diseño contenido que retiene la atención y genera resultados medibles para marcas y creadores.</p>
+        <div class="contact-actions">
+          <button class="btn primary" id="copy-mail" type="button"><span id="mail-text">alexpinocaro@gmail.com</span><small>Copiar</small></button>
+          <a class="btn" id="mailto" href="mailto:alexpinocaro@gmail.com">Escribir un correo</a>
+          <a class="btn" id="wa" href="#" target="_blank" rel="noopener" hidden>WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot wrap">
+    <span>© <span id="year">2026</span> Alexander Pino Caro</span>
+    <span>Pereira, Colombia</span>
+  </footer>
+
+  <!-- VISOR (video, imagen, libro) -->
+  <div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Visor">
+    <div class="viewer-bg" data-close></div>
+    <div class="viewer-box">
+      <div class="viewer-bar">
+        <span class="viewer-title" id="viewer-title"></span>
+        <span class="viewer-count" id="viewer-count"></span>
+        <button class="viewer-x" type="button" data-close aria-label="Cerrar">✕</button>
+      </div>
+      <div class="viewer-stage" id="viewer-stage"></div>
+      <button class="viewer-nav prev" type="button" id="viewer-prev" aria-label="Anterior">‹</button>
+      <button class="viewer-nav next" type="button" id="viewer-next" aria-label="Siguiente">›</button>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
