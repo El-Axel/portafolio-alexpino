@@ -61,6 +61,16 @@
         <img class="hero-img" src="assets/img/hero-glass.jpg" alt="Alex Pino de perfil, con gafas, a contraluz teal; un vidrio estriado refracta la luz frente a su rostro">
       </picture>
       <div class="guides" aria-hidden="true"></div>
+
+      <!-- visor de cámara sobre el retrato -->
+      <div class="vf" aria-hidden="true">
+        <i></i><i></i><i></i><i></i>
+        <span class="vf-top"><b class="rec"></b>REC<em>4K · 25p</em></span>
+        <span class="vf-bot">ISO 800<em>f/1.8</em><em>1/50</em></span>
+        <span class="vf-af"><small>AF·C</small></span>
+      </div>
+
+
       <div class="glass-edge" aria-hidden="true"></div>
       <div class="hero-text">
         <div class="sel"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b>
@@ -68,11 +78,44 @@
         </div>
         <p class="sub">Depende del <span class="uw">proyecto<svg viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C60 30 140 30 196 6"/></svg></span>.</p>
       </div>
-      <div class="prompt" aria-live="polite">
-        <span class="in"><span id="typed">Editor de video</span><span class="caret"></span></span>
-        <a class="go" href="#audiovisual">Ver trabajo</a>
+
+      <!-- isotipo de vidrio -->
+      <div class="float iso-glass" style="--d:30" aria-hidden="true">
+        <span class="bob"><span class="fill"></span><svg viewBox="70 50 360 370"><defs><linearGradient id="isoEdge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".5" stop-color="#fff" stop-opacity=".15"/><stop offset="1" stop-color="#F29863" stop-opacity=".8"/></linearGradient></defs><path d="M117 384 Q106 384 111 374 L246 104 Q262 72 278 104 L331 230 C368 244 389 288 387 322 C385 362 357 389 319 389 C288 389 263 373 257 352 C254 340 262 333 271 341 C283 351 300 355 317 351 C337 345 345 323 341 300 C337 276 323 259 304 259 C279 259 259 285 247 318 C239 340 233 362 227 375 C200 383 150 384 117 384 Z"/></svg></span>
+      </div>
+
+      <!-- panel de capas: se enciende según el rol -->
+      <div class="float layers-panel" style="--d:-18" aria-hidden="true">
+        <div class="lp-head"><span>Capas</span><span class="lp-dots"><i></i><i></i><i></i></span></div>
+        <ol id="lp">
+          <li data-l="0"><i class="eye"></i>Edición<span class="sw" style="--c:#2EA690"></span></li>
+          <li data-l="1"><i class="eye"></i>Cámara<span class="sw" style="--c:#2A5159"></span></li>
+          <li data-l="2"><i class="eye"></i>Color<span class="sw" style="--c:#F29863"></span></li>
+          <li data-l="3"><i class="eye"></i>Motion<span class="sw" style="--c:#D9674E"></span></li>
+          <li data-l="4"><i class="eye"></i>Diseño gráfico<span class="sw" style="--c:#F2C572"></span></li>
+          <li data-l="5"><i class="eye"></i>Editorial<span class="sw" style="--c:#2EA690"></span></li>
+          <li data-l="6"><i class="eye"></i>Web<span class="sw" style="--c:#2A5159"></span></li>
+        </ol>
+      </div>
+
+      <!-- dock: prompt + línea de tiempo -->
+      <div class="dock">
+        <div class="prompt" aria-live="polite">
+          <span class="in"><span id="typed">Editor de video</span><span class="caret"></span></span>
+          <a class="go" href="#audiovisual">Ver trabajo</a>
+        </div>
+        <div class="tl" aria-hidden="true">
+          <div class="tl-ruler"></div>
+          <div class="trk"><span class="tn">V2</span><span class="lane"><b class="clip c-sand" style="left:6%;width:14%">Título</b><b class="clip c-peach" style="left:48%;width:10%">Gráfico</b><b class="clip c-sand" style="left:78%;width:16%">Logo</b></span></div>
+          <div class="trk"><span class="tn">V1</span><span class="lane"><b class="clip c-teal" style="left:0;width:22%">Hook</b><b class="clip c-petrol" style="left:22.5%;width:30%">Entrevista</b><b class="clip c-teal" style="left:53%;width:19%">B-roll</b><b class="clip c-petrol" style="left:72.5%;width:27.5%">Cierre</b></span></div>
+          <div class="trk"><span class="tn">A1</span><span class="lane"><b class="clip wave" style="left:0;width:100%"></b></span></div>
+          <span class="tl-head"></span>
+        </div>
       </div>
     </section>
+
+    <!-- cinta de roles -->
+    <div class="marquee" aria-hidden="true"><div class="mq-track"><span>Edición<i></i>Cámara<i></i>Color<i></i>Motion graphics<i></i>Diseño gráfico<i></i>Diseño editorial<i></i>Web<i></i></span><span>Edición<i></i>Cámara<i></i>Color<i></i>Motion graphics<i></i>Diseño gráfico<i></i>Diseño editorial<i></i>Web<i></i></span></div></div>
 
     <!-- CIFRAS -->
     <section class="stats wrap" aria-label="Resultados">
@@ -93,17 +136,15 @@
       </div>
 
       <div id="reels-wrap" hidden>
-        <h3 class="subhead reveal"><span class="kf"></span>Reels</h3>
+        <h3 class="subhead reveal"><span class="kf"></span>Reels<small class="label" id="reels-n"></small></h3>
+        <p class="swipe-hint" aria-hidden="true">Desliza<i></i></p>
         <div id="reels" class="reels"></div>
-      </div>
-      <div id="corto-wrap" hidden>
-        <h3 class="subhead reveal"><span class="kf"></span>Formato corto</h3>
-        <div id="corto" class="reels small"></div>
       </div>
     </section>
 
     <!-- GRÁFICO -->
     <section id="grafico" class="block wrap">
+      <svg class="deco right" viewBox="70 50 360 370" style="--d:0.12" aria-hidden="true"><path d="M117 384 Q106 384 111 374 L246 104 Q262 72 278 104 L331 230 C368 244 389 288 387 322 C385 362 357 389 319 389 C288 389 263 373 257 352 C254 340 262 333 271 341 C283 351 300 355 317 351 C337 345 345 323 341 300 C337 276 323 259 304 259 C279 259 259 285 247 318 C239 340 233 362 227 375 C200 383 150 384 117 384 Z"/></svg>
       <header class="bhead reveal"><span class="kf"></span><h2>Gráfico</h2><p class="label">Piezas · identidad · redes</p><span class="tcode">02</span></header>
       <div class="ruler" aria-hidden="true"></div>
       <div id="grafico-grid" class="pieces"></div>
@@ -111,9 +152,10 @@
 
     <!-- EDITORIAL -->
     <section id="editorial" class="block wrap">
+      <svg class="deco left" viewBox="70 50 360 370" style="--d:0.08" aria-hidden="true"><path d="M117 384 Q106 384 111 374 L246 104 Q262 72 278 104 L331 230 C368 244 389 288 387 322 C385 362 357 389 319 389 C288 389 263 373 257 352 C254 340 262 333 271 341 C283 351 300 355 317 351 C337 345 345 323 341 300 C337 276 323 259 304 259 C279 259 259 285 247 318 C239 340 233 362 227 375 C200 383 150 384 117 384 Z"/></svg>
       <header class="bhead reveal"><span class="kf"></span><h2>Editorial</h2><p class="label">Publicaciones para hojear</p><span class="tcode">03</span></header>
       <div class="ruler" aria-hidden="true"></div>
-      <div id="editorial-grid" class="books"></div>
+      <div class="shelf"><div id="editorial-grid" class="books"></div></div>
     </section>
 
     <!-- CONTACTO -->
@@ -124,8 +166,6 @@
         <h2>Ahora ya sabes quién soy.<br><span>Hablemos.</span></h2>
         <p class="bio">Soy Alexander Pino Caro, Diseñador Crossmedia y Creador Audiovisual en Pereira. Grabo, edito y diseño contenido que retiene la atención y genera resultados medibles para marcas y creadores.</p>
         <div class="contact-actions">
-          <button class="btn primary" id="copy-mail" type="button"><span id="mail-text">alexpinocaro@gmail.com</span><small>Copiar</small></button>
-          <a class="btn" id="mailto" href="mailto:alexpinocaro@gmail.com">Escribir un correo</a>
           <a class="btn" id="wa" href="#" target="_blank" rel="noopener" hidden>WhatsApp</a>
         </div>
       </div>

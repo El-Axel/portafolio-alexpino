@@ -6,7 +6,8 @@ window.PORTFOLIO = {
   contacto: {
     correo: "alexpinocaro@gmail.com",
     ciudad: "Pereira, Risaralda",
-    whatsapp: "" // ej: "573001234567" (sin +). Si queda vacío, no aparece.
+    whatsapp: "573042969936", // mensaje inicial abajo
+    mensajeWhatsapp: "Hola Alex, vi tu portafolio y quiero hablar de un proyecto." // ej: "573001234567" (sin +). Si queda vacío, no aparece.
   },
 
   /* ---------- AUDIOVISUAL ---------- */
@@ -57,11 +58,26 @@ window.PORTFOLIO = {
     }
   ],
 
-  /* Videoclips: agrega aquí los de Apóstol cuando estén (YouTube o archivo local).
-     Si la lista queda vacía, la sección no aparece. */
-  videoclips: [],
+  /* Videoclips: cambia "cliente", "roles" y los títulos por los reales (artista / canción). */
+  videoclips: [
+    {
+      id: "videoclips",
+      titulo: "Videoclips",
+      cliente: "Música · artistas independientes",
+      anio: "2026",
+      roles: ["Videoclip"],
+      descripcion: "Cinco videoclips: la música manda el ritmo del corte.",
+      videos: [
+        { tipo: "youtube", id: "4RtfGuRQXYw", titulo: "Videoclip 01" },
+        { tipo: "youtube", id: "Yv687H7gZnk", titulo: "Videoclip 02" },
+        { tipo: "youtube", id: "zzhdbEWIKj8", titulo: "Videoclip 03" },
+        { tipo: "youtube", id: "e9Jl1wr8j24", titulo: "Videoclip 04" },
+        { tipo: "youtube", id: "2KBNRGW3v3w", titulo: "Videoclip 05" }
+      ]
+    }
+  ],
 
-  /* Reels: primero las piezas más largas; después el formato corto. */
+  /* Reels: todo el formato vertical y corto en una sola sección. */
   reels: [
     {
       "src": "assets/video/la-cepa-vacaciones.mp4",
@@ -83,9 +99,7 @@ window.PORTFOLIO = {
       "titulo": "Video corto para web",
       "cliente": "Taller",
       "dur": "1:36"
-    }
-  ],
-  formatoCorto: [
+    },
     {
       "src": "assets/video/corto-01.mp4",
       "poster": "assets/poster/corto-01.jpg",
@@ -209,6 +223,25 @@ window.PORTFOLIO = {
       ],
       "mockup": "hablador",
       "ar": "4/5"
+    },
+    {
+      "titulo": "Importadora Maka",
+      "tipo": "Logo · identidad de marca",
+      "ancho": "w12",
+      "modo": "galeria",
+      "mockup": "marca",
+      "portada": "assets/grafico/importadora-maka/p01.jpg",
+      "imagenes": [
+        "assets/grafico/importadora-maka/p01.jpg",
+        "assets/grafico/importadora-maka/p02.jpg",
+        "assets/grafico/importadora-maka/p03.jpg",
+        "assets/grafico/importadora-maka/p04.jpg",
+        "assets/grafico/importadora-maka/p05.jpg",
+        "assets/grafico/importadora-maka/p06.jpg",
+        "assets/grafico/importadora-maka/p07.jpg",
+        "assets/grafico/importadora-maka/p08.jpg"
+      ],
+      "ar": "21/9"
     },
     {
       "titulo": "Arbórea",
