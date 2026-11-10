@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sobre mí · Alex Pino</title>
+  <meta name="description" content="Soy Alexander Pino Caro: grabo, edito y cuento. Diseñador Crossmedia y Creador Audiovisual en Pereira.">
+  <meta name="theme-color" content="#0B1315">
+  <link rel="canonical" href="https://alexpino.netlify.app/sobre-mi.html">
+
+  <!-- vista previa al compartir el enlace (WhatsApp, LinkedIn, etc.) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alex Pino">
+  <meta property="og:url" content="https://alexpino.netlify.app/sobre-mi.html">
+  <meta property="og:title" content="Sobre mí · Alex Pino">
+  <meta property="og:description" content="Soy Alexander Pino Caro: grabo, edito y cuento. Diseñador Crossmedia y Creador Audiovisual en Pereira.">
+  <meta property="og:image" content="https://alexpino.netlify.app/assets/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="es_CO">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://alexpino.netlify.app/assets/img/og-image.jpg">
+
+  <!-- íconos -->
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="apple-mobile-web-app-title" content="Alex Pino">
+
+  <!-- tipografías: Krona One (títulos) + Figtree (texto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Krona+One&family=Figtree:wght@400;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Alexander Pino Caro",
+    "alternateName": "Alex Pino",
+    "jobTitle": "Diseñador Crossmedia y Creador Audiovisual",
+    "url": "https://alexpino.netlify.app/",
+    "image": "https://alexpino.netlify.app/assets/img/alex-retrato-vertical.jpg",
+    "address": { "@type": "PostalAddress", "addressLocality": "Pereira", "addressRegion": "Risaralda", "addressCountry": "CO" },
+    "knowsAbout": ["Edición de video", "Dirección de fotografía", "Motion graphics", "Color", "Diseño gráfico", "Diseño editorial", "Diseño web"]
+  }
+  </script>
+  <script>document.documentElement.classList.add("js")</script>
+</head>
+<body data-page="sobre-mi">
+  <main id="contenido">
+    <section class="about-hero wrap">
+      <figure class="portrait big reveal" data-cur="portrait">
+        <div class="frame"><img src="assets/img/alex-retrato-vertical.jpg" alt="Retrato de Alexander Pino Caro de perfil, con luz teal" width="900" height="1125"></div>
+        <figcaption><b class="rec"></b>Alexander Pino Caro · Pereira</figcaption>
+        <span class="crop" aria-hidden="true"><b></b><b></b><b></b><b></b></span>
+      </figure>
+      <div class="ah-text">
+        <p class="ph-kicker"><b class="rec"></b>Escena 00 · Sobre mí</p>
+        <h1 class="ph-title">Soy Alex.<br><span>Lo demás depende del proyecto.</span></h1>
+        <p class="ah-bio" id="bio"></p>
+        <blockquote class="manifest reveal" id="manifest"></blockquote>
+      </div>
+    </section>
+
+    <!-- tres verbos, con pruebas -->
+    <section class="block wrap tone tone-mist pad" aria-labelledby="h-verbos">
+      <header class="bhead reveal"><span class="kf"></span><h2 id="h-verbos">Grabo. Edito. Cuento.</h2><p class="label">Lo que hago, y dónde se ve</p><span class="tcode">01</span></header>
+      <div class="ruler" aria-hidden="true"></div>
+      <div class="verbs" id="verbs"></div>
+    </section>
+
+    <!-- depende del proyecto -->
+    <section class="block wrap tone tone-film pad" aria-labelledby="h-depende">
+      <header class="bhead reveal"><span class="kf"></span><h2 id="h-depende">Depende del proyecto</h2><p class="label">Un papel distinto en cada escena</p><span class="tcode">02</span></header>
+      <div class="ruler" aria-hidden="true"></div>
+      <div class="casting reveal" id="casting"></div>
+    </section>
+
+    <!-- oficios -->
+    <section class="block wrap" aria-labelledby="h-set">
+      <header class="bhead reveal"><span class="kf"></span><h2 id="h-set">Lo que traigo al set</h2><p class="label">Oficios, sin barras ni porcentajes</p><span class="tcode">03</span></header>
+      <div class="ruler" aria-hidden="true"></div>
+      <div class="kit reveal">
+        <div class="trades" id="trades" aria-label="Oficios"></div>
+        <div class="offcam" id="offcam" hidden><p class="label">Fuera de cámara</p><div class="chips-row" id="offcam-list"></div></div>
+      </div>
+    </section>
+
+    <!-- ========== LÍNEA DE TIEMPO ========== -->
+    <section id="trayectoria" class="block wrap tone tone-petrol pad" aria-labelledby="h-tray">
+      <header class="bhead reveal"><span class="kf"></span><h2 id="h-tray">Mi línea de tiempo</h2><p class="label">De dónde vengo</p><span class="tcode">04</span></header>
+      <div class="ruler" aria-hidden="true"></div>
+      <ol class="tray" id="tray"></ol>
+    </section>
+
+    <section class="cta wrap tone tone-terra pad">
+      <p class="label"><b class="rec"></b>Próxima escena</p>
+      <h2>Ya sabes quién soy.<br><span>Ahora mira lo que hago.</span></h2>
+      <div class="cta-actions"><a class="btn primary" href="audiovisual.html">Ver las escenas</a><a class="btn" href="contacto.html">Hablemos</a></div>
+    </section>
+  </main>
+  <script src="js/data.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/paginas.js"></script>
+  <script src="js/cursors.js"></script>
+</body>
+</html>

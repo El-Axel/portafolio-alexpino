@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Contacto · Alex Pino</title>
+  <meta name="description" content="Arma tu pedido y escríbeme por WhatsApp. Grabo, edito y cuento para marcas.">
+  <meta name="theme-color" content="#0B1315">
+  <link rel="canonical" href="https://alexpino.netlify.app/contacto.html">
+
+  <!-- vista previa al compartir el enlace (WhatsApp, LinkedIn, etc.) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alex Pino">
+  <meta property="og:url" content="https://alexpino.netlify.app/contacto.html">
+  <meta property="og:title" content="Contacto · Alex Pino">
+  <meta property="og:description" content="Arma tu pedido y escríbeme por WhatsApp. Grabo, edito y cuento para marcas.">
+  <meta property="og:image" content="https://alexpino.netlify.app/assets/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="es_CO">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://alexpino.netlify.app/assets/img/og-image.jpg">
+
+  <!-- íconos -->
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="apple-mobile-web-app-title" content="Alex Pino">
+
+  <!-- tipografías: Krona One (títulos) + Figtree (texto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Krona+One&family=Figtree:wght@400;600;700&display=swap">
+
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Alexander Pino Caro",
+    "alternateName": "Alex Pino",
+    "jobTitle": "Diseñador Crossmedia y Creador Audiovisual",
+    "url": "https://alexpino.netlify.app/",
+    "image": "https://alexpino.netlify.app/assets/img/alex-retrato-vertical.jpg",
+    "address": { "@type": "PostalAddress", "addressLocality": "Pereira", "addressRegion": "Risaralda", "addressCountry": "CO" },
+    "knowsAbout": ["Edición de video", "Dirección de fotografía", "Motion graphics", "Color", "Diseño gráfico", "Diseño editorial", "Diseño web"]
+  }
+  </script>
+  <script>document.documentElement.classList.add("js")</script>
+</head>
+<body data-page="contacto">
+  <main id="contenido">
+    <!-- ========== CONTACTO ========== -->
+    <section id="contacto" class="contact wrap page-contact" aria-labelledby="h-contacto">
+      <div class="contact-card glass reveal">
+        <svg class="super" aria-hidden="true"><use href="#iso"/></svg>
+        <p class="label rec-label"><b class="rec"></b>Fin de la secuencia</p>
+        <ul class="recap" id="recap" aria-label="Quién soy, según el proyecto"></ul>
+        <h2 id="h-contacto">Ahora ya sabes quién soy.<br><span>Hablemos.</span></h2>
+        <p class="lead">Cuéntame qué quieres que la gente vea, entienda o compre. Yo te digo cómo grabarlo, editarlo y contarlo.</p>
+        <form class="brief" id="brief" hidden>
+          <p class="brief-title"><b>Arma tu pedido</b> · tres toques y me llega todo claro</p>
+          <div id="brief-qs"></div>
+          <label class="who"><span>Tu nombre o tu marca <small>(opcional)</small></span><input id="brief-name" type="text" autocomplete="organization" maxlength="60" placeholder="Ej: Café La Esquina"></label>
+          <div class="brief-out" aria-live="polite"><small>Así me llega tu mensaje</small><p id="brief-msg"></p></div>
+        </form>
+        <div class="contact-actions">
+          <a class="btn primary" id="wa" href="https://wa.me/573042969936" target="_blank" rel="noopener" data-cur="wa"><svg width="18" height="18" aria-hidden="true"><use href="#wa-ico"/></svg><span class="wa-label">Escríbeme por WhatsApp</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="js/data.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/cursors.js"></script>
+</body>
+</html>

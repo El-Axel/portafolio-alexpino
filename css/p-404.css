@@ -1,0 +1,11 @@
+/* ==========================================================================
+   Alex Pino · Portafolio — 404.html ("Esta toma no existe")
+   ========================================================================== */
+.nf{position:relative;z-index:2;min-height:calc(100svh - 120px);display:grid;place-items:center;padding-top:calc(var(--topbar) + 40px);padding-bottom:40px}
+.nf-card{position:relative;overflow:hidden;width:min(720px,100%);padding:clamp(26px,5vw,56px);display:grid;justify-items:start;gap:18px}
+.nf-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:30%;background:var(--reed);opacity:.5;-webkit-mask:linear-gradient(90deg,#000,transparent);mask:linear-gradient(90deg,#000,transparent);pointer-events:none}
+.nf-slate{position:relative;display:flex;gap:18px;flex-wrap:wrap;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.nf-slate b{color:var(--sand)}
+.nf-card h1{position:relative;font-size:clamp(1.8rem,6vw,3.6rem);line-height:1.08}
+.nf-tc{position:relative;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--terra);font-variant-numeric:tabular-nums}
+.nf-card .btn{position:relative;margin-top:8px}
