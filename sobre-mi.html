@@ -34,7 +34,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Krona+One&family=Figtree:wght@400;600;700&display=swap">
 
+  <!-- tema (claro/oscuro) e idioma (es/en): se deciden antes de pintar para que no parpadee -->
+  <script>(function(){var d=document.documentElement,q=null,l=null,t=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}try{l=localStorage.getItem("ap-lang");t=localStorage.getItem("ap-theme")}catch(e){}if(q==="en"||q==="es"){l=q;try{localStorage.setItem("ap-lang",q)}catch(e){}}if(l!=="en"&&l!=="es")l=/^en/i.test(navigator.language||"")?"en":"es";d.lang=l;d.setAttribute("data-theme",t==="light"?"light":"dark");if(l==="en"){d.classList.add("i18n-wait");setTimeout(function(){d.classList.remove("i18n-wait")},2500)}})()</script>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/claro.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -52,39 +55,27 @@
 </head>
 <body data-page="sobre-mi">
   <main id="contenido">
-    <section class="about-hero wrap">
+    <section class="about-hero wrap" id="origen">
       <figure class="portrait big reveal" data-cur="portrait">
         <div class="frame"><img src="assets/img/alex-retrato-vertical.jpg" alt="Retrato de Alexander Pino Caro de perfil, con luz teal" width="900" height="1125"></div>
         <figcaption><b class="rec"></b>Alexander Pino Caro · Pereira</figcaption>
         <span class="crop" aria-hidden="true"><b></b><b></b><b></b><b></b></span>
       </figure>
       <div class="ah-text">
-        <p class="ph-kicker"><b class="rec"></b>Escena 00 · Sobre mí</p>
-        <h1 class="ph-title">Soy Alex.<br><span>Lo demás depende del proyecto.</span></h1>
-        <p class="ah-bio" id="bio"></p>
-        <blockquote class="manifest reveal" id="manifest"></blockquote>
+        <p class="ph-kicker"><b class="rec"></b>Escena 00 · El origen</p>
+        <ol class="origen" id="origen-lines"></ol>
+        <h1 class="ph-title og-answer reveal">¿Quién soy?<br><span>Depende del proyecto.</span></h1>
       </div>
     </section>
 
-    <!-- tres verbos, con pruebas -->
+    <!-- quién soy, en una bio + los tres verbos con sus pruebas -->
     <section class="block wrap tone tone-mist pad" aria-labelledby="h-verbos">
       <header class="bhead reveal"><span class="kf"></span><h2 id="h-verbos">Grabo. Edito. Cuento.</h2><p class="label">Lo que hago, y dónde se ve</p><span class="tcode">01</span></header>
       <div class="ruler" aria-hidden="true"></div>
+      <p class="ah-bio reveal" id="bio"></p>
       <div class="verbs" id="verbs"></div>
-    </section>
-
-    <!-- depende del proyecto -->
-    <section class="block wrap tone tone-film pad" aria-labelledby="h-depende">
-      <header class="bhead reveal"><span class="kf"></span><h2 id="h-depende">Depende del proyecto</h2><p class="label">Un papel distinto en cada escena</p><span class="tcode">02</span></header>
-      <div class="ruler" aria-hidden="true"></div>
-      <div class="casting reveal" id="casting"></div>
-    </section>
-
-    <!-- oficios -->
-    <section class="block wrap" aria-labelledby="h-set">
-      <header class="bhead reveal"><span class="kf"></span><h2 id="h-set">Lo que traigo al set</h2><p class="label">Oficios, sin barras ni porcentajes</p><span class="tcode">03</span></header>
-      <div class="ruler" aria-hidden="true"></div>
       <div class="kit reveal">
+        <p class="label">Oficios</p>
         <div class="trades" id="trades" aria-label="Oficios"></div>
         <div class="offcam" id="offcam" hidden><p class="label">Fuera de cámara</p><div class="chips-row" id="offcam-list"></div></div>
       </div>
@@ -92,18 +83,19 @@
 
     <!-- ========== LÍNEA DE TIEMPO ========== -->
     <section id="trayectoria" class="block wrap tone tone-petrol pad" aria-labelledby="h-tray">
-      <header class="bhead reveal"><span class="kf"></span><h2 id="h-tray">Mi línea de tiempo</h2><p class="label">De dónde vengo</p><span class="tcode">04</span></header>
+      <header class="bhead reveal"><span class="kf"></span><h2 id="h-tray">Mi línea de tiempo</h2><p class="label">De dónde vengo</p><span class="tcode">02</span></header>
       <div class="ruler" aria-hidden="true"></div>
       <ol class="tray" id="tray"></ol>
     </section>
 
     <section class="cta wrap tone tone-terra pad">
       <p class="label"><b class="rec"></b>Próxima escena</p>
-      <h2>Ya sabes quién soy.<br><span>Ahora mira lo que hago.</span></h2>
+      <h2>Ya sabes de dónde viene la pregunta.<br><span>Ahora mira las respuestas.</span></h2>
       <div class="cta-actions"><a class="btn primary" href="audiovisual.html">Ver las escenas</a><a class="btn" href="contacto.html">Hablemos</a></div>
     </section>
   </main>
   <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/shell.js"></script>
   <script src="js/main.js"></script>
   <script src="js/paginas.js"></script>

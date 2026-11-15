@@ -1158,3 +1158,114 @@ body:not([data-page="inicio"]) main#contenido{padding-top:calc(var(--topbar) + 1
 .pre.auto .pre-rec .ring .prog{animation:rpFill 3.6s linear forwards}
 @keyframes rpFill{to{--rp:1}}
 .pre-rec .ring .dot{position:absolute;left:50%;top:50%;width:42px;height:42px;margin:-21px 0 0 -21px}
+
+/* ==========================================================================
+   25 · Narrativa compacta: el gancho del Inicio y la Escena 00
+   ========================================================================== */
+.gancho{position:relative;z-index:2;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px 24px;margin-top:clamp(26px,4vw,44px);padding:18px 22px;border-radius:16px;border:1px solid rgba(242,197,114,.3);
+  background:linear-gradient(110deg,rgba(242,197,114,.12),rgba(242,197,114,.02) 60%);color:inherit;text-decoration:none;transition:border-color .3s,transform .4s var(--ease)}
+.gancho:hover{border-color:var(--sand);transform:translateY(-2px)}
+.gc-tag{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.gc-text{font-family:var(--display);font-size:clamp(1rem,1.7vw,1.3rem);line-height:1.35}
+.gc-go{font-size:13px;font-weight:700;color:var(--sand);white-space:nowrap}
+.origen{list-style:none;margin:0 0 26px;padding:0;display:grid;gap:14px}
+.og-line{font-family:var(--display);font-size:clamp(1.05rem,2vw,1.45rem);line-height:1.4;max-width:30em}
+.og-line:first-child{color:var(--ink)}
+.og-cut{display:flex;align-items:center;gap:12px;font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--terra)}
+.og-cut i{flex:1;height:0;border-top:2px dashed rgba(217,103,78,.6)}
+.og-cut em{font-style:normal;letter-spacing:.1em;color:var(--faint);font-variant-numeric:tabular-nums}
+.og-cut span::before{content:"✂ "}
+.reveal.og-cut.in i{animation:cutLine .8s var(--ease) both}
+@keyframes cutLine{from{transform:scaleX(0);transform-origin:left}}
+.og-answer{margin-top:4px}
+.about-hero .ah-text .ph-title.og-answer{font-size:clamp(2rem,5vw,3.6rem)}
+.tone-mist .ah-bio{max-width:44rem;margin:0 0 26px;font-size:clamp(1rem,1.5vw,1.15rem)}
+.kit{margin-top:26px}
+.kit .label{margin-bottom:8px}
+@media (max-width:760px){
+  .gancho{grid-template-columns:1fr;gap:10px}
+}
+
+/* ==========================================================================
+   27 · Tema claro e idioma
+   El sitio nace oscuro. Con el switch de la barra se pasa a claro:
+   - aquí van los colores base del tema claro y los ajustes a mano;
+   - css/claro.css (generado por tools/gen_light.py) cambia los colores fijos.
+   "Islas oscuras": la portada, la claqueta, el visor y los sets/pantallas
+   se quedan oscuros en los dos temas, porque son la imagen (como una sala
+   de cine dentro de una página clara).
+   ========================================================================== */
+/* switches */
+.prefs{flex:none;display:flex;align-items:center;gap:8px}
+.tgl{position:relative;display:inline-flex;align-items:center;height:30px;padding:0;border-radius:99px;border:1px solid var(--line-2);background:rgba(255,255,255,.05);color:var(--soft);transition:border-color .25s,background .25s}
+.tgl:hover{border-color:var(--teal)}
+.tgl .knob{position:absolute;top:2px;left:2px;height:24px;border-radius:99px;background:var(--sand);box-shadow:0 2px 8px rgba(0,0,0,.35);transition:transform .35s var(--ease)}
+.tgl-theme{width:58px}
+.tgl-theme .knob{width:24px}
+.tgl-theme .ic{position:relative;z-index:1;width:15px;height:15px;margin:0 6.5px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:color .3s}
+.tgl-theme .moon{color:#1B2526}
+.tgl-theme[aria-checked="true"] .knob{transform:translateX(28px)}
+.tgl-theme[aria-checked="true"] .moon{color:var(--soft)}
+.tgl-theme[aria-checked="true"] .sun{color:#1B2526}
+.tgl-lang{width:70px}
+.tgl-lang .knob{width:32px}
+.tgl-lang b{position:relative;z-index:1;flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:.12em;transition:color .3s}
+.tgl-lang b[data-l="es"]{color:#1B2526}
+.tgl-lang[aria-checked="true"] .knob{transform:translateX(34px)}
+.tgl-lang[aria-checked="true"] b[data-l="es"]{color:var(--soft)}
+.tgl-lang[aria-checked="true"] b[data-l="en"]{color:#1B2526}
+@media (max-width:900px){.prefs{margin-left:auto}.tgl{height:28px}.tgl .knob{height:22px}.tgl-theme{width:54px}.tgl-theme .knob{width:22px}.tgl-theme[aria-checked="true"] .knob{transform:translateX(26px)}.tgl-theme .ic{margin:0 5.5px}.tgl-lang{width:64px}.tgl-lang .knob{width:29px}.tgl-lang[aria-checked="true"] .knob{transform:translateX(31px)}}
+@media (max-width:420px){.tc{display:none}}
+
+/* idioma: mientras se traduce no se muestra el español (máx. 2,5 s) */
+html.i18n-wait body{opacity:0}
+html[lang="en"] .pre.rolling .pre-rec .txt::after{content:" · rolling"}
+
+/* cambio de tema suave */
+html.theme-anim body,html.theme-anim body *{transition:background-color .45s,color .45s,border-color .45s,fill .45s!important}
+
+/* colores base del tema claro */
+html[data-theme="light"]{
+  --ground:#EEF2F0; --ink:#10201F; --soft:rgba(16,32,31,.74); --faint:rgba(16,32,31,.54);
+  --line:rgba(16,32,31,.14); --line-2:rgba(16,32,31,.22);
+  --glass:rgba(255,255,255,.62); --glass-deep:rgba(255,255,255,.74);
+  --sand:#B9821A; --teal:#1E8C78; --peach:#D2703F;
+  --reed:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 1px,rgba(255,255,255,.18) 1px 6px,rgba(16,32,31,.05) 6px 8px,rgba(255,255,255,0) 8px 11px);
+  --sheen:linear-gradient(115deg,rgba(255,255,255,.7),rgba(255,255,255,.15) 38%,rgba(255,255,255,0) 60%,rgba(255,255,255,.35));
+  color-scheme:light;
+}
+/* islas oscuras: recuperan los colores del tema oscuro */
+html[data-theme="light"] :is(.hero,.pre,.viewer,.stage,.keys-box,.tv,.phone,.screen,.tlx){
+  --ground:#0B1315; --ink:#F4F1EA; --soft:rgba(244,241,234,.74); --faint:rgba(244,241,234,.52);
+  --line:rgba(255,255,255,.15); --line-2:rgba(255,255,255,.22);
+  --glass:rgba(12,22,24,.55); --glass-deep:rgba(10,20,22,.62);
+  --sand:#F2C572; --teal:#2EA690; --peach:#F29863;
+  --reed:repeating-linear-gradient(90deg,rgba(255,255,255,.13) 0 1px,rgba(255,255,255,.035) 1px 6px,rgba(0,0,0,.14) 6px 8px,rgba(255,255,255,0) 8px 11px);
+  --sheen:linear-gradient(115deg,rgba(255,255,255,.16),rgba(255,255,255,.02) 38%,rgba(255,255,255,0) 60%,rgba(255,255,255,.07));
+  color:var(--ink); color-scheme:dark;
+}
+html[data-theme="light"] .hero{background:#0B1315}
+html[data-theme="light"] .hero::after{background:linear-gradient(0deg,#EEF2F0,transparent)}
+html[data-theme="light"] .btn.primary,html[data-theme="light"] .prompt .go{background:#F2C572}
+html[data-theme="light"] .tgl .knob{background:#F2C572;box-shadow:0 2px 8px rgba(16,32,31,.18)}
+html[data-theme="light"] .tgl{background:rgba(255,255,255,.6)}
+html[data-theme="light"] .grain{opacity:.08}
+html[data-theme="light"] .glass{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 24px 48px -30px rgba(16,32,31,.35)}
+html[data-theme="light"] ::selection{background:#2EA690;color:#fff}
+/* tonos por zona en claro: lavados de color sobre papel frío */
+html[data-theme="light"] .tone-sand::before{background:radial-gradient(60% 90% at 88% 0%,rgba(242,197,114,.38),transparent 62%),radial-gradient(50% 70% at 0% 100%,rgba(242,152,99,.18),transparent 65%),linear-gradient(160deg,#F3F4EF,#EAF0EE 70%)}
+html[data-theme="light"] .tone-mist::before{background:radial-gradient(70% 80% at 15% 0%,rgba(46,166,144,.2),transparent 65%),radial-gradient(60% 70% at 100% 100%,rgba(42,81,89,.12),transparent 65%),linear-gradient(180deg,#E7EFED,#EEF2F0)}
+html[data-theme="light"] .tone-mist .verb{background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,.4))}
+html[data-theme="light"] .tone-petrol::before{background:radial-gradient(rgba(42,81,89,.16) 1.2px,transparent 1.6px) 0 0/14px 14px,linear-gradient(160deg,#D8E6E5,#E6EEEC 70%)}
+html[data-theme="light"] .tone-petrol .door,html[data-theme="light"] .tone-petrol .tr-clip{background:rgba(255,255,255,.6)}
+html[data-theme="light"] .tone-terra::before{background:radial-gradient(55% 120% at 10% 50%,rgba(217,103,78,.24),transparent 65%),radial-gradient(55% 120% at 90% 50%,rgba(242,152,99,.2),transparent 65%),radial-gradient(40% 60% at 50% 0%,rgba(242,197,114,.2),transparent 70%),linear-gradient(180deg,#F4EFEB,#EEF2F0)}
+html[data-theme="light"] .tone-terra .btn.primary{background:#F29863}
+html[data-theme="light"] .tone-film::before{background:radial-gradient(70% 50% at 50% 0%,rgba(46,166,144,.14),transparent 70%),#E3E9E7}
+html[data-theme="light"] .tone-film::after{background:repeating-linear-gradient(90deg,rgba(16,32,31,.14) 0 16px,transparent 16px 34px) top/100% 10px no-repeat,repeating-linear-gradient(90deg,rgba(16,32,31,.14) 0 16px,transparent 16px 34px) bottom/100% 10px no-repeat}
+html[data-theme="light"] .glass-teal{background:linear-gradient(135deg,rgba(46,166,144,.24),rgba(255,255,255,.55))!important}
+html[data-theme="light"] .glass-peach{background:linear-gradient(135deg,rgba(242,152,99,.26),rgba(255,255,255,.55))!important}
+html[data-theme="light"] .glass-sand{background:linear-gradient(135deg,rgba(242,197,114,.32),rgba(255,255,255,.55))!important}
+html[data-theme="light"] .frost{background:rgba(255,255,255,.55)!important;border-color:rgba(16,32,31,.16)!important}
+/* los sets son objetos oscuros: en claro su vidrio va casi opaco para no verse gris */
+html[data-theme="light"] :is(.stage .glass,.stage.glass,.stage .editor,.stage .tv,.stage .cine-frame){background-color:#0F1A1C}
+html[data-theme="light"] .stage .glass{background:var(--sheen),rgba(12,22,24,.94)}

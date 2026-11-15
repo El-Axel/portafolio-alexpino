@@ -22,14 +22,25 @@ window.PORTFOLIO = {
   sobre: {
     /* intro: la primera frase que se lee en la portada, debajo de "¿Quién soy? Depende del proyecto." */
     intro: "Soy Alexander Pino Caro, diseñador crossmedia y creador audiovisual en Pereira. Grabo, edito y cuento historias para marcas, y después las mido.",
-    bio: "Soy Alexander Pino Caro, Diseñador Crossmedia y Creador Audiovisual en Pereira. Grabo, edito y cuento: tomo material en bruto y lo convierto en piezas que retienen la atención y se pueden medir. Edité para un canal de YouTube que llegó a 80.000 seguidores en cuatro meses, hice contenido para Meta que subió un 40 % las reservas de un hotel y trabajé en una serie que salió al aire en Telecafé.",
+    /* origen: la Escena 00 de Sobre mí. "corte" es la marca de corte entre una línea y otra. */
+    origen: [
+      "Una reunión. Un cliente: «¿Y tú qué haces? Porque pruebas de todo».",
+      "corte",
+      "Durante un tiempo intenté quedarme con un solo oficio. Cada proyecto me pedía otro.",
+      "corte",
+      "Lo que él vio como falta de foco es justo de donde sale mi rango. Hoy esa pregunta es mi respuesta."
+    ],
+    /* gancho: la línea del Inicio que lleva al origen */
+    gancho: "Me preguntaron qué hacía y no supe responder con un solo oficio. Así que respondo con proyectos.",
+    /* bio sin cifras (las cifras viven en las escenas): 61 palabras, regla del curso 50–80 */
+    bio: "Soy Alexander Pino Caro, Diseñador Crossmedia y Creador Audiovisual en Pereira. Técnico en Elaboración de Medios Audiovisuales y estudiante de octavo semestre de Diseño Crossmedia. Grabo, edito y cuento: tomo material en bruto y lo convierto en piezas que retienen la atención y se pueden medir. Trabajo con marcas, creadores y medios que tienen algo bueno, pero todavía no saben contarlo.",
     pasos: [
       { verbo: "Grabo", pruebas: ["lacepa", "nosfui"], texto: "Cámara, luz y dirección de fotografía. Busco lo que hace única a la marca y lo registro con intención." },
       { verbo: "Edito", pruebas: ["austin", "ckabai"], texto: "Escojo el material, corto con ritmo y le doy color. Si no engancha en los primeros segundos, lo vuelvo a cortar." },
       { verbo: "Cuento", pruebas: ["telecafe", "lacepa"], texto: "Uno video, diseño y web en una sola historia, y la mido: seguidores, reservas, pantalla." }
     ],
     oficios: ["Cámara", "Dirección de fotografía", "Edición", "Color", "Motion graphics", "Diseño gráfico", "Diseño editorial", "Diseño web"],
-    manifiesto: "No respondo con una lista de oficios. Respondo con proyectos.",
+    manifiesto: "",
 
     /* Fuera de cámara: lo que te gusta cuando no estás grabando (música, fútbol, cine…).
        Mientras esté vacío, no aparece. Ej: ["Cine de autor", "Fútbol", "Música urbana"] */
@@ -43,9 +54,9 @@ window.PORTFOLIO = {
     { cuando: "Formación", que: "Técnico en Elaboración de Medios Audiovisuales", donde: "Aquí aprendí cámara, luz y montaje." },
     { cuando: "2025", que: "Paisajes Íntimos · Ckabai", donde: "Edición de cápsulas documentales.", href: "proyecto-paisajes-intimos.html" },
     { cuando: "2025", que: "Nos fui pues mijo", donde: "Magazine: dirección de fotografía, cámara y edición.", href: "proyecto-nos-fui-pues-mijo.html" },
-    { cuando: "2026", que: "Austin Marchese", donde: "Edición y motion graphics para YouTube. 80.000 seguidores en 4 meses.", href: "proyecto-austin.html" },
-    { cuando: "2026", que: "La Cepa · Hotel Pinares Plaza", donde: "Cámara, edición y diseño. +40 % en reservas.", href: "proyecto-la-cepa.html" },
-    { cuando: "2026", que: "Por encima de la mesa · Telecafé", donde: "Edición, foto fija y making of. Salió al aire.", href: "proyecto-telecafe.html" },
+    { cuando: "2026", que: "Austin Marchese", donde: "Edición y motion graphics para un canal de YouTube.", href: "proyecto-austin.html" },
+    { cuando: "2026", que: "La Cepa · Hotel Pinares Plaza", donde: "Cámara, edición y diseño para un hotel y su restaurante.", href: "proyecto-la-cepa.html" },
+    { cuando: "2026", que: "Por encima de la mesa · Telecafé", donde: "Edición, foto fija y making of de una serie documental.", href: "proyecto-telecafe.html" },
     { cuando: "Hoy", que: "Diseño Crossmedia · 8.º semestre", donde: "Uno video, diseño y web en una sola historia." }
   ],
 

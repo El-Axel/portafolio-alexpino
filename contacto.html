@@ -34,7 +34,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Krona+One&family=Figtree:wght@400;600;700&display=swap">
 
+  <!-- tema (claro/oscuro) e idioma (es/en): se deciden antes de pintar para que no parpadee -->
+  <script>(function(){var d=document.documentElement,q=null,l=null,t=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}try{l=localStorage.getItem("ap-lang");t=localStorage.getItem("ap-theme")}catch(e){}if(q==="en"||q==="es"){l=q;try{localStorage.setItem("ap-lang",q)}catch(e){}}if(l!=="en"&&l!=="es")l=/^en/i.test(navigator.language||"")?"en":"es";d.lang=l;d.setAttribute("data-theme",t==="light"?"light":"dark");if(l==="en"){d.classList.add("i18n-wait");setTimeout(function(){d.classList.remove("i18n-wait")},2500)}})()</script>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/claro.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -57,8 +60,7 @@
       <div class="contact-card glass reveal">
         <svg class="super" aria-hidden="true"><use href="#iso"/></svg>
         <p class="label rec-label"><b class="rec"></b>Fin de la secuencia</p>
-        <ul class="recap" id="recap" aria-label="Quién soy, según el proyecto"></ul>
-        <h2 id="h-contacto">Ahora ya sabes quién soy.<br><span>Hablemos.</span></h2>
+        <h2 id="h-contacto">Ahora ya sabes quién soy.<br><span>¿Y en tu proyecto?</span></h2>
         <p class="lead">Cuéntame qué quieres que la gente vea, entienda o compre. Yo te digo cómo grabarlo, editarlo y contarlo.</p>
         <form class="brief" id="brief" hidden>
           <p class="brief-title"><b>Arma tu pedido</b> · tres toques y me llega todo claro</p>
@@ -73,6 +75,7 @@
     </section>
   </main>
   <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/shell.js"></script>
   <script src="js/main.js"></script>
   <script src="js/cursors.js"></script>

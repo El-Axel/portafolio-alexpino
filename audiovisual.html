@@ -34,7 +34,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Krona+One&family=Figtree:wght@400;600;700&display=swap">
 
+  <!-- tema (claro/oscuro) e idioma (es/en): se deciden antes de pintar para que no parpadee -->
+  <script>(function(){var d=document.documentElement,q=null,l=null,t=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}try{l=localStorage.getItem("ap-lang");t=localStorage.getItem("ap-theme")}catch(e){}if(q==="en"||q==="es"){l=q;try{localStorage.setItem("ap-lang",q)}catch(e){}}if(l!=="en"&&l!=="es")l=/^en/i.test(navigator.language||"")?"en":"es";d.lang=l;d.setAttribute("data-theme",t==="light"?"light":"dark");if(l==="en"){d.classList.add("i18n-wait");setTimeout(function(){d.classList.remove("i18n-wait")},2500)}})()</script>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/claro.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -54,8 +57,8 @@
   <main id="contenido">
     <header class="page-head wrap">
       <p class="ph-kicker"><b class="rec"></b>Capítulo 02 · Audiovisual</p>
-      <h1 class="ph-title">¿Quién soy?<br><span>Depende del proyecto.</span></h1>
-      <p class="ph-lead">Cada proyecto tiene su propia escena. Entra a la que te llame, o filtra por el oficio que buscas.</p>
+      <h1 class="ph-title">Cinco escenas.<br><span>Un papel distinto en cada una.</span></h1>
+      <p class="ph-lead">Entra a la que te llame, o filtra por el oficio que buscas.</p>
       <span class="ph-tc" aria-hidden="true">02</span>
     </header>
     <nav class="fbar wrap" id="fbar" aria-label="Ver el trabajo por oficio">
@@ -76,6 +79,7 @@
     </section>
   </main>
   <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/shell.js"></script>
   <script src="js/main.js"></script>
   <script src="js/cursors.js"></script>

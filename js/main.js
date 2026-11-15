@@ -568,6 +568,16 @@
     }).join(""));
     put("#trades", (s.oficios || []).map(function (o) { return '<span class="chip">' + esc(o) + "</span>"; }).join(""));
     $$("[data-intro], #intro").forEach(function (el) { el.textContent = s.intro || ""; });
+    $$("[data-gancho]").forEach(function (el) { el.textContent = s.gancho || ""; });
+    var og = $("#origen-lines");
+    if (og && s.origen) {
+      var k = 0;
+      og.innerHTML = s.origen.map(function (l, i) {
+        if (l === "corte") { k++; return '<li class="og-cut reveal" style="--i:' + i + '" aria-hidden="true"><span>Corte</span><i></i><em>00:00:0' + (k * 3) + ":" + pad(k * 7) + "</em></li>"; }
+        return '<li class="og-line reveal" style="--i:' + i + '">' + esc(l) + "</li>";
+      }).join("");
+    }
+    var man = $("#manifest"); if (man && !s.manifiesto) man.remove();
     var off = s.fueraDeCamara || [];
     if (off.length && $("#offcam")) { put("#offcam-list", off.map(function (o) { return '<span class="chip">' + esc(o) + "</span>"; }).join("")); $("#offcam").hidden = false; }
   }
@@ -677,7 +687,7 @@
   /* ---------- portada: roles que se escriben y capas que se encienden ---------- */
   (function typer() {
     var el = $("#typed"); if (!el) return;
-    var words = ["Editor de video", "Director de fotografía", "Camarógrafo", "Colorista", "Motion graphics", "Diseñador gráfico", "Diseñador editorial", "Diseñador web", "Depende del proyecto…"];
+    var words = ["Editor de video", "Director de fotografía", "Camarógrafo", "Colorista", "Motion graphics", "Diseñador gráfico", "Diseñador editorial", "Diseñador web", "Depende del proyecto…"].map(function (w) { return window.T ? T(w) : w; });
     var layerOf = [0, 1, 1, 2, 3, 4, 5, 6, -1]; // -1 = todas las capas
     var lis = $$("#lp li");
     function light(i) { lis.forEach(function (li) { li.classList.toggle("on", i === -1 || +li.dataset.l === i); }); }
@@ -729,8 +739,9 @@
   /* ---------- contacto ---------- */
   var C = D.contacto || {};
   var wa = $("#wa");
+  function tr(x) { return window.T ? T(x) : x; }
   function waLink(msg) { return "https://wa.me/" + C.whatsapp + (msg ? "?text=" + encodeURIComponent(msg) : ""); }
-  if (C.whatsapp) $$('a[href^="https://wa.me/"]').forEach(function (a) { a.href = waLink(C.mensajeWhatsapp); });
+  if (C.whatsapp) $$('a[href^="https://wa.me/"]').forEach(function (a) { a.href = waLink(tr(C.mensajeWhatsapp)); });
   if ($("#year")) $("#year").textContent = new Date().getFullYear();
 
   // "Arma tu pedido": tres toques y el mensaje de WhatsApp llega listo
@@ -748,15 +759,16 @@
     form.closest(".contact-card").classList.add("has-brief");
     var name = $("#brief-name"), out = $("#brief-msg"), label = $(".wa-label", wa);
     function picked(k) { return $$('.opts[data-k="' + k + '"] .opt[aria-pressed="true"]', form).map(function (b) { return b.textContent; }); }
-    function list(a) { return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " y " + a[a.length - 1]; }
+    var en = window.I18N && I18N.lang === "en";
+    function list(a) { return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + (en ? " and " : " y ") + a[a.length - 1]; }
     function build() {
       var que = picked("que"), cu = picked("cuando"), pr = picked("presupuesto"), who = name.value.trim();
       var any = que.length || cu.length || pr.length || who;
-      var lines = ["Hola Alex" + (who ? ", soy " + who : "") + ". Vi tu portafolio."];
-      if (que.length) lines.push("Necesito: " + list(que).toLowerCase() + ".");
-      if (cu.length) lines.push("Para: " + cu[0].toLowerCase() + ".");
-      if (pr.length) lines.push("Presupuesto: " + pr[0].toLowerCase() + ".");
-      var msg = any ? lines.join("\n") : C.mensajeWhatsapp;
+      var lines = [en ? "Hi Alex" + (who ? ", I'm " + who : "") + ". I saw your portfolio." : "Hola Alex" + (who ? ", soy " + who : "") + ". Vi tu portafolio."];
+      if (que.length) lines.push((en ? "I need: " : "Necesito: ") + list(que).toLowerCase() + ".");
+      if (cu.length) lines.push((en ? "Timing: " : "Para: ") + cu[0].toLowerCase() + ".");
+      if (pr.length) lines.push((en ? "Budget: " + pr[0] : "Presupuesto: " + pr[0].toLowerCase()) + ".");
+      var msg = any ? lines.join("\n") : tr(C.mensajeWhatsapp);
       wa.href = waLink(msg);
       out.textContent = msg;
       form.classList.toggle("ready", !!any);

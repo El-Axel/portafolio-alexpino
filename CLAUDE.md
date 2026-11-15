@@ -64,8 +64,31 @@
 - Las páginas HTML las genera un script interno a partir de la portada; si las editas a mano, no pasa nada.
 - Todo respeta "reducir movimiento": sin claqueta, sin cursores y el sitio se ve terminado.
 
+## Narrativa compacta (v8): una idea por página, sin repetir
+- Inicio plantea la pregunta ("¿Quién soy? Depende del proyecto.") + gancho al origen (`sobre.gancho`) + cifras + escenas.
+- Sobre mí cuenta el origen: Escena 00 (`sobre.origen`, con marcas de "corte") + bio sin cifras + Grabo/Edito/Cuento con pruebas + línea de tiempo.
+- Las escenas muestran las pruebas: "Aquí soy…" solo en las tarjetas de escena y en la página de cada proyecto.
+- Contacto cierra: "Ahora ya sabes quién soy. ¿Y en tu proyecto?" + pedido + créditos finales (los créditos SOLO salen en Contacto).
+- Las cifras viven solo en las tarjetas de cifras y en cada escena. No repetirlas en la bio ni en la línea de tiempo.
+- Alex pidió NO agregar más secciones narrativas (conflicto, sección para el cliente, etc.): se siente redundante. Antes de sumar texto, revisar si ya se dice en otra página.
+
+## Tema claro / oscuro e idioma (pedido del profe, nov. 2026)
+- En la barra superior hay dos switches (`.tgl-theme` y `.tgl-lang`, en `js/shell.js`; estilos en la sección 27 de `css/style.css`). OJO: `.sw` ya existe en impresos.css (muestras de color), no usarlo.
+- Cada página tiene en el `<head>` un script corto que decide tema e idioma ANTES de pintar (localStorage `ap-theme` / `ap-lang`, o `?lang=en` en el enlace; si no hay nada, idioma del navegador). El tema por defecto es oscuro.
+- Tema claro:
+  - colores base y ajustes a mano: sección 27 de `css/style.css`;
+  - `css/claro.css` lo GENERA `tools/gen_light.py` (`python3 tools/gen_light.py css/style.css css/sets.css css/impresos.css css/claro.css`). Si cambias colores fijos en el CSS, vuelve a correrlo. No lo edites a mano.
+  - "Islas oscuras" que no cambian: portada, claqueta, visor, sets de cada proyecto, pantallas, celulares, televisor.
+- Inglés: `js/i18n.js`. El sitio se escribe en español; si el visitante elige inglés, i18n.js cambia cada texto por su traducción apenas aparece (diccionario `EN` + reglas para textos con números o nombres).
+  - Texto nuevo en el sitio = agregar su traducción en `EN` con la frase EXACTA en español.
+  - Nombres propios y títulos de piezas (La Cepa, Austin Marchese, títulos de reels y publicaciones) no se traducen.
+  - El mensaje de WhatsApp del pedido también sale en inglés.
+  - Para mandarle el portafolio a un cliente de EE. UU.: `https://alexpino.netlify.app/?lang=en`.
+- En el inicio se quitaron el panel de "Capas" y la cinta de oficios (pedido del profe: menos movimiento). Lo demás de la portada sigue igual.
+
 ## Antes de dar algo por terminado
 - Probar en escritorio y en celular de 390 px y 360 px de ancho: sin errores en consola y sin scroll horizontal.
+- Probar en los dos temas (claro y oscuro) y en los dos idiomas.
 - Revisar también con "reducir movimiento" activado.
 - Publicar: commit y push a `main`; Netlify publica solo.
 

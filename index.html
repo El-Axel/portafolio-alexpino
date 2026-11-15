@@ -36,7 +36,10 @@
 
   <link rel="preload" as="image" href="assets/img/hero-glass.jpg" media="(min-width: 761px)">
   <link rel="preload" as="image" href="assets/img/hero-glass-movil.jpg" media="(max-width: 760px)">
+  <!-- tema (claro/oscuro) e idioma (es/en): se deciden antes de pintar para que no parpadee -->
+  <script>(function(){var d=document.documentElement,q=null,l=null,t=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}try{l=localStorage.getItem("ap-lang");t=localStorage.getItem("ap-theme")}catch(e){}if(q==="en"||q==="es"){l=q;try{localStorage.setItem("ap-lang",q)}catch(e){}}if(l!=="en"&&l!=="es")l=/^en/i.test(navigator.language||"")?"en":"es";d.lang=l;d.setAttribute("data-theme",t==="light"?"light":"dark");if(l==="en"){d.classList.add("i18n-wait");setTimeout(function(){d.classList.remove("i18n-wait")},2500)}})()</script>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/claro.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -123,20 +126,6 @@
         <span class="bob"><span class="fill"></span><svg viewBox="70 50 360 370"><defs><linearGradient id="isoEdge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".5" stop-color="#fff" stop-opacity=".15"/><stop offset="1" stop-color="#F29863" stop-opacity=".8"/></linearGradient></defs><use href="#iso"/></svg></span>
       </div>
 
-      <!-- panel de capas: se enciende según el rol y filtra el trabajo al tocarlo -->
-      <div class="float layers-panel" style="--d:-18" role="group" aria-label="Filtrar el trabajo por oficio">
-        <div class="lp-head"><span>Capas <small>· toca una</small></span><span class="lp-dots"><i></i><i></i><i></i></span></div>
-        <ol id="lp">
-          <li data-l="0" data-f="edicion"><i class="eye"></i>Edición<span class="sw" style="--c:#2EA690"></span></li>
-          <li data-l="1" data-f="camara"><i class="eye"></i>Cámara<span class="sw" style="--c:#2A5159"></span></li>
-          <li data-l="2" data-f="color"><i class="eye"></i>Color<span class="sw" style="--c:#F29863"></span></li>
-          <li data-l="3" data-f="motion"><i class="eye"></i>Motion<span class="sw" style="--c:#D9674E"></span></li>
-          <li data-l="4" data-f="grafico"><i class="eye"></i>Diseño gráfico<span class="sw" style="--c:#F2C572"></span></li>
-          <li data-l="5" data-f="editorial"><i class="eye"></i>Editorial<span class="sw" style="--c:#2EA690"></span></li>
-          <li data-l="6" data-f="web"><i class="eye"></i>Web<span class="sw" style="--c:#2A5159"></span></li>
-        </ol>
-      </div>
-
       <!-- dock: prompt + línea de tiempo -->
       <div class="dock">
         <div class="prompt" aria-live="polite">
@@ -153,9 +142,12 @@
       </div>
     </section>
 
-    <!-- cinta de oficios -->
-    <div class="marquee" aria-hidden="true"><div class="mq-track"><span>Edición<i></i>Cámara<i></i>Color<i></i>Motion graphics<i></i>Diseño gráfico<i></i>Diseño editorial<i></i>Web<i></i></span><span>Edición<i></i>Cámara<i></i>Color<i></i>Motion graphics<i></i>Diseño gráfico<i></i>Diseño editorial<i></i>Web<i></i></span></div></div>
-
+    <!-- ========== GANCHO AL ORIGEN ========== -->
+    <a class="gancho wrap reveal" href="sobre-mi.html#origen">
+      <span class="gc-tag"><b class="rec"></b>Escena 00</span>
+      <span class="gc-text" data-gancho></span>
+      <span class="gc-go">Empieza por el origen →</span>
+    </a>
     <!-- ========== CIFRAS (cada una lleva a su escena) ========== -->
     <section class="stats wrap" aria-label="Resultados" id="trabajo">
       <a class="stat reveal glass-teal" href="proyecto-austin.html"><span class="v" data-count="80000" data-fmt="miles">80.000</span><span class="t">seguidores en 4 meses<small>Austin Marchese · edición</small></span></a>
@@ -167,27 +159,12 @@
     <section id="escenas-sec" class="block wrap tone tone-film pad" aria-labelledby="h-escenas">
       <header class="bhead reveal"><span class="kf"></span><h2 id="h-escenas">Escenas</h2><p class="label">Un proyecto, un papel distinto</p><span class="tcode">01</span></header>
       <div class="ruler" aria-hidden="true"></div>
-      <p class="block-lead reveal">¿Quién soy? <span>Depende del proyecto.</span> Entra a cada escena: en cada una soy alguien distinto.</p>
       <div id="escenas" class="scenes"></div>
-    </section>
-
-    <!-- ========== QUIÉN SOY, EN CORTO ========== -->
-    <section class="block wrap stop tone tone-sand pad" data-name="Quién soy" aria-labelledby="h-corto">
-      <header class="bhead reveal"><span class="kf"></span><h2 id="h-corto">Quién soy, en corto</h2><p class="label">Grabo · edito · cuento</p><span class="tcode">02</span></header>
-      <div class="ruler" aria-hidden="true"></div>
-      <div class="teaser reveal">
-        <figure class="teaser-pic"><img src="assets/img/alex-retrato-vertical.jpg" alt="Retrato de Alexander Pino Caro de perfil, con luz teal" loading="lazy" width="900" height="1125"></figure>
-        <div class="teaser-text">
-          <p class="teaser-intro" data-intro></p>
-          <ol class="mini-steps"><li><b>Grabo.</b></li><li><b>Edito.</b></li><li><b>Cuento.</b></li></ol>
-          <a class="btn" href="sobre-mi.html">Conóceme completo →</a>
-        </div>
-      </div>
     </section>
 
     <!-- ========== MÁS TRABAJO ========== -->
     <section class="block wrap stop tone tone-petrol pad" data-name="Más trabajo" aria-labelledby="h-mas">
-      <header class="bhead reveal"><span class="kf"></span><h2 id="h-mas">Más trabajo</h2><p class="label">Videoclips · reels · impresos</p><span class="tcode">03</span></header>
+      <header class="bhead reveal"><span class="kf"></span><h2 id="h-mas">Más trabajo</h2><p class="label">Videoclips · reels · impresos</p><span class="tcode">02</span></header>
       <div class="ruler" aria-hidden="true"></div>
       <div class="doors">
         <a class="door reveal" href="audiovisual.html#reels-wrap"><span class="door-pic phone-mini"><img src="assets/poster/corto-02.jpg" alt="" loading="lazy"></span><b>Reels y videoclips</b><small>Formato vertical, videoclips y piezas cortas</small></a>
@@ -207,6 +184,7 @@
     </section>
   </main>
   <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/shell.js"></script>
   <script src="js/main.js"></script>
   <script src="js/cursors.js"></script>

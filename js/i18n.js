@@ -1,0 +1,564 @@
+/* ==========================================================================
+   Idioma: español (original) / inglés
+   - El sitio está escrito en español. Si el visitante elige inglés, este
+     archivo cambia cada texto por su traducción apenas aparece en pantalla
+     (también lo que arman main.js, proyecto.js, impresos.js, etc.).
+   - Para traducir un texto nuevo: agrégalo en EN con la frase EXACTA en
+     español a la izquierda y la traducción a la derecha.
+   - Los nombres propios (La Cepa, Austin Marchese, títulos de videos y
+     publicaciones) se quedan como están.
+   - El idioma se elige con el switch de la barra superior, o con
+     ?lang=en en el enlace (sirve para mandarle el portafolio a un cliente
+     de EE. UU. ya en inglés).
+   ========================================================================== */
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var lang = root.lang === "en" ? "en" : "es";
+
+  var EN = {
+    /* ---------- marco común ---------- */
+    "Saltar al contenido": "Skip to content",
+    "Sobre mí": "About",
+    "Audiovisual": "Film & video",
+    "Gráfico": "Graphic",
+    "Editorial": "Editorial",
+    "Contacto": "Contact",
+    "Secciones": "Sections",
+    "Alex Pino · inicio": "Alex Pino · home",
+    "Volver al inicio ↑": "Back to top ↑",
+    "Volver al inicio": "Back to home",
+    "Alexander Pino Caro · Pereira, Colombia": "Alexander Pino Caro · Pereira, Colombia",
+    "Viendo": "Showing",
+    "✕ Ver todo": "✕ Show all",
+    "Quitar el filtro": "Clear filter",
+    "Atajos de editor": "Editor shortcuts",
+    "Ver atajos de teclado": "See keyboard shortcuts",
+    "Proyecto anterior / siguiente": "Previous / next project",
+    "Reproducir o pausar el video en pantalla": "Play or pause the video on screen",
+    "Ir a Sobre mí, Audiovisual, Gráfico, Editorial, Contacto": "Go to About, Film & video, Graphic, Editorial, Contact",
+    "Quitar el filtro por oficio": "Clear the craft filter",
+    "Mostrar u ocultar esta ayuda": "Show or hide this help",
+    "Listo": "Got it",
+    "Cerrar": "Close",
+    "Anterior": "Previous",
+    "Siguiente": "Next",
+    "Resultados": "Results",
+    "Créditos": "Credits",
+    "Créditos finales": "End credits",
+    "Tema claro u oscuro": "Light or dark theme",
+    "Idioma": "Language",
+    "Preferencias": "Preferences",
+    "Tema claro": "Light theme",
+    "Claro": "Light",
+    "Oscuro": "Dark",
+
+    /* ---------- claqueta ---------- */
+    "Escena": "Scene",
+    "Toma": "Take",
+    "Portafolio": "Portfolio",
+    "Diseño crossmedia · Cámara · Edición": "Crossmedia design · Camera · Editing",
+    "Dale a grabar": "Hit record",
+    "Toca el botón o presiona Enter": "Tap the button or press Enter",
+
+    /* ---------- inicio ---------- */
+    "Alex Pino · Diseñador Crossmedia y Creador Audiovisual": "Alex Pino · Crossmedia Designer & Video Creator",
+    "Alexander Pino Caro · Diseñador Crossmedia y Creador Audiovisual en Pereira. ¿Quién soy? Depende del proyecto: grabo, edito y cuento.": "Alexander Pino Caro · Crossmedia Designer and Video Creator based in Pereira, Colombia. Who am I? Depends on the project: I shoot, I edit, I tell stories.",
+    "Alex Pino de perfil, con gafas, a contraluz teal; un vidrio estriado refracta la luz frente a su rostro": "Alex Pino in profile, wearing glasses, backlit in teal; a reeded glass panel refracts the light in front of his face",
+    "Juega con la cámara": "Play with the camera",
+    "Diafragma": "Aperture",
+    "Obturador": "Shutter",
+    "Balance": "WB",
+    "Velocidad de obturación": "Shutter speed",
+    "Balance de blancos": "White balance",
+    "Volver a los valores automáticos": "Back to auto settings",
+    "¿Quién soy?": "Who am I?",
+    "Depende del": "Depends on the",
+    "proyecto": "project",
+    "Soy Alexander Pino Caro, diseñador crossmedia y creador audiovisual en Pereira. Grabo, edito y cuento historias para marcas, y después las mido.": "I'm Alexander Pino Caro, a crossmedia designer and video creator in Pereira, Colombia. I shoot, edit and tell stories for brands, and then I measure them.",
+    "Ver escenas": "See the scenes",
+    "Título": "Title",
+    "Entrevista": "Interview",
+    "Cierre": "Outro",
+    "Me preguntaron qué hacía y no supe responder con un solo oficio. Así que respondo con proyectos.": "Someone asked me what I do, and I couldn't answer with a single craft. So I answer with projects.",
+    "Empieza por el origen →": "Start at the origin →",
+    "seguidores en 4 meses": "followers in 4 months",
+    "Austin Marchese · edición": "Austin Marchese · editing",
+    "en reservas": "in bookings",
+    "Hotel Pinares Plaza · contenido para Meta": "Hotel Pinares Plaza · content for Meta",
+    "Al aire": "On air",
+    "en Telecafé": "on Telecafé",
+    "Por encima de la mesa · serie documental": "Por encima de la mesa · documentary series",
+    "Escenas": "Scenes",
+    "Un proyecto, un papel distinto": "One project, a different role",
+    "Aquí soy": "Here I'm",
+    "el que hace que la gente se quede hasta el final": "the one who keeps people watching to the end",
+    "el que hace que la gente reserve": "the one who gets people to book",
+    "el que cuida la historia hasta que llega a la televisión": "the one who takes care of the story all the way to TV",
+    "el que deja respirar las imágenes": "the one who lets the images breathe",
+    "el que arma un programa entero, del lente a la línea de tiempo": "the one who builds a whole show, from the lens to the timeline",
+    "Entrar a la escena →": "Enter the scene →",
+    "Más trabajo": "More work",
+    "Videoclips · reels · impresos": "Music videos · reels · print",
+    "Reels y videoclips": "Reels & music videos",
+    "Formato vertical, videoclips y piezas cortas": "Vertical format, music videos and short pieces",
+    "Cartas, habladores, marcas y piezas para redes": "Menus, table tents, brands and social posts",
+    "Revistas, catálogos y libros para hojear": "Magazines, catalogs and books to flip through",
+    "Próxima escena": "Next scene",
+    "¿Y en tu proyecto, quién soy?": "And in your project, who am I?",
+    "Eso lo decidimos juntos.": "We decide that together.",
+    "Arma tu pedido": "Build your brief",
+    "WhatsApp directo": "WhatsApp me",
+
+    /* oficios y roles */
+    "Edición": "Editing",
+    "Cámara": "Camera",
+    "Color": "Color",
+    "Motion": "Motion",
+    "Motion graphics": "Motion graphics",
+    "Diseño gráfico": "Graphic design",
+    "Diseño editorial": "Editorial design",
+    "Diseño web": "Web design",
+    "Web": "Web",
+    "Dirección de fotografía": "Cinematography",
+    "Foto fija": "Set photography",
+    "Making of": "Behind the scenes",
+    "Fotografía": "Photography",
+    "Diseño": "Design",
+    "Dirección": "Direction",
+    "Edición · Motion graphics": "Editing · Motion graphics",
+    "Cámara · Edición · Diseño gráfico": "Camera · Editing · Graphic design",
+    "Edición · Foto fija · Making of": "Editing · Set photography · Behind the scenes",
+    "Dirección de fotografía · Cámara · Edición": "Cinematography · Camera · Editing",
+    "Editor de video": "Video editor",
+    "Director de fotografía": "Cinematographer",
+    "Camarógrafo": "Camera operator",
+    "Colorista": "Colorist",
+    "Diseñador gráfico": "Graphic designer",
+    "Diseñador editorial": "Editorial designer",
+    "Diseñador web": "Web designer",
+    "Depende del proyecto…": "Depends on the project…",
+    "Depende del proyecto.": "Depends on the project.",
+    "Pronto": "Coming soon",
+
+    /* ---------- sobre mí ---------- */
+    "Sobre mí · Alex Pino": "About · Alex Pino",
+    "Alexander Pino Caro · Pereira": "Alexander Pino Caro · Pereira, Colombia",
+    "Escena 00 · El origen": "Scene 00 · The origin",
+    "Una reunión. Un cliente: «¿Y tú qué haces? Porque pruebas de todo».": "A meeting. A client: “So what do you actually do? You try a bit of everything.”",
+    "Corte": "Cut",
+    "corte": "cut",
+    "Durante un tiempo intenté quedarme con un solo oficio. Cada proyecto me pedía otro.": "For a while I tried to stick to one craft. Every project asked me for another.",
+    "Lo que él vio como falta de foco es justo de donde sale mi rango. Hoy esa pregunta es mi respuesta.": "What he saw as a lack of focus is exactly where my range comes from. Today that question is my answer.",
+    "Grabo. Edito. Cuento.": "I shoot. I edit. I tell.",
+    "Lo que hago, y dónde se ve": "What I do, and where you can see it",
+    "Soy Alexander Pino Caro, Diseñador Crossmedia y Creador Audiovisual en Pereira. Técnico en Elaboración de Medios Audiovisuales y estudiante de octavo semestre de Diseño Crossmedia. Grabo, edito y cuento: tomo material en bruto y lo convierto en piezas que retienen la atención y se pueden medir. Trabajo con marcas, creadores y medios que tienen algo bueno, pero todavía no saben contarlo.": "I'm Alexander Pino Caro, a Crossmedia Designer and Video Creator in Pereira, Colombia. I hold a technical degree in Audiovisual Media Production and I'm in my eighth semester of Crossmedia Design. I shoot, edit and tell: I take raw footage and turn it into pieces that hold attention and can be measured. I work with brands, creators and media outlets that have something good but don't know how to tell it yet.",
+    "Grabo.": "I shoot.",
+    "Edito.": "I edit.",
+    "Cuento.": "I tell.",
+    "Grabo": "I shoot",
+    "Edito": "I edit",
+    "Cuento": "I tell",
+    "Cámara, luz y dirección de fotografía. Busco lo que hace única a la marca y lo registro con intención.": "Camera, light and cinematography. I look for what makes a brand unique and capture it with intent.",
+    "Escojo el material, corto con ritmo y le doy color. Si no engancha en los primeros segundos, lo vuelvo a cortar.": "I pick the footage, cut with rhythm and grade the color. If it doesn't hook in the first seconds, I cut it again.",
+    "Uno video, diseño y web en una sola historia, y la mido: seguidores, reservas, pantalla.": "I bring video, design and web together into one story, and I measure it: followers, bookings, airtime.",
+    "Míralo en": "See it in",
+    "Oficios": "Crafts",
+    "Fuera de cámara": "Off camera",
+    "Mi línea de tiempo": "My timeline",
+    "De dónde vengo": "Where I come from",
+    "Formación": "Training",
+    "Técnico en Elaboración de Medios Audiovisuales": "Technical degree in Audiovisual Media Production",
+    "Aquí aprendí cámara, luz y montaje.": "This is where I learned camera, light and editing.",
+    "Paisajes Íntimos · Ckabai": "Paisajes Íntimos · Ckabai",
+    "Edición de cápsulas documentales.": "Editing of short documentary pieces.",
+    "Ver →": "See →",
+    "Magazine: dirección de fotografía, cámara y edición.": "TV magazine: cinematography, camera and editing.",
+    "Edición y motion graphics para un canal de YouTube.": "Editing and motion graphics for a YouTube channel.",
+    "Cámara, edición y diseño para un hotel y su restaurante.": "Camera, editing and design for a hotel and its restaurant.",
+    "Por encima de la mesa · Telecafé": "Por encima de la mesa · Telecafé",
+    "Edición, foto fija y making of de una serie documental.": "Editing, set photography and behind the scenes for a documentary series.",
+    "Hoy": "Today",
+    "Diseño Crossmedia · 8.º semestre": "Crossmedia Design · 8th semester",
+    "Uno video, diseño y web en una sola historia.": "I bring video, design and web together into one story.",
+    "Ya sabes de dónde viene la pregunta.": "Now you know where the question comes from.",
+    "Ahora mira las respuestas.": "Now see the answers.",
+    "Ver las escenas": "See the scenes",
+    "Hablemos": "Let's talk",
+    "Soy Alexander Pino Caro: grabo, edito y cuento. Diseñador Crossmedia y Creador Audiovisual en Pereira.": "I'm Alexander Pino Caro: I shoot, edit and tell stories. Crossmedia Designer and Video Creator in Pereira, Colombia.",
+    "Retrato de Alexander Pino Caro de perfil, con luz teal": "Portrait of Alexander Pino Caro in profile, with teal light",
+    "Encuadre listo": "Framing set",
+
+    /* ---------- audiovisual ---------- */
+    "Audiovisual · Alex Pino": "Film & video · Alex Pino",
+    "Capítulo 02 · Audiovisual": "Chapter 02 · Film & video",
+    "Cinco escenas.": "Five scenes.",
+    "Un papel distinto en cada una.": "A different role in each one.",
+    "Entra a la que te llame, o filtra por el oficio que buscas.": "Step into the one that calls you, or filter by the craft you need.",
+    "Ver por oficio": "Filter by craft",
+    "Ver el trabajo por oficio": "See the work by craft",
+    "Todo": "All",
+    "Videoclips": "Music videos",
+    "Videoclip": "Music video",
+    "Música · artistas independientes": "Music · independent artists",
+    "Cinco videoclips: la música manda el ritmo del corte.": "Five music videos: the music sets the rhythm of the cut.",
+    "Vista previa": "Preview",
+    "Arrastra el cabezal o toca un clip": "Drag the playhead or tap a clip",
+    "Desliza el cabezal o toca un clip": "Slide the playhead or tap a clip",
+    "Cabezal de reproducción": "Playhead",
+    "Reels": "Reels",
+    "Desliza": "Swipe",
+    "Video corto para web": "Short web video",
+    "Testimonio": "Testimonial",
+    "Reacción": "Reaction",
+    "Recorre el video": "Scrub the video",
+    "Pásale el cursor": "Hover over it",
+    "Escenas audiovisuales de Alexander Pino Caro: edición, cámara, dirección de fotografía y motion graphics.": "Film and video scenes by Alexander Pino Caro: editing, camera, cinematography and motion graphics.",
+    "Mi rol": "My role",
+    "Versión": "Version",
+    "En bruto": "Raw",
+    "Mi corte": "My cut",
+    "Después": "After",
+    "Antes": "Before",
+    "Antes y después de color": "Color before and after",
+    "Del material en bruto a mi corte": "From raw footage to my cut",
+    "Deslizar entre antes y después": "Slide between before and after",
+    "Ver el caso completo": "See the full case",
+    "Usa los controles del video": "Use the video controls",
+    "Este video solo se puede ver en YouTube.": "This video can only be played on YouTube.",
+    "Tiene una canción con derechos de autor y YouTube no deja reproducirlo en otras páginas.": "It has a copyrighted song, so YouTube won't let it play on other sites.",
+    "Verlo en YouTube": "Watch it on YouTube",
+    "Desde el set": "From the set",
+
+    /* ---------- gráfico ---------- */
+    "Gráfico · Alex Pino": "Graphic · Alex Pino",
+    "Capítulo 03 · Gráfico": "Chapter 03 · Graphic",
+    "Impresos que se tocan": "Print you can touch",
+    "Ábrelos, gíralos y hojéalos. Así se ven en la mesa, no en un PDF.": "Open them, turn them, flip through them. This is how they look on the table, not in a PDF.",
+    "Piezas": "Pieces",
+    "Menú · restaurante": "Menu · restaurant",
+    "Impreso de mesa": "Table print",
+    "Logo · identidad de marca": "Logo · brand identity",
+    "Identidad visual · manual de marca": "Visual identity · brand guidelines",
+    "Piezas para redes": "Social media posts",
+    "La carta del restaurante, pensada para hojearse en la mesa: cada plato con su foto y su precio a la vista.": "The restaurant menu, designed to be flipped through at the table: every dish with its photo and price in plain sight.",
+    "Pasa la página arrastrando la esquina, con clic o con las flechas del teclado.": "Turn the page by dragging the corner, clicking, or using the arrow keys.",
+    "Ver en grande": "View large",
+    "Arrastra la esquina o haz clic en la página": "Drag the corner or click the page",
+    "Desliza para pasar la página": "Swipe to turn the page",
+    "Hablador La Cepa · Hotel Pinares Plaza": "La Cepa table tent · Hotel Pinares Plaza",
+    "Una cara invita a pedir desde la habitación con un QR; la otra recuerda las reglas del huésped.": "One side invites guests to order from their room with a QR code; the other reminds them of the house rules.",
+    "Arrástralo para girarlo.": "Drag it to turn it.",
+    "Mueve el cursor para girarlo": "Move the cursor to turn it",
+    "Estás viendo la": "You're looking at",
+    "cara A": "side A",
+    "cara B": "side B",
+    "Cara A": "Side A",
+    "Cara B": "Side B",
+    "Hablador de mesa con dos caras": "Two-sided table tent",
+    "Logo, patrón y aplicaciones de una importadora.": "Logo, pattern and applications for an import company.",
+    "Copiar": "Copy",
+    "Identidad visual y manual de marca: de dónde sale el nombre, el logo y cómo se usa.": "Visual identity and brand guidelines: where the name and logo come from, and how to use them.",
+    "Pasa las diapositivas con las flechas o tocando la pantalla.": "Move through the slides with the arrows or by tapping the screen.",
+    "Portadas y publicaciones para el feed de Bai Rural.": "Covers and posts for Bai Rural's feed.",
+    "Así se ven en el perfil. Toca una publicación para abrirla.": "This is how they look on the profile. Tap a post to open it.",
+    "publicaciones": "posts",
+    "← Volver al perfil": "← Back to profile",
+    "Diseño gráfico de Alexander Pino Caro: cartas, habladores, identidades de marca y piezas para redes.": "Graphic design by Alexander Pino Caro: menus, table tents, brand identities and social media posts.",
+    "Página anterior": "Previous page",
+    "Página siguiente": "Next page",
+    "Portada de la carta": "Menu cover",
+    "Piezas en preparación.": "Pieces coming soon.",
+    "Publicaciones en preparación.": "Publications coming soon.",
+    "Toca una capa": "Tap a layer",
+    "Abre el diafragma": "Open the aperture",
+    "Ahora juega tú": "Your turn to play",
+    "Gíralo": "Turn it",
+    "Gíralo →": "Turn it →",
+    "Hojéala": "Flip through it",
+    "Hojéalo": "Flip through it",
+    "Hojéala →": "Flip through it →",
+
+    /* ---------- editorial ---------- */
+    "Editorial · Alex Pino": "Editorial · Alex Pino",
+    "Capítulo 04 · Editorial": "Chapter 04 · Editorial",
+    "Publicaciones para hojear": "Publications to flip through",
+    "Escoge una de la estantería y pasa las páginas: con el cursor, arrastrando o con las flechas.": "Pick one from the shelf and turn the pages: with the cursor, by dragging, or with the arrow keys.",
+    "Catálogo de moda": "Fashion catalog",
+    "Revista": "Magazine",
+    "Álbum ilustrado": "Illustrated album",
+    "Librito": "Booklet",
+    "Diseño editorial de Alexander Pino Caro: revistas, catálogos y libros.": "Editorial design by Alexander Pino Caro: magazines, catalogs and books.",
+    "Publicación abierta": "Open publication",
+    "Estantería": "Bookshelf",
+
+    /* ---------- contacto ---------- */
+    "Contacto · Alex Pino": "Contact · Alex Pino",
+    "Fin de la secuencia": "End of sequence",
+    "Ahora ya sabes quién soy.": "Now you know who I am.",
+    "Ahora ya sabes quién soy": "Now you know who I am",
+    "¿Y en tu proyecto?": "What about your project?",
+    "Cuéntame qué quieres que la gente vea, entienda o compre. Yo te digo cómo grabarlo, editarlo y contarlo.": "Tell me what you want people to see, understand or buy. I'll tell you how to shoot it, edit it and tell it.",
+    "· tres toques y me llega todo claro": "· three taps and I get the whole picture",
+    "¿Qué necesitas?": "What do you need?",
+    "Puedes marcar varias": "Pick as many as you like",
+    "Reels o videos cortos": "Reels or short videos",
+    "Video para mi marca": "A video for my brand",
+    "Diseño gráfico o de marca": "Graphic or brand design",
+    "Otra cosa": "Something else",
+    "¿Para cuándo?": "When do you need it?",
+    "Lo antes posible": "As soon as possible",
+    "Este mes": "This month",
+    "Sin afán": "No rush",
+    "¿Cuánto piensas invertir?": "What's your budget?",
+    "Menos de $1 millón": "Under COP $1 million",
+    "$1 a $3 millones": "COP $1 to $3 million",
+    "Más de $3 millones": "Over COP $3 million",
+    "Aún no sé": "Not sure yet",
+    "Tu nombre o tu marca": "Your name or brand",
+    "(opcional)": "(optional)",
+    "Ej: Café La Esquina": "e.g. Corner Café",
+    "Así me llega tu mensaje": "This is the message I'll get",
+    "Hola Alex, vi tu portafolio y quiero hablar de un proyecto.": "Hi Alex, I saw your portfolio and I'd like to talk about a project.",
+    "Escríbeme por WhatsApp": "Message me on WhatsApp",
+    "Enviar mi pedido por WhatsApp": "Send my brief on WhatsApp",
+    "Y el próximo proyecto": "And the next project",
+    "Tú": "You",
+    "Tu turno": "Your turn",
+    "Arma tu pedido y escríbeme por WhatsApp. Grabo, edito y cuento para marcas.": "Build your brief and message me on WhatsApp. I shoot, edit and tell stories for brands.",
+    "Pereira, Risaralda": "Pereira, Colombia",
+
+    /* ---------- proyectos (comunes) ---------- */
+    "← Todas las escenas": "← All scenes",
+    "Programa": "Program",
+    "Canal": "Channel",
+    "Ficha técnica": "Credits sheet",
+    "Cliente": "Client",
+    "Formato": "Format",
+    "Año": "Year",
+    "Lo que hice": "What I did",
+    "El caso": "The case",
+    "Problema → proceso → solución → resultado": "Problem → process → solution → result",
+    "Problema": "Problem",
+    "Proceso": "Process",
+    "Solución": "Solution",
+    "Resultado": "Result",
+    "← Escena anterior": "← Previous scene",
+    "Ver": "See",
+    "Todas": "All",
+    "Siguiente escena →": "Next scene →",
+    "Otras escenas": "Other scenes",
+    "Proyectos": "Projects",
+    "Toca para verlo con sonido": "Tap to watch with sound",
+
+    /* Austin */
+    "Escena 01 · Videos para YouTube, en inglés": "Scene 01 · English-language YouTube videos",
+    "Videos para YouTube, en inglés": "English-language YouTube videos",
+    "YouTube · Cliente internacional": "YouTube · International client",
+    "Edité los videos del canal a partir del guion.": "I edited the channel's videos from the script.",
+    "Escogí la mejor toma de cada frase y corté lo que sobraba.": "I picked the best take of every line and cut everything that wasn't needed.",
+    "Diseñé y animé los motion graphics que explican las ideas.": "I designed and animated the motion graphics that explain the ideas.",
+    "Un canal en inglés con ideas complejas que tenían que entenderse rápido y retener a la audiencia hasta el final.": "An English-language channel with complex ideas that had to land fast and keep the audience watching to the end.",
+    "Edición desde el guion: escoger la mejor toma por frase, cortar lo que sobra y marcar dónde entra cada animación.": "Editing from the script: pick the best take per line, cut the excess and mark where each animation comes in.",
+    "Ganchos en los primeros segundos, cortes precisos y motion graphics para explicar las ideas sin frenar el ritmo.": "Hooks in the first seconds, precise cuts and motion graphics that explain the ideas without slowing the pace.",
+    "El canal llegó a 80.000 seguidores en cuatro meses. Arranqué con miedo por el idioma; el ritmo terminó hablando por mí.": "The channel reached 80,000 followers in four months. I started out nervous about the language; in the end, the rhythm spoke for me.",
+    "Edición y motion graphics para un canal de YouTube que llegó a 80.000 seguidores en 4 meses.": "Editing and motion graphics for a YouTube channel that reached 80,000 followers in 4 months.",
+    "Edición rítmica y motion graphics para un canal de YouTube en inglés.": "Rhythmic editing and motion graphics for an English-language YouTube channel.",
+
+    /* La Cepa */
+    "Escena 02 · Reels verticales para Meta y piezas impresas": "Scene 02 · Vertical reels for Meta and print pieces",
+    "Reels verticales para Meta y piezas impresas": "Vertical reels for Meta and print pieces",
+    "Así se ven en el celular de quien va a reservar. Toca uno para verlo con sonido.": "This is how they look on the phone of someone about to book. Tap one to watch with sound.",
+    "Y en la mesa": "And on the table",
+    "El mismo hotel, en impreso": "The same hotel, in print",
+    "Carta del restaurante": "Restaurant menu",
+    "Hablador de mesa": "Table tent",
+    "Hotel y restaurante · Contenido para Meta": "Hotel & restaurant · Content for Meta",
+    "Grabé en el hotel y en el restaurante.": "I shot at the hotel and the restaurant.",
+    "Edité los reels en vertical para Meta.": "I edited the vertical reels for Meta.",
+    "Diseñé la carta del restaurante y el hablador de mesa.": "I designed the restaurant menu and the table tent.",
+    "Ver la carta y el hablador →": "See the menu and the table tent →",
+    "Ver la carta y el hablador": "See the menu and the table tent",
+    "El hotel y su restaurante necesitaban que su oferta se viera en redes y se convirtiera en reservas.": "The hotel and its restaurant needed their offer to show up on social media and turn into bookings.",
+    "Grabación en el hotel y el restaurante, edición en formato vertical y diseño de las piezas impresas con la misma línea.": "Shooting at the hotel and restaurant, vertical editing, and print pieces designed in the same visual line.",
+    "Reels cortos para Meta que muestran la experiencia, más la carta y el hablador de mesa para el punto de venta.": "Short reels for Meta that show the experience, plus the menu and table tent for the point of sale.",
+    "Las reservas subieron un 40 %. El contenido dejó de ser solo bonito y empezó a vender.": "Bookings went up 40%. The content stopped being just pretty and started selling.",
+    "Reels para Meta, carta y hablador para un hotel: las reservas subieron un 40 %.": "Reels for Meta, a menu and a table tent for a hotel: bookings went up 40%.",
+    "Reels para Meta, carta del restaurante y hablador de mesa para el hotel.": "Reels for Meta, the restaurant menu and a table tent for the hotel.",
+
+    /* Telecafé */
+    "Escena 03 · Serie documental para televisión abierta": "Scene 03 · Documentary series for broadcast TV",
+    "Tráiler": "Trailer",
+    "Al aire · Telecafé": "On air · Telecafé",
+    "Una serie documental para televisión abierta: tenía que pasar el control técnico del canal. Pasó.": "A documentary series for broadcast TV: it had to pass the channel's technical review. It did.",
+    "Hoja de contactos": "Contact sheet",
+    "Fotogramas del tráiler": "Stills from the trailer",
+    "Serie documental para televisión abierta": "Documentary series for broadcast TV",
+    "Serie documental para televisión abierta.": "Documentary series for broadcast TV.",
+    "Edité los capítulos de la serie.": "I edited the episodes of the series.",
+    "Hice la foto fija en el set.": "I did the set photography.",
+    "Registré el making of del rodaje.": "I shot the behind the scenes of the production.",
+    "Una serie documental que tenía que cumplir el estándar técnico de un canal de televisión abierta.": "A documentary series that had to meet the technical standard of a broadcast TV channel.",
+    "Edición de los capítulos, foto fija en el set y registro del making of durante el rodaje.": "Editing the episodes, set photography and behind-the-scenes footage during the shoot.",
+    "Un montaje que respeta el relato de cada capítulo y entrega con las especificaciones del canal.": "An edit that respects each episode's story and delivers to the channel's specs.",
+    "La serie salió al aire en Telecafé. Cumplir el estándar de la televisión abierta fue la prueba.": "The series aired on Telecafé. Meeting the broadcast standard was the proof.",
+    "Serie documental que salió al aire en Telecafé: edición, foto fija y making of.": "A documentary series that aired on Telecafé: editing, set photography and behind the scenes.",
+
+    /* Paisajes Íntimos */
+    "Escena 04 · Cápsulas documentales": "Scene 04 · Short documentary pieces",
+    "Cápsulas documentales": "Short documentary pieces",
+    "Serie de cápsulas documentales": "Series of short documentary pieces",
+    "Un ritmo pausado que deja respirar las imágenes y sostiene la emoción.": "A slow pace that lets the images breathe and holds the emotion.",
+    "Escogí el material y armé la estructura de cada cápsula.": "I selected the footage and built the structure of each piece.",
+    "Edité con un ritmo pausado para sostener la emoción.": "I edited at a slow pace to hold the emotion.",
+    "Contar historias íntimas en cápsulas cortas sin perder lo que las hace humanas.": "Telling intimate stories in short pieces without losing what makes them human.",
+    "Selección del material y estructura del relato antes de cortar.": "Selecting the footage and structuring the story before cutting.",
+    "Una serie de cápsulas con una misma voz visual.": "A series of pieces with one visual voice.",
+    "Cápsulas documentales para Ckabai.": "Short documentary pieces for Ckabai.",
+    "Cine de autor": "Auteur film",
+
+    /* Nos fui pues mijo */
+    "Escena 05 · Magazine": "Scene 05 · TV magazine",
+    "Magazine": "TV magazine",
+    "Magazine completo": "Full TV magazine",
+    "Cámaras · toca una para cortar": "Cameras · tap one to cut",
+    "Escaleta": "Rundown",
+    "Arranca el magazine": "The show begins",
+    "Dirigí la fotografía del magazine. Operé la cámara. Edité el programa completo.": "I was the cinematographer on the magazine. I operated the camera. I edited the whole show.",
+    "Proyecto académico · Diseño Crossmedia, 5.º semestre": "Academic project · Crossmedia Design, 5th semester",
+    "Dirigí la fotografía del magazine.": "I was the cinematographer on the magazine.",
+    "Operé la cámara.": "I operated the camera.",
+    "Edité el programa completo.": "I edited the whole show.",
+
+    /* ---------- 404 ---------- */
+    "Esta toma no existe · Alex Pino": "This take doesn't exist · Alex Pino",
+    "Esta toma no existe.": "This take doesn't exist.",
+    "La cortamos en edición, o el enlace está mal escrito.": "We cut it in the edit, or the link is misspelled.",
+    "La página que buscas no existe.": "The page you're looking for doesn't exist.",
+
+    /* ---------- otros que arma el código ---------- */
+    "Música urbana": "Urban music",
+    "Fútbol": "Soccer",
+    "Fotograma": "Frame",
+    "Sala de control": "Control room",
+    "Carta La Cepa": "La Cepa menu",
+    "Hablador La Cepa": "La Cepa table tent",
+    "animación": "animation"
+  };
+
+  /* Textos que llevan un número o un nombre adentro. $1, $2… se traducen también. */
+  var RULES = [
+    [/^(.+) · Escena · Alex Pino$/, "$1 · Scene · Alex Pino"],
+    [/^Escena (\d+) · (.+)$/, "Scene $1 · $2"],
+    [/^Escena (\d+)$/, "Scene $1"],
+    [/^Capítulo (\d+) · (.+)$/, "Chapter $1 · $2"],
+    [/^Pieza (\d+) · (.+)$/, "Piece $1 · $2"],
+    [/^Ver (.+) con sonido$/, "Watch $1 with sound"],
+    [/^Reproducir (.+) con sonido$/, "Play $1 with sound"],
+    [/^Ver solo (.+) \((\d+)\)$/, "Show only $1 ($2)"],
+    [/^Ver (.+)$/, "View $1"],
+    [/^Abrir (.+)$/, "Open $1"],
+    [/^Hojear (.+)$/, "Flip through $1"],
+    [/^Hojear · (\d+) págs\.$/, "Flip through · $1 pp."],
+    [/^Clip (\d+): (.+)$/, "Clip $1: $2"],
+    [/^Diapositiva (\d+)$/, "Slide $1"],
+    [/^Cápsula (\d+)$/, "Piece $1"],
+    [/^Fotograma (\d+) \/ (\d+)$/, "Frame $1 / $2"],
+    [/^Fotograma (\d+)$/, "Frame $1"],
+    [/^Publicación (\d+)$/, "Post $1"],
+    [/^Publicación: (.+)\. Usa las flechas para pasar la página\.$/, "Publication: $1. Use the arrow keys to turn the page."],
+    [/^Presentación (.+)$/, "$1 presentation"],
+    [/^Videos de (.+)$/, "Videos from $1"],
+    [/^Aplicación (\d+) de (.+)$/, "Application $1 for $2"],
+    [/^Pág\. (\d+) de (\d+)$/, "Page $1 of $2"],
+    [/^Pág\. ([\d–]+) \/ (\d+)$/, "Page $1 / $2"],
+    [/^(.+) · (\d+) páginas$/, "$1 · $2 pages"],
+    [/^(.+) · (\d+) págs\.$/, "$1 · $2 pp."],
+    [/^(\d+) piezas$/, "$1 pieces"],
+    [/^(\d+) clips$/, "$1 clips"],
+    [/^(\d+) semanas$/, "$1 weeks"],
+    [/^Edité (\d+) videos del canal, de los que ves aquí\.$/, "I edited $1 of the channel's videos you see here."],
+    [/^Cortar a la cámara (\d+): (.+)$/, "Cut to camera $1: $2"],
+    [/^CAM (\d+) al aire · (.*)$/, "CAM $1 on air · $2"],
+    [/^Cámara (\d+)$/, "Camera $1"],
+    [/^Copiado (.+)$/, "Copied $1"],
+    [/^(\d{1,3})\.(\d{3})$/, "$1,$2"],
+    [/^\+(\d+) %$/, "+$1%"],
+    [/^(\d+) · (.+)$/, "$1 · $2"],
+    [/^(.+) · (.+)$/, "$1 · $2"]
+  ];
+
+  function look(k) {
+    if (Object.prototype.hasOwnProperty.call(EN, k)) return EN[k];
+    for (var i = 0; i < RULES.length; i++) {
+      var m = k.match(RULES[i][0]);
+      if (!m) continue;
+      var out = RULES[i][1].replace(/\$(\d)/g, function (_, n) { var s = m[+n]; var t = look(s); return t == null ? s : t; });
+      // la última regla (" · ") solo cuenta si de verdad tradujo algo
+      return out === k ? null : out;
+    }
+    return null;
+  }
+  function t(s) {
+    if (lang !== "en" || typeof s !== "string") return s;
+    var k = s.trim();
+    if (!k) return s;
+    var v = look(k);
+    if (v == null) return s;
+    return s.slice(0, s.indexOf(k)) + v + s.slice(s.indexOf(k) + k.length);
+  }
+
+  var ATTRS = ["alt", "aria-label", "title", "placeholder", "data-name", "aria-valuetext"];
+  var SKIP = /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|INPUT|CODE)$/;
+  function doText(n) {
+    var p = n.parentNode;
+    if (!p || SKIP.test(p.nodeName) || (p.closest && p.closest("[data-no-i18n]"))) return;
+    var v = t(n.nodeValue);
+    if (v !== n.nodeValue) n.nodeValue = v;
+  }
+  function doEl(el) {
+    if (el.nodeType !== 1 || SKIP.test(el.nodeName) && el.nodeName !== "INPUT" && el.nodeName !== "TEXTAREA") return;
+    for (var i = 0; i < ATTRS.length; i++) {
+      var a = el.getAttribute(ATTRS[i]);
+      if (a) { var v = t(a); if (v !== a) el.setAttribute(ATTRS[i], v); }
+    }
+  }
+  function walk(node) {
+    if (node.nodeType === 3) return doText(node);
+    if (node.nodeType !== 1) return;
+    doEl(node);
+    if (node.querySelectorAll) Array.prototype.forEach.call(node.querySelectorAll("[alt],[aria-label],[title],[placeholder],[data-name],[aria-valuetext]"), doEl);
+    var w = document.createTreeWalker(node, NodeFilter.SHOW_TEXT), n;
+    while ((n = w.nextNode())) doText(n);
+  }
+  function head() {
+    var tt = t(document.title); if (tt !== document.title) document.title = tt;
+    Array.prototype.forEach.call(document.querySelectorAll('meta[name="description"],meta[property="og:description"],meta[property="og:title"]'), function (m) {
+      var c = m.getAttribute("content"), v = t(c); if (v !== c) m.setAttribute("content", v);
+    });
+  }
+
+  function setLang(l) {
+    try { localStorage.setItem("ap-lang", l); } catch (e) {}
+    try { var u = new URL(location.href); u.searchParams.set("lang", l); location.replace(u.toString()); }
+    catch (e) { location.reload(); }
+  }
+
+  window.I18N = { lang: lang, t: t, set: setLang };
+  window.T = t;
+
+  if (lang !== "en") return;
+  function start() {
+    head();
+    walk(document.body);
+    root.classList.remove("i18n-wait");
+    new MutationObserver(function (list) {
+      list.forEach(function (m) {
+        if (m.type === "attributes") return doEl(m.target);
+        Array.prototype.forEach.call(m.addedNodes, walk);
+      });
+    }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ATTRS });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
+})();
