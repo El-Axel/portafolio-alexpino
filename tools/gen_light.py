@@ -3,7 +3,7 @@ Lee style.css, sets.css e impresos.css, busca colores fijos pensados para fondo
 oscuro y escribe la versión para fondo claro, solo bajo html[data-theme="light"].
 Las "islas oscuras" (portada, claqueta, visor, sets, pantallas) no se tocan."""
 import re,sys
-ISL=".hero,.pre,.viewer,.stage,.screen,.sc-media,.tlx,.phone,.tv,.keys-box,.prog-stage,.mnu,.corte"
+ISL=".hero,.pre,.viewer,.stage,.screen,.sc-media,.tlx,.phone,.tv,.keys-box,.prog-stage,.mnu,.corte,.entry,.nxt-go,.crt"
 ISL_SET=set(x.strip() for x in ISL.split(','))
 def strip_comments(s): return re.sub(r'/\*.*?\*/','',s,flags=re.S)
 def rules(css):
@@ -48,7 +48,7 @@ def notisl(sel):
         s=s.strip()
         if not s: continue
         first=re.split(r'[\s>+~]',s)[0]
-        if any(x in s.split(':')[0].split() or s.startswith(x) for x in ISL_SET) or re.match(r'^(\.hero|\.pre|\.viewer|\.stage|\.tv|\.phone|\.screen|\.tlx|\.sc-media|\.keys|\.prog-|\.prg|\.pslide|\.pframe|\.ptl|\.ptag|\.pyear|\.pc\b|\.pnum|\.ptitle|\.pcifra|\.plink|\.pmeta|\.ln|\.mnu|\.corte|html\[data-theme|html\.cutting|\.kin|\.lens-o)',s): return None
+        if any(x in s.split(':')[0].split() or s.startswith(x) for x in ISL_SET) or re.match(r'^(\.hero|\.pre|\.viewer|\.stage|\.tv|\.phone|\.screen|\.tlx|\.sc-media|\.keys|\.prog-|\.prg|\.pslide|\.pframe|\.ptl|\.ptag|\.pyear|\.pc\b|\.pnum|\.ptitle|\.pcifra|\.plink|\.pmeta|\.ln|\.mnu|\.corte|html\[data-theme|html\.cutting|\.kin|\.lens-o|\.en-|\.entry|\.nxt-|\.crt|\.reel-word|\.rm-)',s): return None
         if s.startswith(('html','body',':root')):
             s=re.sub(r'^(html|:root)','',s).strip()
         pe=''

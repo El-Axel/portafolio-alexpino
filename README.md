@@ -54,7 +54,7 @@ Abrir `index.html` con doble clic también funciona, pero los videos de YouTube 
 ├── 404.html
 ├── css/
 │   ├── vendor/open-props.min.css   Framework (tokens base)
-│   ├── style.css              Tokens + base + componentes (secciones numeradas 01–28)
+│   ├── style.css              Tokens + base + componentes (secciones numeradas 01–29)
 │   ├── sets.css               "Sets" de cada proyecto (editor, celulares, TV, cine, control)
 │   ├── impresos.css           Vitrinas de gráfico y editorial
 │   └── claro.css              Tema claro (GENERADO por tools/gen_light.py)
@@ -63,8 +63,8 @@ Abrir `index.html` con doble clic también funciona, pero los videos de YouTube 
 │   ├── i18n.js                Traducción ES → EN
 │   ├── shell.js               Barra superior, pie, visor y ayudas comunes a todas las páginas
 │   ├── main.js                Lógica común (línea de tiempo, claqueta, filtros, pedido…)
-│   ├── experiencia.js         Menú a pantalla completa, cortes entre páginas, portada cinética y «el programa»
-│   ├── proyecto.js            Páginas de proyecto
+│   ├── experiencia.js         Menú a pantalla completa, cortes entre páginas, portada cinética, «el programa» y el reel de Audiovisual
+│   ├── proyecto.js            Páginas de proyecto (entrada en diagonal, el caso paso a paso, cifra de remate, CRT)
 │   ├── impresos.js            Vitrinas y libros
 │   ├── paginas.js             Sobre mí
 │   └── cursors.js             Cursores animados que "diseñan" la página

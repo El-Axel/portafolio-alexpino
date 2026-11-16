@@ -20,6 +20,8 @@
     /* ---------- marco común ---------- */
     /* ---------- experiencia: menú, barra lateral, portada ---------- */
     "Menú": "Menu",
+    "Baja para entrar a la escena ↓": "Scroll to enter the scene ↓",
+    "Todas las escenas": "All scenes",
     "Al aire": "On air",
     "Cerrar ✕": "Close ✕",
     "Cerrar": "Close",

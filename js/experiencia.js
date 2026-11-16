@@ -7,6 +7,7 @@
    · Videos que se reproducen al pasar el mouse ................... (todas)
    · Presentación: «¿Quién soy?» se arma y se desarma ............ (inicio)
    · El programa: las 5 escenas pasan por un mismo cuadro ......... (inicio)
+   · El reel: una columna de escenas con su ficha a los lados ..... (audiovisual)
    Todo respeta "reducir movimiento": sin animaciones, todo visible.
    ============================================================================= */
 (function () {
@@ -241,5 +242,74 @@
         });
       });
     }
+  }
+
+  /* ---------- 7 · Audiovisual: el reel (columna central + ficha a los lados) ----------
+     La palabra ESCENAS queda fija detrás. La escena que pasa por el centro
+     de la pantalla se enciende (su video corre en silencio) y su ficha se
+     escribe a los lados. Los filtros por oficio siguen funcionando. */
+  var esc0 = $("#escenas");
+  if (page === "audiovisual" && esc0) {
+    var cards = $$(".scard", esc0);
+    var reel = document.createElement("div");
+    reel.className = "reelv";
+    esc0.parentNode.insertBefore(reel, esc0);
+    reel.innerHTML = '<p class="reel-word" aria-hidden="true">' + esc(T("Escenas")) + '</p>' +
+      '<aside class="rv-side rv-l" aria-hidden="true"><span class="rv-n" id="rv-n">01</span><span class="rv-k" id="rv-k"></span><span class="rv-y" id="rv-y"></span></aside>';
+    reel.appendChild(esc0);
+    reel.insertAdjacentHTML("beforeend", '<aside class="rv-side rv-r" aria-hidden="true"><span class="label">' + esc(T("Aquí soy")) + '</span><b class="rv-soy" id="rv-soy"></b><span class="rv-roles" id="rv-roles"></span><span class="rv-c" id="rv-c"></span><span class="rv-go">' + esc(T("Entrar a la escena →")) + '</span></aside>');
+    esc0.classList.add("reel-col");
+    if (!reduce) html.classList.add("snap-reel"); // la escena se acomoda sola en el centro
+    // miniaturas de YouTube en alta
+    cards.forEach(function (c) {
+      var im = $(".sc-media > img", c);
+      if (im && /i\.ytimg\.com\/vi\/[^/]+\/hqdefault/.test(im.src)) {
+        var hq = im.src; im.onerror = function () { im.onerror = null; im.src = hq; };
+        im.src = hq.replace("hqdefault", "maxresdefault");
+      }
+    });
+    var rvN = $("#rv-n"), rvK = $("#rv-k"), rvY = $("#rv-y"), rvSoy = $("#rv-soy"), rvRoles = $("#rv-roles"), rvC = $("#rv-c");
+    var cur = -1, sides = $$(".rv-side", reel);
+    var fill = function (i) {
+      var d = LIST[i]; if (!d) return;
+      rvN.textContent = pad(i + 1);
+      rvK.textContent = T(d.cliente || "");
+      rvY.textContent = d.anio || "";
+      rvSoy.textContent = T(d.soy || "");
+      rvRoles.innerHTML = (d.roles || []).map(function (r) { return '<span class="chip">' + esc(T(r)) + "</span>"; }).join("");
+      rvC.innerHTML = d.cifra ? "<b>" + esc(d.cifra) + "</b> " + esc(T(d.cifraTexto || "")) : "";
+    };
+    var activate = function (i) {
+      if (i === cur) return;
+      cur = i;
+      cards.forEach(function (c, j) {
+        var on = j === i; c.classList.toggle("on", on);
+        var v = $("video", c);
+        if (v && !window.matchMedia("(hover: hover)").matches) return; // en celular main.js ya las enciende al verlas
+        if (v) { if (on && !reduce && !(navigator.connection && navigator.connection.saveData)) { v.preload = "auto"; var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); c.classList.add("playing"); } else { v.pause(); c.classList.remove("playing"); } }
+      });
+      if (i < 0) return;
+      if (reduce) { fill(i); return; }
+      sides.forEach(function (s) { s.classList.add("swap"); });
+      setTimeout(function () { fill(i); sides.forEach(function (s) { s.classList.remove("swap"); }); }, 220);
+    };
+    var pick = function () {
+      var mid = innerHeight / 2, best = -1, bd = 1e9;
+      cards.forEach(function (c, j) {
+        if (c.classList.contains("f-out") || !c.offsetParent) return;
+        var r = c.getBoundingClientRect(), d = Math.abs(r.top + r.height / 2 - mid);
+        if (d < bd) { bd = d; best = j; }
+      });
+      var rr = esc0.getBoundingClientRect();
+      reel.classList.toggle("live", rr.top < innerHeight * .45 && rr.bottom > innerHeight * .55);
+      activate(best);
+    };
+    var tk = false;
+    window.addEventListener("scroll", function () { if (!tk) { tk = true; requestAnimationFrame(function () { tk = false; pick(); }); } }, { passive: true });
+    window.addEventListener("resize", pick);
+    // los filtros cambian qué escenas hay: volver a mirar
+    var chipsEl = $("#fbar-chips");
+    if (chipsEl) chipsEl.addEventListener("click", function () { setTimeout(pick, 60); setTimeout(pick, 500); });
+    fill(0); pick();
   }
 })();

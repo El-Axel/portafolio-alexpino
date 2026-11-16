@@ -121,3 +121,9 @@
 - Clases nuevas que NO se deben reutilizar: `.mnu`, `.corte`, `.prg`, `.pslide`, `.pframe`, `.ptl-*`, `.kin*`, `.lens-o`.
 - `.prog-stage`, `.mnu` y `.corte` son islas oscuras (también en tema claro); están en la lista ISL de tools/gen_light.py.
 - Reducir movimiento: sin corte, título quieto y todas las escenas una debajo de otra.
+
+## Experiencia, entrega 2
+- Portada: el bloque de texto de la derecha es grande en escritorio (título 8.4vw, subtítulo 2.9vw); reglas al final de style.css.
+- Audiovisual (experiencia.js §7): `.reelv` envuelve `#escenas` (clase `.reel-col`): palabra «Escenas» fija detrás (`.reel-word`), la tarjeta del centro se enciende (`.on`) y su ficha se escribe en `.rv-l`/`.rv-r`. Snap suave (`html.snap-reel`). Los filtros por oficio siguen igual.
+- Proyecto (proyecto.js): entrada `#entry` con el título partido en diagonal (`.en-a`/`.en-b`, `--e` por scroll); «El caso» en `.cas` (un paso por pantalla, índice fijo a la izquierda); `.remate` con la cifra contando (solo si el proyecto tiene `cifra`; no se inventan cifras); `.crt` en Telecafé (tv) y Nos fui (sala de control); `.nxt` = siguiente escena a lo ancho.
+- `.entry`, `.nxt-go` y `.crt` son islas oscuras en gen_light.py.

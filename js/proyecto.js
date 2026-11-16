@@ -23,12 +23,31 @@
   var n = pad(idx + 1);
 
   /* ---------- piezas comunes ---------- */
+  function cover(q) {
+    var v = (q.videos || [])[0] || {};
+    if (v.tipo === "youtube") return "https://i.ytimg.com/vi/" + v.id + "/maxresdefault.jpg";
+    return v.poster || (q.fotogramas || [])[0] || "";
+  }
+  function coverImg(q, cls) {
+    var v = (q.videos || [])[0] || {}, src = cover(q);
+    var fb = v.tipo === "youtube" ? ' onerror="this.onerror=null;this.src=\'https://i.ytimg.com/vi/' + esc(v.id) + '/hqdefault.jpg\'"' : "";
+    return '<img class="' + (cls || "") + '" src="' + esc(src) + '" alt=""' + fb + ">";
+  }
+  /* entrada: el título partido en diagonal sobre la escena; al bajar se abre */
   function head() {
-    return '<header class="set-head wrap">' +
+    var v = vids[0] || {};
+    var media = coverImg(p, "en-img" + (v.vertical ? " vert" : ""));
+    if (v.tipo === "local" && !v.vertical && !reduce && !U.saveData) media += '<video class="en-vid" muted playsinline preload="metadata" src="' + esc(v.src) + '" poster="' + esc(v.poster || "") + '"></video>';
+    var t = esc(p.titulo);
+    return '<header class="entry" id="entry">' +
+      '<div class="en-media" aria-hidden="true">' + media + '</div><div class="en-shade" aria-hidden="true"></div>' +
+      '<div class="en-in wrap">' +
       '<a class="set-back" href="audiovisual.html">← Todas las escenas</a>' +
       '<p class="ph-kicker"><b class="rec"></b>Escena ' + n + " · " + esc(p.formato || p.cliente || "") + "</p>" +
-      '<h1 class="set-title">' + esc(p.titulo) + "</h1>" +
-      '<p class="set-soy">Aquí soy <em>' + esc(p.soy || "") + "</em>.</p></header>";
+      '<h1 class="en-title"><span class="en-sr">' + t + '</span><span class="en-a" aria-hidden="true" data-no-i18n>' + t + '</span><span class="en-b" aria-hidden="true" data-no-i18n>' + t + "</span></h1>" +
+      '<p class="set-soy">Aquí soy <em>' + esc(p.soy || "") + "</em>.</p>" +
+      '<span class="en-hint" aria-hidden="true">Baja para entrar a la escena ↓</span></div>' +
+      '<span class="en-tc" aria-hidden="true">' + n + "</span></header>";
   }
   function ficha() {
     return '<dl class="ficha">' + [["Cliente", p.cliente], ["Formato", p.formato], ["Mi rol", (p.roles || []).join(" · ")], ["Año", p.anio]]
@@ -37,27 +56,36 @@
   }
   function info() {
     var hice = (p.hice || []).length ? '<div class="hice"><p class="label">Lo que hice</p><ul>' + p.hice.map(function (h) { return "<li>" + esc(h) + "</li>"; }).join("") + "</ul></div>" : "";
-    var res = p.cifra ? '<div class="set-res"><span class="v">' + esc(p.cifra) + '</span><span class="t">' + esc(p.cifraTexto || "") + "</span></div>" : "";
+    var res = "";
     var also = p.verTambien ? '<a class="see-also" href="' + esc(p.verTambien.href) + '">' + esc(p.verTambien.texto) + " →</a>" : "";
     return '<section class="set-info wrap reveal"><div class="si-card glass"><p class="label">Ficha técnica</p>' + ficha() + "</div>" +
       '<div class="si-card glass">' + hice + res + also + "</div></section>";
   }
+  /* el caso, una idea por pantalla: problema → proceso → solución → resultado */
   function caso() {
     var c = p.caso || {};
     var steps = [["Problema", c.problema], ["Proceso", c.proceso], ["Solución", c.solucion], ["Resultado", c.resultado]].filter(function (s) { return s[1]; });
     if (!steps.length) return "";
-    return '<section class="set-case wrap tone tone-mist pad" aria-labelledby="h-caso"><header class="bhead reveal"><span class="kf"></span><h2 id="h-caso">El caso</h2><p class="label">Problema → proceso → solución → resultado</p><span class="tcode">' + n + "</span></header>" +
-      '<div class="ruler" aria-hidden="true"></div><ol class="markers">' + steps.map(function (s, i) {
-        return '<li class="marker reveal" style="--i:' + i + '"><span class="mk-tc">' + "00:0" + i + ":00:00" + '</span><b>' + s[0] + "</b><p>" + esc(s[1]) + "</p></li>";
-      }).join("") + "</ol></section>";
+    return '<section class="cas wrap" aria-labelledby="h-caso"><header class="bhead reveal"><span class="kf"></span><h2 id="h-caso">El caso</h2><p class="label">Problema → proceso → solución → resultado</p><span class="tcode">' + n + "</span></header>" +
+      '<div class="cas-grid"><div class="cas-rail" aria-hidden="true"><div class="cas-stick"><span class="cas-tc" id="cas-tc">00:00:00:00</span><ol class="cas-idx">' +
+      steps.map(function (s, i) { return '<li data-i="' + i + '"' + (i ? "" : ' class="on"') + "><em>" + pad(i + 1) + "</em>" + s[0] + "</li>"; }).join("") +
+      '</ol></div></div><div class="cas-steps">' + steps.map(function (s, i) {
+        return '<article class="cas-step' + (i ? "" : " on") + '" data-i="' + i + '"><p class="label"><span class="kf"></span>' + pad(i + 1) + " · " + s[0] + '</p><p class="cas-txt">' + esc(s[1]) + "</p></article>";
+      }).join("") + "</div></div></section>" + remate();
+  }
+  /* la cifra llega al final, en grande */
+  function remate() {
+    if (!p.cifra) return "";
+    return '<section class="remate" aria-label="Resultado"><p class="label"><b class="rec"></b>Resultado</p><b class="rm-v" id="rm-v">' + esc(p.cifra) + '</b><span class="rm-t">' + esc(p.cifraTexto || "") + "</span></section>";
   }
   function compare() { var h = U.compareHTML(p.comparar); return h ? '<section class="wrap set-compare">' + h + "</section>" : ""; }
+  /* siguiente escena: toda la franja es el enlace, con la escena de fondo */
   function nav() {
     var prev = list[(idx - 1 + list.length) % list.length], next = list[(idx + 1) % list.length];
-    return '<nav class="set-nav wrap" aria-label="Otras escenas">' +
-      '<a class="sn prev" href="' + esc(prev.pagina) + '"><small>← Escena anterior</small><b>' + esc(prev.titulo) + "</b></a>" +
-      '<a class="sn all" href="audiovisual.html"><small>Ver</small><b>Todas</b></a>' +
-      '<a class="sn next" href="' + esc(next.pagina) + '"><small>Siguiente escena →</small><b>' + esc(next.titulo) + "</b></a></nav>";
+    return '<nav class="nxt" aria-label="Otras escenas">' +
+      '<a class="nxt-go" href="' + esc(next.pagina) + '"><span class="nxt-media" aria-hidden="true">' + coverImg(next) + '</span>' +
+      '<span class="nxt-in"><small class="label">Siguiente escena →</small><b>' + esc(next.titulo) + '</b><span class="nxt-soy">Aquí soy <em>' + esc(next.soy || "") + "</em>.</span></span></a>" +
+      '<div class="nxt-row wrap"><a href="' + esc(prev.pagina) + '">← ' + esc(prev.titulo) + '</a><a href="audiovisual.html">Todas las escenas</a></div></nav>';
   }
   function count(el, to, ms) {
     if (!el) return;
@@ -146,7 +174,7 @@
         }).join("") + "</div></section>";
     };
     return '<section class="stage wrap"><div class="room"><div class="tv reveal">' +
-      '<div class="tv-screen"><div class="screen">' + U.screenHTML(v) + '</div><span class="tv-bug"><b class="rec"></b>Al aire · ' + esc((p.cliente || "").split(" · ")[0]) + '</span><span class="tv-scan" aria-hidden="true"></span></div>' +
+      '<div class="tv-screen crt"><div class="screen">' + U.screenHTML(v) + '</div><span class="tv-bug"><b class="rec"></b>Al aire · ' + esc((p.cliente || "").split(" · ")[0]) + '</span><span class="tv-scan" aria-hidden="true"></span><span class="crt-fx" aria-hidden="true"></span></div>' +
       '<span class="tv-brand" aria-hidden="true">' + esc(p.titulo) + '</span></div><div class="tv-stand" aria-hidden="true"></div><div class="tv-tl"></div>' +
       '<p class="stage-note">Una serie documental para televisión abierta: tenía que pasar el control técnico del canal. Pasó.</p></div></section>' +
       sheet(fotos, "Foto fija", "Desde el set", "fotos") +
@@ -195,7 +223,7 @@
     }).join("");
     return '<section class="stage wrap reveal"><div class="control glass">' +
       '<div class="ctl-top"><span class="ctl-name">Sala de control · ' + esc(p.titulo) + '</span><span class="ctl-air" id="ctl-air"><b></b>Al aire</span><span class="ctl-clock" id="ctl-clock">00:00:00</span></div>' +
-      '<div class="ctl-grid"><div class="pgm"><p class="ctl-lbl"><i class="tally on"></i>Programa</p><div class="screen pgm-scr">' + U.screenHTML(v) + '</div><div class="pgm-tl"></div></div>' +
+      '<div class="ctl-grid"><div class="pgm"><p class="ctl-lbl"><i class="tally on"></i>Programa</p><div class="crt crt-pgm"><div class="screen pgm-scr">' + U.screenHTML(v) + '</div><span class="crt-fx" aria-hidden="true"></span></div><div class="pgm-tl"></div></div>' +
       '<div class="cams"><p class="ctl-lbl">Cámaras · toca una para cortar</p>' + cams + "</div></div>" +
       '<div class="ctl-bottom"><div class="vu" aria-hidden="true">' + new Array(12).join("<i></i>") + '</div>' +
       '<div class="rundown"><p class="ctl-lbl">Escaleta</p><div class="blks">' + blocks + '</div></div>' +
@@ -245,6 +273,53 @@
     APP.k = function () { var b = $(".playbtn", scr); if (b) { b.click(); return true; } return false; };
   };
 
+
+  /* ---------- movimiento de la entrada, el caso, la cifra y el CRT ---------- */
+  function onScroll(fn) { var t = false; window.addEventListener("scroll", function () { if (!t) { t = true; requestAnimationFrame(function () { t = false; fn(); }); } }, { passive: true }); window.addEventListener("resize", fn); fn(); }
+  function wireEntry() {
+    var e = $("#entry"); if (!e) return;
+    var v = $(".en-vid", e);
+    if (v) { v.addEventListener("playing", function () { e.classList.add("rolling"); }); var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); }
+    if (reduce) { e.classList.add("static"); return; }
+    requestAnimationFrame(function () { e.classList.add("in"); });
+    onScroll(function () { var k = Math.min(1, Math.max(0, scrollY / (innerHeight * .75))); e.style.setProperty("--e", k.toFixed(4)); });
+  }
+  function wireCase() {
+    var st = $$(".cas-step"), idxs = $$(".cas-idx li"), tc = $("#cas-tc");
+    if (st.length) {
+      var set = function (i) {
+        st.forEach(function (x, j) { x.classList.toggle("on", j === i); x.classList.toggle("past", j < i); });
+        idxs.forEach(function (x, j) { x.classList.toggle("on", j === i); x.classList.toggle("done", j < i); });
+        if (tc) tc.textContent = "00:0" + i + ":" + pad((i * 17) % 60) + ":" + pad((i * 9) % 25);
+      };
+      if (reduce) st.forEach(function (x) { x.classList.add("on"); });
+      else onScroll(function () {
+        var mid = innerHeight * .55, cur = 0;
+        st.forEach(function (x, j) { if (x.getBoundingClientRect().top < mid) cur = j; });
+        set(cur);
+      });
+    }
+    var rm = $("#rm-v");
+    if (rm) {
+      var m = String(p.cifra).match(/^(\D*?)([\d.]+)(\D*)$/);
+      if (!m || reduce || !("IntersectionObserver" in window)) { $(".remate").classList.add("in"); return; }
+      var to = parseInt(m[2].replace(/\./g, ""), 10), fmt = new Intl.NumberFormat("es-CO");
+      rm.textContent = m[1] + "0" + m[3];
+      var io = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return; io.disconnect(); $(".remate").classList.add("in");
+        var t0 = performance.now();
+        (function f(now) { var k = Math.min(1, (now - t0) / 1800); k = 1 - Math.pow(1 - k, 3); rm.textContent = m[1] + fmt.format(Math.round(to * k)) + m[3]; if (k < 1) requestAnimationFrame(f); })(t0);
+      }, { threshold: .5 });
+      io.observe(rm);
+    }
+  }
+  function wireCrt() {
+    var c = $$(".crt"); if (!c.length) return;
+    if (reduce || !("IntersectionObserver" in window)) { c.forEach(function (x) { x.classList.add("on"); }); return; }
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); } }); }, { threshold: .45 });
+    c.forEach(function (x) { io.observe(x); });
+  }
+
   /* ---------- montaje ---------- */
   var set = SETS[p.set] || SETS.cine;
   document.body.classList.add("set-" + (p.set || "cine"));
@@ -253,6 +328,7 @@
   // en la página de un proyecto, J y L pasan de escena
   APP.jl = function (d) { var t = list[(idx + d + list.length) % list.length]; location.href = t.pagina; };
   U.wireCompare(mount);
+  wireEntry(); wireCase(); wireCrt();
   // las apariciones de esta página nacieron después de que main.js revisara la página
   var rev = $$(".reveal", mount);
   if (reduce || !("IntersectionObserver" in window)) rev.forEach(function (r) { r.classList.add("in"); });
