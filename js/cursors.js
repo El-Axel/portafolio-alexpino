@@ -230,6 +230,14 @@
   }
   var counters = $$(".stats [data-count]");
   counters.forEach(function (el) { el.textContent = el.dataset.fmt === "pct" ? "+0 %" : "0"; });
+  // red de seguridad: si el cursor no alcanzó a animar una cifra, que no se quede en cero
+  if ("IntersectionObserver" in window) counters.forEach(function (el) {
+    var io = new IntersectionObserver(function (es) {
+      if (!es[0].isIntersecting) return; io.disconnect();
+      setTimeout(function () { if (/^\+?0( %)?$/.test(el.textContent.trim())) countUp(el, +el.dataset.count, el.dataset.fmt, 1100); }, 6000);
+    }, { threshold: .6 });
+    io.observe(el);
+  });
   function sceneStats() {
     if (!counters.length) return;
     var c = spawn("motion", pt(counters[0], 0, 1), -60, 120);

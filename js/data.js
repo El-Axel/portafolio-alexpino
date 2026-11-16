@@ -89,6 +89,7 @@ window.PORTFOLIO = {
   destacados: [
     {
       id: "austin",
+      sala: "assets/poster/sala-austin.jpg",
       pagina: "proyecto-austin.html",
       set: "editor",        // diseño especial de su página (ver js/proyecto.js)
       titulo: "Austin Marchese",
@@ -117,6 +118,7 @@ window.PORTFOLIO = {
     },
     {
       id: "lacepa",
+      sala: "assets/poster/sala-lacepa.jpg",
       pagina: "proyecto-la-cepa.html",
       set: "celulares",
       titulo: "La Cepa · Hotel Pinares Plaza",
@@ -145,6 +147,7 @@ window.PORTFOLIO = {
     },
     {
       id: "telecafe",
+      sala: "assets/poster/por-encima-de-la-mesa.jpg",
       pagina: "proyecto-telecafe.html",
       set: "television",
       // fotogramas sacados del tráiler (no son la foto fija; si tienes la foto fija, ponla en "fotos")
@@ -172,6 +175,7 @@ window.PORTFOLIO = {
     },
     {
       id: "ckabai",
+      sala: "assets/poster/sala-paisajes.jpg",
       pagina: "proyecto-paisajes-intimos.html",
       set: "cine",
       titulo: "Paisajes Íntimos",
@@ -197,6 +201,7 @@ window.PORTFOLIO = {
     },
     {
       id: "nosfui",
+      sala: "assets/poster/sala-nosfui.jpg",
       pagina: "proyecto-nos-fui-pues-mijo.html",
       set: "control",
       titulo: "Nos fui pues mijo",
@@ -224,6 +229,7 @@ window.PORTFOLIO = {
     },
     {
       id: "pregon",
+      sala: "assets/poster/sala-pregon.jpg",
       pagina: "proyecto-pregon-de-la-plaza.html",
       set: "cine",
       titulo: "Pregón de la plaza",

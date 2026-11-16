@@ -7,7 +7,7 @@
    · Videos que se reproducen al pasar el mouse ................... (todas)
    · Presentación: «¿Quién soy?» se arma y se desarma ............ (inicio)
    · El programa: las 5 escenas pasan por un mismo cuadro ......... (inicio)
-   · El reel: una columna de escenas con su ficha a los lados ..... (audiovisual)
+   · La sala de proyección: las escenas en un arco de pantallas ... (audiovisual)
    · Web: cada sitio en una ventana de navegador, con su ficha ...... (web)
    Todo respeta "reducir movimiento": sin animaciones, todo visible.
    ============================================================================= */
@@ -246,73 +246,109 @@
     }
   }
 
-  /* ---------- 7 · Audiovisual: el reel (columna central + ficha a los lados) ----------
-     La palabra ESCENAS queda fija detrás. La escena que pasa por el centro
-     de la pantalla se enciende (su video corre en silencio) y su ficha se
-     escribe a los lados. Los filtros por oficio siguen funcionando. */
+  /* ---------- 7 · Audiovisual: la sala de proyección ----------
+     Las escenas en un arco de pantallas (referencia: Studio Mirage). La del
+     centro va grande, con su título encima; las de los lados giran hacia
+     adentro. Se avanza con los botones, las flechas del teclado, arrastrando
+     o tocando una pantalla lateral. Los filtros por oficio dejan solo las
+     escenas de ese oficio. La pantalla central corre su video si es local. */
   var esc0 = $("#escenas");
-  if (page === "audiovisual" && esc0) {
+  if (page === "audiovisual" && esc0 && LIST.length) {
     var cards = $$(".scard", esc0);
-    var reel = document.createElement("div");
-    reel.className = "reelv";
-    esc0.parentNode.insertBefore(reel, esc0);
-    reel.innerHTML = '<p class="reel-word" aria-hidden="true">' + esc(T("Escenas")) + '</p>' +
-      '<aside class="rv-side rv-l" aria-hidden="true"><span class="rv-n" id="rv-n">01</span><span class="rv-k" id="rv-k"></span><span class="rv-y" id="rv-y"></span></aside>';
-    reel.appendChild(esc0);
-    reel.insertAdjacentHTML("beforeend", '<aside class="rv-side rv-r" aria-hidden="true"><span class="label">' + esc(T("Aquí soy")) + '</span><b class="rv-soy" id="rv-soy"></b><span class="rv-roles" id="rv-roles"></span><span class="rv-c" id="rv-c"></span><span class="rv-go">' + esc(T("Entrar a la escena →")) + '</span></aside>');
-    esc0.classList.add("reel-col");
-    if (!reduce) html.classList.add("snap-reel"); // la escena se acomoda sola en el centro
-    // miniaturas de YouTube en alta
-    cards.forEach(function (c) {
-      var im = $(".sc-media > img", c);
-      if (im && /i\.ytimg\.com\/vi\/[^/]+\/hqdefault/.test(im.src)) {
-        var hq = im.src; im.onerror = function () { im.onerror = null; im.src = hq; };
-        im.src = hq.replace("hqdefault", "maxresdefault");
-      }
-    });
-    var rvN = $("#rv-n"), rvK = $("#rv-k"), rvY = $("#rv-y"), rvSoy = $("#rv-soy"), rvRoles = $("#rv-roles"), rvC = $("#rv-c");
-    var cur = -1, sides = $$(".rv-side", reel);
-    var fill = function (i) {
-      var d = LIST[i]; if (!d) return;
-      rvN.textContent = pad(i + 1);
-      rvK.textContent = T(d.cliente || "");
-      rvY.textContent = d.anio || "";
-      rvSoy.textContent = T(d.soy || "");
-      rvRoles.innerHTML = (d.roles || []).map(function (r) { return '<span class="chip">' + esc(T(r)) + "</span>"; }).join("");
-      rvC.innerHTML = d.cifra ? "<b>" + esc(d.cifra) + "</b> " + esc(T(d.cifraTexto || "")) : "";
+    var sala = document.createElement("section");
+    sala.className = "sala"; sala.setAttribute("aria-label", T("Escenas")); sala.setAttribute("aria-roledescription", "carrusel");
+    var ROLE = function (d) { return (d.roles || []).map(function (r) { return T(r); }).join(" · "); };
+    sala.innerHTML =
+      '<div class="sala-stage">' +
+      '<div class="sala-floor" aria-hidden="true"></div>' +
+      LIST.map(function (d, i) {
+        var v = (d.videos || [])[0] || {};
+        var vid = v.tipo === "local" && !v.vertical ? '<video muted loop playsinline preload="none" src="' + esc(v.src) + '"></video>' : "";
+        return '<a class="sala-scr" href="' + esc(d.pagina) + '" data-i="' + i + '" tabindex="-1" draggable="false"><img draggable="false" src="' + esc(d.sala || v.poster || "") + '" alt="" loading="' + (i < 3 ? "eager" : "lazy") + '">' + vid + '<span class="sala-shade" aria-hidden="true"></span></a>';
+      }).join("") +
+      LIST.map(function (d, i) {
+        return '<div class="sala-tt" data-i="' + i + '" aria-hidden="true"><span class="sala-k">' + esc(T("Escena")) + " " + pad(i + 1) + " · " + esc(d.anio || "") + "</span><h2>" + esc(d.titulo) + "</h2><p>" + esc(T("Aquí soy")) + " " + esc(T(d.soy || "")) + ".</p></div>";
+      }).join("") +
+      "</div>" +
+      '<div class="sala-top"><span class="label">' + esc(T("Capítulo 02 · Audiovisual")) + '</span><span class="sala-n" aria-hidden="true"><b id="sala-n">01</b> / <span id="sala-t">' + pad(LIST.length) + "</span></span></div>" +
+      '<div class="sala-bot">' +
+      '<button class="sala-nav prev" type="button"><small>← ' + esc(T("Anterior")) + '</small><b id="sala-pv"></b></button>' +
+      '<div class="sala-mid"><p class="sala-meta" id="sala-meta"></p><a class="sala-go" id="sala-go" href="#">' + esc(T("Entrar a la escena")) + ' <i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></i></a></div>' +
+      '<button class="sala-nav next" type="button"><small>' + esc(T("Siguiente")) + ' →</small><b id="sala-nx"></b></button>' +
+      "</div>" +
+      '<p class="sala-live" id="sala-live" aria-live="polite"></p>';
+    var avSec = $("#audiovisual"); avSec.parentNode.insertBefore(sala, avSec); // a lo ancho, fuera del contenedor
+    esc0.classList.add("sala-src"); // la grilla original queda oculta: la usan los filtros
+
+    var scrs = $$(".sala-scr", sala), tts = $$(".sala-tt", sala), stageEl = $(".sala-stage", sala);
+    var cur = 0, visible = LIST.map(function (_, i) { return i; });
+    var nEl = $("#sala-n"), tEl = $("#sala-t"), pv = $("#sala-pv"), nx = $("#sala-nx"), meta = $("#sala-meta"), goEl = $("#sala-go"), live = $("#sala-live");
+    var saveData = !!(navigator.connection && navigator.connection.saveData);
+    var layout = function () {
+      var w = scrs[0] ? scrs[0].offsetWidth : 800, n = visible.length, pos = visible.indexOf(cur);
+      var step = w * (innerWidth <= 760 ? .9 : .78), depth = w * .42, turn = innerWidth <= 760 ? 18 : 34;
+      scrs.forEach(function (el, i) {
+        var k = visible.indexOf(i);
+        if (k < 0) { el.classList.add("off"); el.style.transform = "translateZ(-2000px)"; return; }
+        el.classList.remove("off");
+        var d = k - pos; if (d > n / 2) d -= n; if (d < -n / 2) d += n;
+        var a = Math.abs(d);
+        el.style.transform = "translateX(" + (d * step).toFixed(1) + "px) translateZ(" + (-a * depth).toFixed(1) + "px) rotateY(" + (-d * turn) + "deg)";
+        el.style.zIndex = 10 - a;
+        el.classList.toggle("on", a === 0); el.classList.toggle("far", a > 2);
+        el.setAttribute("aria-hidden", a === 0 ? "false" : "true");
+        el.tabIndex = a === 0 ? 0 : -1;
+        var v = $("video", el);
+        if (v) { if (a === 0 && !reduce && !saveData) { v.preload = "auto"; var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); el.classList.add("playing"); } else { v.pause(); el.classList.remove("playing"); } }
+      });
+      tts.forEach(function (t, i) { t.classList.toggle("on", i === cur); });
     };
-    var activate = function (i) {
-      if (i === cur) return;
+    var go = function (i, quiet) {
+      if (visible.indexOf(i) < 0) i = visible[0];
       cur = i;
-      cards.forEach(function (c, j) {
-        var on = j === i; c.classList.toggle("on", on);
-        var v = $("video", c);
-        if (v && !window.matchMedia("(hover: hover)").matches) return; // en celular main.js ya las enciende al verlas
-        if (v) { if (on && !reduce && !(navigator.connection && navigator.connection.saveData)) { v.preload = "auto"; var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); c.classList.add("playing"); } else { v.pause(); c.classList.remove("playing"); } }
-      });
-      if (i < 0) return;
-      if (reduce) { fill(i); return; }
-      sides.forEach(function (s) { s.classList.add("swap"); });
-      setTimeout(function () { fill(i); sides.forEach(function (s) { s.classList.remove("swap"); }); }, 220);
+      var d = LIST[i], n = visible.length, pos = visible.indexOf(i);
+      var prev = LIST[visible[(pos - 1 + n) % n]], next = LIST[visible[(pos + 1) % n]];
+      nEl.textContent = pad(pos + 1); tEl.textContent = pad(n);
+      pv.textContent = prev.titulo; nx.textContent = next.titulo;
+      meta.innerHTML = esc(ROLE(d)) + (d.cifra ? ' · <b>' + esc(d.cifra) + "</b> " + esc(T(d.cifraTexto || "")) : "");
+      goEl.href = d.pagina;
+      sala.classList.toggle("solo", n < 2);
+      if (!quiet) live.textContent = T("Escena") + " " + pad(i + 1) + ": " + d.titulo;
+      layout();
     };
-    var pick = function () {
-      var mid = innerHeight / 2, best = -1, bd = 1e9;
-      cards.forEach(function (c, j) {
-        if (c.classList.contains("f-out") || !c.offsetParent) return;
-        var r = c.getBoundingClientRect(), d = Math.abs(r.top + r.height / 2 - mid);
-        if (d < bd) { bd = d; best = j; }
-      });
-      var rr = esc0.getBoundingClientRect();
-      reel.classList.toggle("live", rr.top < innerHeight * .45 && rr.bottom > innerHeight * .55);
-      activate(best);
+    var step = function (dir) { var n = visible.length, pos = visible.indexOf(cur); go(visible[(pos + dir + n) % n]); };
+    $(".sala-nav.prev", sala).addEventListener("click", function () { step(-1); });
+    $(".sala-nav.next", sala).addEventListener("click", function () { step(1); });
+    scrs.forEach(function (el, i) {
+      el.addEventListener("click", function (e) { if (i !== cur) { e.preventDefault(); go(i); } });
+    });
+    // flechas del teclado mientras la sala está en pantalla
+    var inView = false;
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { inView = es[0].isIntersecting; }, { threshold: .5 }).observe(sala); else inView = true;
+    document.addEventListener("keydown", function (e) {
+      if (!inView || e.metaKey || e.ctrlKey || e.altKey || /input|textarea|select/i.test((e.target.tagName || ""))) return;
+      if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+    });
+    // arrastrar con el mouse o el dedo
+    var sx = null, moved = false;
+    stageEl.addEventListener("pointerdown", function (e) { sx = e.clientX; moved = false; });
+    stageEl.addEventListener("pointercancel", function () { sx = null; });
+    stageEl.addEventListener("pointermove", function (e) { if (sx !== null && Math.abs(e.clientX - sx) > 12) moved = true; });
+    stageEl.addEventListener("pointerup", function (e) { if (sx === null) return; var dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 60) step(dx < 0 ? 1 : -1); });
+    stageEl.addEventListener("click", function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    stageEl.addEventListener("dragstart", function (e) { e.preventDefault(); });
+    // los filtros por oficio: solo las escenas de ese oficio
+    var syncFilter = function () {
+      var vis = []; cards.forEach(function (c, i) { if (!c.classList.contains("f-out")) vis.push(i); });
+      visible = vis.length ? vis : LIST.map(function (_, i) { return i; });
+      go(visible.indexOf(cur) >= 0 ? cur : visible[0], true);
     };
-    var tk = false;
-    window.addEventListener("scroll", function () { if (!tk) { tk = true; requestAnimationFrame(function () { tk = false; pick(); }); } }, { passive: true });
-    window.addEventListener("resize", pick);
-    // los filtros cambian qué escenas hay: volver a mirar
     var chipsEl = $("#fbar-chips");
-    if (chipsEl) chipsEl.addEventListener("click", function () { setTimeout(pick, 60); setTimeout(pick, 500); });
-    fill(0); pick();
+    if (chipsEl) chipsEl.addEventListener("click", function () { [80, 450, 900].forEach(function (t) { setTimeout(syncFilter, t); }); });
+    window.addEventListener("resize", layout);
+    if (reduce) sala.classList.add("still");
+    syncFilter();
   }
 
   /* ---------- 8 · Web: cada sitio en su ventana, con lo que hice y con qué ---------- */
@@ -348,4 +384,22 @@
     if (reduce || !("IntersectionObserver" in window)) wr.forEach(function (r) { r.classList.add("in"); });
     else { var wio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); wio.unobserve(e.target); } }); }, { rootMargin: "0px 0px -8% 0px" }); wr.forEach(function (r) { wio.observe(r); }); }
   }
+
+  /* ---------- 9 · La luz de set: una sola luz suave que sigue a la sección ----------
+     Cada sección grande tiene su color (data-light="teal|sand|terra|petrol");
+     si no lo declara, se alternan. La luz cambia de color y de lugar con calma. */
+  (function () {
+    var LIGHT = { teal: ["rgba(46,166,144,.22)", "rgba(42,81,89,.18)"], sand: ["rgba(242,197,114,.16)", "rgba(46,166,144,.1)"], terra: ["rgba(217,103,78,.18)", "rgba(242,152,99,.1)"], petrol: ["rgba(42,81,89,.32)", "rgba(46,166,144,.08)"] };
+    var ORDER = ["teal", "sand", "petrol", "terra"];
+    var POS = [["82%", "18%"], ["16%", "30%"], ["74%", "62%"], ["22%", "70%"]];
+    var secs = $$("main > section, main > header, main > div, .sala, .cas, .remate, .nxt").filter(function (el) { return el.offsetHeight > 120; });
+    if (!secs.length || !("IntersectionObserver" in window)) return;
+    var apply = function (el) {
+      var i = secs.indexOf(el), key = el.dataset.light || (el.matches(".cta,.remate,.tone-terra") ? "terra" : ORDER[i % ORDER.length]), c = LIGHT[key] || LIGHT.teal, p = POS[i % POS.length];
+      var st = html.style; st.setProperty("--lc", c[0]); st.setProperty("--lc2", c[1]); st.setProperty("--lx", p[0]); st.setProperty("--ly", p[1]);
+    };
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) apply(e.target); }); }, { rootMargin: "-45% 0px -45% 0px" });
+    secs.forEach(function (el) { io.observe(el); });
+    apply(secs[0]);
+  })();
 })();

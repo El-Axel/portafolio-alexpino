@@ -140,3 +140,13 @@
 - web.html (Capítulo 05 · Web): datos en `D.web` (grupo "cero" = hechas de cero en código; "modificadas" = WordPress + Elementor), render en experiencia.js §8, CSS sección 32. Capturas en assets/web (primer pantallazo, 1280 px). Contacto pasó a ser 06 en el menú; atajos 1–6.
 - Mis Finanzas va sin captura a propósito: la app abierta mostraba datos personales de Alex. Tarjeta tipográfica hasta que él mande una captura con datos de ejemplo.
 - Pregón de la plaza = Escena 06 (proyecto universitario; cámara, dirección de fotografía y producción de las cápsulas + la web). El podcast NO se menciona (pedido de Alex). Sin cifra: el resultado es el tráiler publicado y el sitio en línea. El número de escenas en el Inicio sale de `D.destacados.length` (`--n`).
+
+## Audiovisual = sala de proyección
+- experiencia.js §7 crea `.sala` (fuera del `.wrap`, antes de `#audiovisual`): pantallas en arco con `transform` calculado en JS (`layout()`), títulos `.sala-tt`, anterior/siguiente, flechas del teclado (solo con la sala en pantalla), arrastre, filtros por oficio (lee `.f-out` de las `.scard` ocultas de `#escenas`, que siguen existiendo solo para eso).
+- Imagen de cada pantalla: campo `sala` en `D.destacados` (assets/poster/sala-*.jpg; las de YouTube son sus portadas guardadas en el repo). La central corre su video si es local y horizontal (Telecafé).
+- CSS sección 33. `.sala` es isla oscura (también en tema claro).
+
+## Fondo unificado («luz de set»)
+- Sección 34 de style.css: `.bg` ya no pinta las manchas SVG (oculto); es el fondo liso + una luz radial (`--lc`, `--lc2`, `--lx`, `--ly`, registradas con @property para que transicionen). experiencia.js §9 cambia la luz según la sección en pantalla (data-light="teal|sand|terra|petrol" opcional; si no, se alternan; CTA/remate = terra).
+- Las franjas `.tone*` ya no pintan fondo ni textura (::before/::after ocultos). Hero, entrada de proyecto, programa y siguiente escena se funden con el fondo por degradado. No volver a poner fondos propios con bordes duros por sección.
+- cursors.js: las cifras de la portada tienen red de seguridad (si el cursor no las anima en 6 s, cuentan solas).

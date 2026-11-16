@@ -53,6 +53,7 @@
     "Guarda las memorias de los 3 encuentros, el kit de herramientas y la venta del libro del ciclo, ganador de la Concertación Municipal de Pereira.": "It holds the records of the 3 meetings, the toolkit and the book sales for the program, a winner of Pereira's Municipal Concertation call.",
     /* ---------- experiencia: menú, barra lateral, portada ---------- */
     "Menú": "Menu",
+    "Entrar a la escena": "Enter the scene",
     "Sonido": "Sound",
     "Al aire en Telecafé": "On air on Telecafé",
     "Cámara · Foto fija · Edición": "Camera · Stills · Editing",
