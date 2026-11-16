@@ -51,7 +51,7 @@ Abrir `index.html` con doble clic también funciona, pero los videos de YouTube 
 ├── editorial.html             Diseño editorial (estantería + libro)
 ├── web.html                   Sitios y apps web (hechas de cero / páginas que sumé)
 ├── contacto.html              "Arma tu pedido" → WhatsApp
-├── proyecto-*.html            Una página por proyecto (5), armadas por js/proyecto.js
+├── proyecto-*.html            Una página por proyecto (6), armadas por js/proyecto.js
 ├── 404.html
 ├── css/
 │   ├── vendor/open-props.min.css   Framework (tokens base)
@@ -120,8 +120,8 @@ Tema claro (`html[data-theme="light"]`): `--ground #EEF2F0` y `--ink #10201F`, m
 | **Átomos** | Tokens de color, tipo y espacio · `.btn` (+ `.primary`) · `.chip` · `.label` · `.tc` (timecode) · `.dot` · iconos SVG · `.tgl` (switch) |
 | **Moléculas** | `.stat` (cifra + texto) · `.opt` (opción del pedido) · campo con etiqueta del pedido · `.ficha` (dato de ficha técnica) · grupo de botones del cierre · `.prefs` (tema + idioma) |
 | **Organismos** | `.topbar` (barra lateral: marca + botón de menú + escena actual + prefs + timecode) · `.mnu` (menú a pantalla completa) · `.pslide` (escena del programa) · `.corte` (transición) · `.scard` (tarjeta de escena) · `.bhead` (encabezado de sección: rombo + título + etiqueta + número) · `.tlx` (línea de tiempo de video) · `.brief` (formulario "Arma tu pedido") · `.viewer` (visor) · `.cta` (cierre "Próxima escena") · `footer` / créditos · `.pre` (claqueta) |
-| **Plantillas** | `data-page="inicio"`, `"sobre-mi"`, `"audiovisual"`, `"grafico"`, `"editorial"`, `"web"`, `"contacto"` y `"proyecto"`. Esta última es una sola plantilla que se rellena con `data-id` + `data.js` para los 5 proyectos. |
-| **Páginas** | `index.html`, `sobre-mi.html`, `audiovisual.html`, `grafico.html`, `editorial.html`, `web.html`, `contacto.html` y las 5 páginas `proyecto-*.html` |
+| **Plantillas** | `data-page="inicio"`, `"sobre-mi"`, `"audiovisual"`, `"grafico"`, `"editorial"`, `"web"`, `"contacto"` y `"proyecto"`. Esta última es una sola plantilla que se rellena con `data-id` + `data.js` para los 6 proyectos. |
+| **Páginas** | `index.html`, `sobre-mi.html`, `audiovisual.html`, `grafico.html`, `editorial.html`, `web.html`, `contacto.html` y las 6 páginas `proyecto-*.html` |
 
 ### Reglas de uso
 - No hay barras, porcentajes ni puntos para medir habilidades.

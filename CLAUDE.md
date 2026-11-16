@@ -139,4 +139,4 @@
 - Sección 31 de style.css: vidrio esmerilado (tokens `--gl-fill`, `--gl-hi`, `--gl-rim`, `--gl-drop`) aplicado con un solo `:is(...)` a paneles, chips, botones, barra lateral. Versión clara con los mismos tokens bajo `html[data-theme="light"]`; gen_light.py no regenera esas reglas.
 - web.html (Capítulo 05 · Web): datos en `D.web` (grupo "cero" = hechas de cero en código; "modificadas" = WordPress + Elementor), render en experiencia.js §8, CSS sección 32. Capturas en assets/web (primer pantallazo, 1280 px). Contacto pasó a ser 06 en el menú; atajos 1–6.
 - Mis Finanzas va sin captura a propósito: la app abierta mostraba datos personales de Alex. Tarjeta tipográfica hasta que él mande una captura con datos de ejemplo.
-- Pendiente: Pregón de la plaza como Escena 06 (falta su rol en cápsulas/podcast y resultados). Tráiler: YouTube 9jISh5-TYGk.
+- Pregón de la plaza = Escena 06 (proyecto universitario; cámara, dirección de fotografía y producción de las cápsulas + la web). El podcast NO se menciona (pedido de Alex). Sin cifra: el resultado es el tráiler publicado y el sitio en línea. El número de escenas en el Inicio sale de `D.destacados.length` (`--n`).

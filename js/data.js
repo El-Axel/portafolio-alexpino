@@ -221,6 +221,31 @@ window.PORTFOLIO = {
          (reclamo de LatinAutor - UMPG). El sitio lo muestra con vista previa y un botón para verlo en YouTube.
          Si subes una versión sin esa canción (o un mp4 en assets/video), quita "embed: false" o cambia el video. */
       videos: [{ tipo: "youtube", id: "pH4I3-CPcwU", inicio: 2365, embed: false, titulo: "Nos fui pues mijo" }]
+    },
+    {
+      id: "pregon",
+      pagina: "proyecto-pregon-de-la-plaza.html",
+      set: "cine",
+      titulo: "Pregón de la plaza",
+      cliente: "Proyecto universitario",
+      anio: "2026",
+      roles: ["Cámara", "Dirección de fotografía", "Producción"],
+      soy: "el que lleva la cámara a la plaza",
+      formato: "Cápsulas documentales · Web",
+      hice: ["Fui camarógrafo y director de fotografía de las cápsulas documentales.", "Produje el rodaje en las plazas de mercado.", "Diseñé y programé el sitio web del proyecto."],
+      cifra: "",
+      cifraTexto: "Cápsulas documentales y sitio web",
+      descripcion: "Cámara, dirección de fotografía y producción de cápsulas documentales sobre las plazas de mercado del Eje Cafetero, y el sitio web del proyecto.",
+      caso: {
+        problema: "Las plazas de mercado del Eje Cafetero son memoria viva, pero desde afuera solo parecen ruido y desorden.",
+        proceso: "Rodaje en las plazas, con la gente que las mueve, para unas cápsulas documentales.",
+        solucion: "Cápsulas con la imagen al servicio de la gente de la plaza, y un sitio web que las reúne con el archivo visual y el mapa de las plazas.",
+        resultado: "El tráiler de las cápsulas está publicado y el sitio está en línea con 14 plazas mapeadas."
+      },
+      videos: [
+        { tipo: "youtube", id: "9jISh5-TYGk", titulo: "Tráiler de las cápsulas" }
+      ],
+      verTambien: { href: "web.html", texto: "Ver el sitio web del proyecto" }
     }
   ],
 

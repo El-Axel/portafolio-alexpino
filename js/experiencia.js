@@ -175,6 +175,7 @@
     var small = function (v) { return v.tipo === "youtube" ? "https://i.ytimg.com/vi/" + v.id + "/hqdefault.jpg" : (v.poster || ""); };
     var N = LIST.length;
     var bg = $(".prg .prog-bg"), tl = $("#prog-tl"), numEl = $("#prog-n");
+    var pinEl = $("#prog-pin"); if (pinEl) pinEl.style.setProperty("--n", N); var totEl = $("#prog-total"); if (totEl) totEl.textContent = pad(N);
     bg.innerHTML = LIST.map(function (d, i) { var v = (d.videos || [])[0] || {}; return '<img src="' + esc(small(v)) + '" alt="" data-i="' + i + '" loading="lazy">'; }).join("");
     slidesEl.innerHTML = LIST.map(function (d, i) {
       var v = (d.videos || [])[0] || {};
