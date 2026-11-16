@@ -38,6 +38,7 @@
   <link rel="preload" as="image" href="assets/img/hero-glass-movil.jpg" media="(max-width: 760px)">
   <!-- tema (claro/oscuro) e idioma (es/en): se deciden antes de pintar para que no parpadee -->
   <script>(function(){var d=document.documentElement,q=null,l=null,t=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}try{l=localStorage.getItem("ap-lang");t=localStorage.getItem("ap-theme")}catch(e){}if(q==="en"||q==="es"){l=q;try{localStorage.setItem("ap-lang",q)}catch(e){}}if(l!=="en"&&l!=="es")l=/^en/i.test(navigator.language||"")?"en":"es";d.lang=l;d.setAttribute("data-theme",t==="light"?"light":"dark");if(l==="en"){d.classList.add("i18n-wait");setTimeout(function(){d.classList.remove("i18n-wait")},2500)}})()</script>
+  <link rel="stylesheet" href="css/vendor/open-props.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/claro.css">
   <script type="application/ld+json">

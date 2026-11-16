@@ -86,6 +86,12 @@
   - Para mandarle el portafolio a un cliente de EE. UU.: `https://alexpino.netlify.app/?lang=en`.
 - En el inicio se quitaron el panel de "Capas" y la cinta de oficios (pedido del profe: menos movimiento). Lo demás de la portada sigue igual.
 
+## Tokens y framework (Aplicaciones móviles y web, Momento 2)
+- Framework CSS: Open Props (`css/vendor/open-props.min.css`, se carga antes de style.css). Solo variables: no trae componentes.
+- Escalas en la sección 01 de style.css: espaciado `--space-1…12` (base 4 px) y tipografía `--fs-2xs…xl` + fluidas `--fs-lead/h3/h2/h1/display`.
+- Regla: nada de px sueltos en padding, margin, gap ni font-size. Usa el token más cercano.
+- README.md documenta la tecnología, la estructura, los tokens y el Atomic Design (con los nombres reales de las clases). Si renombras un componente, actualiza el README y Figma.
+
 ## Antes de dar algo por terminado
 - Probar en escritorio y en celular de 390 px y 360 px de ancho: sin errores en consola y sin scroll horizontal.
 - Probar en los dos temas (claro y oscuro) y en los dos idiomas.
