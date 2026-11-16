@@ -54,7 +54,7 @@ Abrir `index.html` con doble clic también funciona, pero los videos de YouTube 
 ├── 404.html
 ├── css/
 │   ├── vendor/open-props.min.css   Framework (tokens base)
-│   ├── style.css              Tokens + base + componentes (secciones numeradas 01–27)
+│   ├── style.css              Tokens + base + componentes (secciones numeradas 01–28)
 │   ├── sets.css               "Sets" de cada proyecto (editor, celulares, TV, cine, control)
 │   ├── impresos.css           Vitrinas de gráfico y editorial
 │   └── claro.css              Tema claro (GENERADO por tools/gen_light.py)
@@ -63,6 +63,7 @@ Abrir `index.html` con doble clic también funciona, pero los videos de YouTube 
 │   ├── i18n.js                Traducción ES → EN
 │   ├── shell.js               Barra superior, pie, visor y ayudas comunes a todas las páginas
 │   ├── main.js                Lógica común (línea de tiempo, claqueta, filtros, pedido…)
+│   ├── experiencia.js         Menú a pantalla completa, cortes entre páginas, portada cinética y «el programa»
 │   ├── proyecto.js            Páginas de proyecto
 │   ├── impresos.js            Vitrinas y libros
 │   ├── paginas.js             Sobre mí
@@ -117,7 +118,7 @@ Tema claro (`html[data-theme="light"]`): `--ground #EEF2F0` y `--ink #10201F`, m
 |---|---|
 | **Átomos** | Tokens de color, tipo y espacio · `.btn` (+ `.primary`) · `.chip` · `.label` · `.tc` (timecode) · `.dot` · iconos SVG · `.tgl` (switch) |
 | **Moléculas** | `.stat` (cifra + texto) · `.opt` (opción del pedido) · campo con etiqueta del pedido · `.ficha` (dato de ficha técnica) · grupo de botones del cierre · `.prefs` (tema + idioma) |
-| **Organismos** | `.topbar` (marca + `.layers` nav + prefs + timecode) · `.scard` (tarjeta de escena) · `.bhead` (encabezado de sección: rombo + título + etiqueta + número) · `.tlx` (línea de tiempo de video) · `.brief` (formulario "Arma tu pedido") · `.viewer` (visor) · `.cta` (cierre "Próxima escena") · `footer` / créditos · `.pre` (claqueta) |
+| **Organismos** | `.topbar` (barra lateral: marca + botón de menú + escena actual + prefs + timecode) · `.mnu` (menú a pantalla completa) · `.pslide` (escena del programa) · `.corte` (transición) · `.scard` (tarjeta de escena) · `.bhead` (encabezado de sección: rombo + título + etiqueta + número) · `.tlx` (línea de tiempo de video) · `.brief` (formulario "Arma tu pedido") · `.viewer` (visor) · `.cta` (cierre "Próxima escena") · `footer` / créditos · `.pre` (claqueta) |
 | **Plantillas** | `data-page="inicio"`, `"sobre-mi"`, `"audiovisual"`, `"grafico"`, `"editorial"`, `"contacto"` y `"proyecto"`. Esta última es una sola plantilla que se rellena con `data-id` + `data.js` para los 5 proyectos. |
 | **Páginas** | `index.html`, `sobre-mi.html`, `audiovisual.html`, `grafico.html`, `editorial.html`, `contacto.html` y las 5 páginas `proyecto-*.html` |
 
@@ -128,7 +129,7 @@ Tema claro (`html[data-theme="light"]`): `--ground #EEF2F0` y `--ink #10201F`, m
 - Se respeta "reducir movimiento": sin claqueta ni cursores, y el sitio se ve terminado.
 
 ### Responsive
-Puntos de quiebre en **900px** (la barra pasa a dos filas y los proyectos a una columna) y **760px** (celular: la portada pasa a vertical). Probado en 1440, 1024, 390 y 360px, sin scroll horizontal.
+Puntos de quiebre en **900px** (la barra lateral pasa a ser una fila arriba y los proyectos a una columna) y **760px** (celular: la portada pasa a vertical). Probado en 1440, 1024, 390 y 360px, sin scroll horizontal.
 
 ---
 

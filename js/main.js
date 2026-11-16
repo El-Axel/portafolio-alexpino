@@ -727,7 +727,7 @@
     var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
     var f = Math.round(p * TOTAL), s = Math.floor(f / 25);
     tcEl.textContent = "00:" + pad(Math.floor(s / 60)) + ":" + pad(s % 60) + ":" + pad(f % 25);
-    ph.style.width = (p * 100).toFixed(2) + "%";
+    ph.style.setProperty("--p", p.toFixed(4)); document.documentElement.style.setProperty("--scroll-p", p.toFixed(4));
     if (!reduce) decos.forEach(function (d) {
       var r = d.parentNode.getBoundingClientRect();
       d.style.setProperty("--sy", (-r.top * (parseFloat(d.style.getPropertyValue("--d")) || .1)).toFixed(1));

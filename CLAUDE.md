@@ -113,3 +113,11 @@
 - Clips en LOG con su versión etalonada, y material en bruto, para `comparar`.
 - Marcar "Color" en los `roles` de los proyectos donde hizo el color.
 - Revisar los rangos de presupuesto del pedido de WhatsApp.
+
+## Experiencia «transmisión en vivo» (entrega 1)
+- Misma identidad (colores, Krona One + Figtree, vidrio estriado, isotipo); cambia la ESTRUCTURA.
+- `js/experiencia.js` (va después de main.js en todas las páginas): barra lateral con la escena actual, menú a pantalla completa (`.mnu`, Esc/Tab atrapado), corte entre páginas (`.corte`, sessionStorage `ap-cut`), video que se reproduce al pasar el mouse (`video[data-hover]`), título cinético de la portada (`.hero-pin` → `--k`) y «el programa» de escenas (`#prog-pin`, una escena por pantalla, línea de tiempo abajo).
+- CSS en style.css sección 28. Escritorio ≥901px: la barra superior es una barra lateral (`--rail: 76px`). Celular: una fila (marca · menú · timecode); los switches viven dentro del menú.
+- Clases nuevas que NO se deben reutilizar: `.mnu`, `.corte`, `.prg`, `.pslide`, `.pframe`, `.ptl-*`, `.kin*`, `.lens-o`.
+- `.prog-stage`, `.mnu` y `.corte` son islas oscuras (también en tema claro); están en la lista ISL de tools/gen_light.py.
+- Reducir movimiento: sin corte, título quieto y todas las escenas una debajo de otra.

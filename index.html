@@ -37,7 +37,7 @@
   <link rel="preload" as="image" href="assets/img/hero-glass.jpg" media="(min-width: 761px)">
   <link rel="preload" as="image" href="assets/img/hero-glass-movil.jpg" media="(max-width: 760px)">
   <!-- tema (claro/oscuro) e idioma (es/en): se deciden antes de pintar para que no parpadee -->
-  <script>(function(){var d=document.documentElement,q=null,l=null,t=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}try{l=localStorage.getItem("ap-lang");t=localStorage.getItem("ap-theme")}catch(e){}if(q==="en"||q==="es"){l=q;try{localStorage.setItem("ap-lang",q)}catch(e){}}if(l!=="en"&&l!=="es")l=/^en/i.test(navigator.language||"")?"en":"es";d.lang=l;d.setAttribute("data-theme",t==="light"?"light":"dark");if(l==="en"){d.classList.add("i18n-wait");setTimeout(function(){d.classList.remove("i18n-wait")},2500)}})()</script>
+  <script>(function(){var d=document.documentElement,q=null,l=null,t=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}try{l=localStorage.getItem("ap-lang");t=localStorage.getItem("ap-theme")}catch(e){}if(q==="en"||q==="es"){l=q;try{localStorage.setItem("ap-lang",q)}catch(e){}}if(l!=="en"&&l!=="es")l=/^en/i.test(navigator.language||"")?"en":"es";d.lang=l;d.setAttribute("data-theme",t==="light"?"light":"dark");if(l==="en"){d.classList.add("i18n-wait");setTimeout(function(){d.classList.remove("i18n-wait")},2500)}try{if(sessionStorage.getItem("ap-cut")){d.classList.add("cutting");setTimeout(function(){d.classList.remove("cutting")},1500)}}catch(e){}})()</script>
   <link rel="stylesheet" href="css/vendor/open-props.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/claro.css">
@@ -79,7 +79,9 @@
     <p class="pre-bot" aria-hidden="true">Toca el botón o presiona Enter</p>
   </div>
   <main id="contenido">
-    <section class="hero" aria-labelledby="hero-title">
+    <!-- ========== PRESENTACIÓN: la pregunta se arma y se desarma con el scroll ========== -->
+    <div class="hero-pin" id="hero-pin">
+    <section class="hero hero-x" aria-labelledby="hero-title">
       <picture>
         <source media="(max-width: 760px)" srcset="assets/img/hero-glass-movil.jpg">
         <img class="hero-img" src="assets/img/hero-glass.jpg" alt="Alex Pino de perfil, con gafas, a contraluz teal; un vidrio estriado refracta la luz frente a su rostro" fetchpriority="high">
@@ -92,7 +94,6 @@
       <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="mblur" x="-5%" y="0" width="110%" height="100%"><feGaussianBlur id="mblur-g" stdDeviation="0 0"/></filter></svg>
       <div class="hero-leaks" aria-hidden="true"><i></i><i></i><i></i></div>
       <span class="hero-flare" aria-hidden="true"></span>
-      <div class="guides" aria-hidden="true"></div>
       <div class="hero-lbox" aria-hidden="true"></div>
 
       <!-- visor de cámara sobre el retrato -->
@@ -113,35 +114,14 @@
         <button class="lv-auto" type="button" id="lens-auto" aria-label="Volver a los valores automáticos">A</button>
       </div>
 
-      <div class="glass-edge" aria-hidden="true"></div>
-      <div class="hero-text">
-        <div class="sel" data-cur="hero-sel"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b>
-          <h1 id="hero-title">¿Quién soy?</h1>
-        </div>
-        <p class="sub">Depende del <span class="uw" data-cur="hero-uw">proyecto<svg viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C60 30 140 30 196 6"/></svg></span>.</p>
+      <div class="kin">
+        <h1 id="hero-title" class="kin-title" data-kin>¿Quién soy?</h1>
+        <p class="kin-sub">Depende del <span class="uw" data-cur="hero-uw">proyecto<svg viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C60 30 140 30 196 6"/></svg></span>.</p>
         <p class="intro" id="intro"></p>
-      </div>
-
-      <!-- isotipo de vidrio -->
-      <div class="float iso-glass" style="--d:30" aria-hidden="true">
-        <span class="bob"><span class="fill"></span><svg viewBox="70 50 360 370"><defs><linearGradient id="isoEdge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".5" stop-color="#fff" stop-opacity=".15"/><stop offset="1" stop-color="#F29863" stop-opacity=".8"/></linearGradient></defs><use href="#iso"/></svg></span>
-      </div>
-
-      <!-- dock: prompt + línea de tiempo -->
-      <div class="dock">
-        <div class="prompt" aria-live="polite">
-          <span class="in"><span id="typed">Editor de video</span><span class="caret"></span></span>
-          <a class="go" href="#escenas-sec">Ver escenas</a>
-        </div>
-        <div class="tl" aria-hidden="true">
-          <div class="tl-ruler"></div>
-          <div class="trk"><span class="tn">V2</span><span class="lane"><b class="clip c-sand" style="left:6%;width:14%">Título</b><b class="clip c-peach" style="left:48%;width:10%">Gráfico</b><b class="clip c-sand" style="left:78%;width:16%">Logo</b></span></div>
-          <div class="trk"><span class="tn">V1</span><span class="lane"><b class="clip c-teal" style="left:0;width:22%">Hook</b><b class="clip c-petrol" style="left:22.5%;width:30%">Entrevista</b><b class="clip c-teal" style="left:53%;width:19%" data-cur="hero-clip">B-roll</b><b class="clip c-petrol" style="left:72.5%;width:27.5%">Cierre</b></span></div>
-          <div class="trk"><span class="tn">A1</span><span class="lane"><b class="clip wave" style="left:0;width:100%"></b></span></div>
-          <span class="tl-head"></span>
-        </div>
+        <div class="kin-go"><a class="btn primary" href="#programa">Ver escenas</a><span class="kin-hint" aria-hidden="true">Baja para rodar ↓</span></div>
       </div>
     </section>
+    </div>
 
     <!-- ========== GANCHO AL ORIGEN ========== -->
     <a class="gancho wrap reveal" href="sobre-mi.html#origen">
@@ -156,11 +136,16 @@
       <a class="stat reveal glass-sand" href="proyecto-telecafe.html"><span class="v">Al aire</span><span class="t">en Telecafé<small>Por encima de la mesa · serie documental</small></span></a>
     </section>
 
-    <!-- ========== ESCENAS ========== -->
-    <section id="escenas-sec" class="block wrap tone tone-film pad" aria-labelledby="h-escenas">
-      <header class="bhead reveal"><span class="kf"></span><h2 id="h-escenas">Escenas</h2><p class="label">Un proyecto, un papel distinto</p><span class="tcode">01</span></header>
-      <div class="ruler" aria-hidden="true"></div>
-      <div id="escenas" class="scenes"></div>
+    <!-- ========== EL PROGRAMA: las 5 escenas pasan por un mismo cuadro mientras bajas ========== -->
+    <section class="prg" id="programa" aria-labelledby="h-prog">
+      <div class="prog-pin" id="prog-pin">
+        <div class="prog-stage">
+          <div class="prog-bg" aria-hidden="true"></div>
+          <header class="prog-head"><span class="kf"></span><h2 id="h-prog">Escenas</h2><p class="label">Un proyecto, un papel distinto</p><span class="prog-count" aria-hidden="true"><b id="prog-n">01</b> / 05</span></header>
+          <div class="prog-slides" id="prog-slides"></div>
+          <div class="prog-tl" id="prog-tl" aria-label="Escenas"></div>
+        </div>
+      </div>
     </section>
 
     <!-- ========== MÁS TRABAJO ========== -->
@@ -188,6 +173,7 @@
   <script src="js/i18n.js"></script>
   <script src="js/shell.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/experiencia.js"></script>
   <script src="js/cursors.js"></script>
 </body>
 </html>

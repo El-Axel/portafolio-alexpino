@@ -18,6 +18,22 @@
 
   var EN = {
     /* ---------- marco común ---------- */
+    /* ---------- experiencia: menú, barra lateral, portada ---------- */
+    "Menú": "Menu",
+    "Al aire": "On air",
+    "Cerrar ✕": "Close ✕",
+    "Cerrar": "Close",
+    "Inicio": "Home",
+    "El origen": "The origin",
+    "Cinco escenas": "Five scenes",
+    "Impresos que se tocan": "Print you can touch",
+    "Publicaciones para hojear": "Publications to flip through",
+    "Próxima escena": "Next scene",
+    "Escena 00 · Inicio": "Scene 00 · Home",
+    "Toma perdida": "Lost take",
+    "Baja para rodar ↓": "Scroll to roll ↓",
+    "WhatsApp ↗": "WhatsApp ↗",
+    "Pereira, Colombia": "Pereira, Colombia",
     "Saltar al contenido": "Skip to content",
     "Sobre mí": "About",
     "Audiovisual": "Film & video",
