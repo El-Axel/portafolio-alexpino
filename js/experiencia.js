@@ -194,9 +194,9 @@
           ln(esc(d.soy || ""), "ln-rol") +
           ln((d.roles || []).map(function (r) { return '<span class="chip">' + esc(r) + "</span>"; }).join(""), "ln-chips") +
           (d.cifra ? ln('<b class="pcifra">' + esc(d.cifra) + "</b> " + esc(d.cifraTexto || ""), "ln-cifra") : "") +
-          ln('<a class="plink" href="' + esc(d.pagina) + '">Entrar a la escena →</a>', "ln-go") +
+          ln('<a class="plink" href="audiovisual.html?e=' + (i + 1) + '">' + esc(T("Verla en la sala")) + ' →</a>', "ln-go") +
         "</div>" +
-        '<a class="pframe hp-host" href="' + esc(d.pagina) + '" aria-label="' + esc(T("Ver") + " " + d.titulo) + '">' +
+        '<a class="pframe hp-host" href="audiovisual.html?e=' + (i + 1) + '" aria-label="' + esc(T("Ver") + " " + d.titulo + " " + T("en la sala de proyección")) + '">' +
           '<span class="pframe-in">' + pic + "</span>" +
           '<span class="ptag"><b class="rec"></b>' + esc(T("Escena") + " " + pad(i + 1)) + "</span>" +
           '<span class="pyear">' + esc(d.anio || "") + "</span>" +
@@ -348,7 +348,9 @@
     if (chipsEl) chipsEl.addEventListener("click", function () { [80, 450, 900].forEach(function (t) { setTimeout(syncFilter, t); }); });
     window.addEventListener("resize", layout);
     if (reduce) sala.classList.add("still");
+    try { var eq = parseInt(new URLSearchParams(location.search).get("e"), 10); if (eq >= 1 && eq <= LIST.length) cur = eq - 1; } catch (e) {}
     syncFilter();
+    if (cur > 0) setTimeout(function () { sala.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }); }, 400);
   }
 
   /* ---------- 8 · Web: cada sitio en su ventana, con lo que hice y con qué ---------- */
@@ -402,4 +404,100 @@
     secs.forEach(function (el) { io.observe(el); });
     apply(secs[0]);
   })();
+
+  /* ---------- 10 · Recorrido lineal ----------
+     La portada es un tráiler por capítulos (cada uno lleva a su página) y
+     cada página termina con «Siguiente capítulo». Así el visitante sigue un
+     orden: Inicio → Sobre mí → Audiovisual → Gráfico → Editorial → Web → Contacto. */
+  var CHAPS = [
+    ["index.html", "inicio", "00", "Inicio", "¿Quién soy?"],
+    ["sobre-mi.html", "sobre-mi", "01", "Sobre mí", "El origen"],
+    ["audiovisual.html", "audiovisual", "02", "Audiovisual", "Seis escenas"],
+    ["grafico.html", "grafico", "03", "Gráfico", "Impresos que se tocan"],
+    ["editorial.html", "editorial", "04", "Editorial", "Publicaciones para hojear"],
+    ["web.html", "web", "05", "Web", "Sitios que se navegan"],
+    ["contacto.html", "contacto", "06", "Contacto", "Próxima escena"]
+  ];
+  var chIdx = -1; CHAPS.forEach(function (c, i) { if (c[1] === page) chIdx = i; });
+  var mainEl = $("main");
+  if (chIdx >= 1 && chIdx < CHAPS.length - 1 && mainEl) {
+    var nx2 = CHAPS[chIdx + 1];
+    var old = $(".cta", mainEl); if (old && page === "sobre-mi") old.remove(); // el cierre propio se reemplaza por el capítulo siguiente
+    mainEl.insertAdjacentHTML("beforeend",
+      '<nav class="nextch wrap" aria-label="' + esc(T("Siguiente capítulo")) + '"><a href="' + nx2[0] + '">' +
+      '<span class="label"><b class="rec"></b>' + esc(T("Siguiente capítulo")) + '</span>' +
+      '<span class="nc-row"><em>' + nx2[2] + '</em><b>' + esc(T(nx2[3])) + '</b><i aria-hidden="true">→</i></span>' +
+      '<small>' + esc(T(nx2[4])) + "</small></a>" +
+      '<a class="nc-back" href="' + CHAPS[chIdx - 1][0] + '">← ' + esc(T("Capítulo anterior")) + ": " + esc(T(CHAPS[chIdx - 1][3])) + "</a></nav>");
+  }
+
+  // los adelantos de la portada (gráfico, editorial, web), armados con data.js
+  var fanEl = $("#fan"), booksEl = $("#books"), winsEl = $("#wins");
+  if (fanEl && D.grafico) {
+    var G = D.grafico.slice(0, 5), mid = (G.length - 1) / 2;
+    fanEl.innerHTML = G.map(function (g, i) {
+      var src = g.portada || (g.paginas || [])[0] || (g.imagenes || [])[0] || "", d = i - mid;
+      return '<a class="fan-c" href="grafico.html#' + esc(g.id) + '" style="--d:' + d + ";--d2:" + (d * d) + '"><img src="' + esc(src) + '" alt="' + esc(g.titulo) + '" loading="lazy"><span>' + esc(g.titulo) + "</span></a>";
+    }).join("");
+  }
+  if (booksEl && D.editorial) {
+    booksEl.innerHTML = D.editorial.slice(0, 4).map(function (b, i) {
+      var src = b.portada || (b.paginas || [])[0] || "";
+      return '<a class="book-c" href="editorial.html" style="--i:' + i + '"><span class="bk"><img src="' + esc(src) + '" alt="' + esc(b.titulo) + '" loading="lazy"></span><span class="bk-t">' + esc(b.titulo) + "</span></a>";
+    }).join("");
+  }
+  if (winsEl && D.web) {
+    winsEl.innerHTML = D.web.filter(function (w) { return w.img; }).slice(0, 3).map(function (w, i) {
+      return '<a class="win-c" href="web.html" style="--i:' + i + '"><span class="wb-bar" aria-hidden="true"><i></i><i></i><i></i><span class="wb-url">' + esc(w.titulo) + '</span></span><img src="' + esc(w.img) + '" alt="' + esc(w.titulo) + '" loading="lazy"></a>';
+    }).join("");
+  }
+
+  // --p de 0 a 1 mientras el elemento cruza la pantalla (los adelantos se arman con el scroll)
+  var scrubs = $$("[data-scrub]"), words = $$("[data-words]");
+  // la frase del capítulo 01: cada palabra se «enciende» al bajar
+  words.forEach(function (h) {
+    var walk = function (node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+        if (n.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          T(n.textContent).split(/(\s+)/).forEach(function (w) {
+            if (!w) return;
+            if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(w)); return; }
+            var sp = document.createElement("span"); sp.className = "wd"; sp.textContent = w; frag.appendChild(sp);
+          });
+          n.parentNode.replaceChild(frag, n);
+        }
+      });
+    };
+    walk(h);
+    h.setAttribute("aria-label", h.textContent.replace(/\s+/g, " ").trim());
+  });
+  if (reduce) { scrubs.forEach(function (el) { el.style.setProperty("--p", 1); }); words.forEach(function (h) { $$(".wd, .pill", h).forEach(function (w) { w.classList.add("on"); }); }); }
+  else if (scrubs.length || words.length) {
+    var tick = false;
+    var upd = function () {
+      tick = false; var vh = innerHeight;
+      scrubs.forEach(function (el) {
+        var r = el.getBoundingClientRect(), p = clamp((vh - r.top) / (vh * .55 + r.height * .5), 0, 1);
+        el.style.setProperty("--p", p.toFixed(3));
+      });
+      words.forEach(function (h) {
+        var r = h.getBoundingClientRect(), p = clamp((vh * .85 - r.top) / (r.height + vh * .35), 0, 1);
+        var ws = $$(".wd, .pill", h), n = Math.round(p * ws.length);
+        ws.forEach(function (w, i) { w.classList.toggle("on", i < n); });
+      });
+    };
+    window.addEventListener("scroll", function () { if (!tick) { tick = true; requestAnimationFrame(upd); } }, { passive: true });
+    window.addEventListener("resize", upd); upd();
+  }
+
+  // en la portada, la barra lateral dice en qué capítulo vas
+  if (page === "inicio" && scene && "IntersectionObserver" in window) {
+    var chs = $$("[data-chap]");
+    var baseLabel = scene.textContent;
+    var cio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) scene.textContent = T(e.target.dataset.chap); }); }, { rootMargin: "-45% 0px -45% 0px" });
+    chs.forEach(function (c) { cio.observe(c); });
+    var top = new IntersectionObserver(function (es) { if (es[0].isIntersecting) scene.textContent = baseLabel; }, { rootMargin: "-45% 0px -45% 0px" });
+    var hp = $("#hero-pin"); if (hp) top.observe(hp);
+  }
 })();

@@ -150,3 +150,11 @@
 - Sección 34 de style.css: `.bg` ya no pinta las manchas SVG (oculto); es el fondo liso + una luz radial (`--lc`, `--lc2`, `--lx`, `--ly`, registradas con @property para que transicionen). experiencia.js §9 cambia la luz según la sección en pantalla (data-light="teal|sand|terra|petrol" opcional; si no, se alternan; CTA/remate = terra).
 - Las franjas `.tone*` ya no pintan fondo ni textura (::before/::after ocultos). Hero, entrada de proyecto, programa y siguiente escena se funden con el fondo por degradado. No volver a poner fondos propios con bordes duros por sección.
 - cursors.js: las cifras de la portada tienen red de seguridad (si el cursor no las anima en 6 s, cuentan solas).
+
+## Recorrido lineal (pedido de Alex: que el visitante no se salte capítulos)
+- Orden: Inicio → Sobre mí (01) → Audiovisual (02) → Gráfico (03) → Editorial (04) → Web (05) → Contacto (06). Lista CHAPS en experiencia.js §10.
+- La portada es un tráiler por capítulos (`.chap#cap-0n`, data-chap, data-light). Ningún elemento de la portada lleva directo a un proyecto: el programa de escenas lleva a `audiovisual.html?e=N` (la sala abre en esa escena). Las cifras ya no son enlaces.
+- Capítulo 01: frase con imágenes dentro (`[data-words]` + `.pill`, referencia Hero Studio); las palabras se encienden con el scroll. Si se cambia el texto, actualizar los fragmentos en i18n.js (se traducen antes de partir en palabras).
+- Capítulos 03–05: adelantos con `[data-scrub]` (`--p` 0→1 al cruzar la pantalla): abanico de impresos, portadas que giran, ventanas que se despliegan.
+- Cada página (01–05) termina con `.nextch` «Siguiente capítulo» (y «← Capítulo anterior»). En Sobre mí reemplaza su cierre anterior.
+- En la portada, la barra lateral muestra el capítulo actual.

@@ -44,7 +44,7 @@ Abrir `index.html` con doble clic también funciona, pero los videos de YouTube 
 ## Estructura
 
 ```
-├── index.html                 Inicio
+├── index.html                 Inicio (tráiler por capítulos 01–06)
 ├── sobre-mi.html              Sobre mí (origen, Grabo/Edito/Cuento, línea de tiempo)
 ├── audiovisual.html           Escenas audiovisuales + reels y videoclips
 ├── grafico.html               Diseño gráfico (vitrinas interactivas)
