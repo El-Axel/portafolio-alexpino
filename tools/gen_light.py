@@ -48,7 +48,7 @@ def notisl(sel):
         s=s.strip()
         if not s: continue
         first=re.split(r'[\s>+~]',s)[0]
-        if any(x in s.split(':')[0].split() or s.startswith(x) for x in ISL_SET) or re.match(r'^(\.hero|\.pre|\.viewer|\.stage|\.tv|\.phone|\.screen|\.tlx|\.sc-media|\.keys|\.prog-|\.prg|\.pslide|\.pframe|\.ptl|\.ptag|\.pyear|\.pc\b|\.pnum|\.ptitle|\.pcifra|\.plink|\.pmeta|\.ln|\.mnu|\.corte|html\[data-theme|html\.cutting|\.kin|\.lens-o|\.en-|\.entry|\.nxt-|\.crt|\.reel-word|\.rm-)',s): return None
+        if any(x in s.split(':')[0].split() or s.startswith(x) for x in ISL_SET) or re.match(r'^(\.hero|\.pre|\.viewer|\.stage|\.tv|\.phone|\.screen|\.tlx|\.sc-media|\.keys|\.prog-|\.prg|\.pslide|\.pframe|\.ptl|\.ptag|\.pyear|\.pc\b|\.pnum|\.ptitle|\.pcifra|\.plink|\.pmeta|\.ln|\.mnu|\.corte|html\[data-theme|html\.cutting|\.kin|\.lens-o|\.en-|\.entry|\.nxt-|\.crt|\.reel-word|\.rm-|:is\(\.glass)',s): return None
         if s.startswith(('html','body',':root')):
             s=re.sub(r'^(html|:root)','',s).strip()
         pe=''

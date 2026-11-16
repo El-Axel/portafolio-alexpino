@@ -608,5 +608,34 @@ window.PORTFOLIO = {
       "dobles": [],
       "ar": "867/1300"
     }
+    ],
+
+  /* ---------- WEB ----------
+     grupo "cero": las hice completas, en código (HTML, CSS y JavaScript).
+     grupo "modificadas": sitios de otros a los que les hice home, páginas
+     o micrositios internos en WordPress + Elementor.
+     "img": captura del primer pantallazo (assets/web). Sin captura → tarjeta tipográfica. */
+  web: [
+    { id: "pregon-web", grupo: "cero", titulo: "Pregón de la plaza", tipo: "Sitio de un proyecto transmedia", url: "https://pregondelaplaza.netlify.app/", img: "assets/web/pregon-web.jpg", anio: "2026",
+      hice: "Todo el sitio: diseño, código y contenido.", con: "Código · HTML, CSS y JavaScript",
+      funciona: "Reúne en un solo lugar el archivo visual, el mapa de 14 plazas, el documental y el podcast del proyecto." },
+    { id: "claqueta", grupo: "cero", titulo: "Claqueta", tipo: "App web para editores de video", url: "https://gestordetareass.netlify.app/", img: "assets/web/claqueta.jpg", anio: "",
+      hice: "Todo: la idea, el diseño y el código.", con: "Código · HTML, CSS y JavaScript",
+      funciona: "Una mesa de trabajo para editores: cola de videos, entregas y calendario de rodaje, y se conecta con Google Calendar." },
+    { id: "gladys", grupo: "cero", titulo: "Gladys del Campo", tipo: "Sitio homenaje", url: "https://gladydelcampo.netlify.app/", img: "assets/web/gladys.jpg", anio: "2025",
+      hice: "Todo el sitio: diseño, código y contenido.", con: "Código · HTML, CSS y JavaScript",
+      funciona: "Cuenta la vida de una pionera de la radio y la televisión colombiana en cuatro paradas: inicio, biografía, carrera y legado." },
+    { id: "finanzas", grupo: "cero", titulo: "Mis Finanzas", tipo: "App web de presupuesto personal", url: "https://finanzas-personale.netlify.app/", img: "", anio: "",
+      hice: "Todo: la idea, el diseño y el código.", con: "Código · HTML, CSS y JavaScript",
+      funciona: "Escribes un gasto como en WhatsApp («almuerzo 25000») y queda anotado. Muestra lo que te queda en el mes, lo pendiente y las metas de ahorro, con respaldo en archivo o en Google." },
+    { id: "audigesco", grupo: "modificadas", titulo: "Audigesco", tipo: "Firma contable y de SST · Pereira", url: "https://audigesco.com/", img: "assets/web/audigesco.jpg", anio: "",
+      hice: "Rediseñé el home y agregué las páginas de Contabilidad, Servicios y Seguridad y Salud en el Trabajo.", con: "WordPress + Elementor",
+      funciona: "Cada servicio de la firma tiene ahora su propia página, y el home lleva a ellas." },
+    { id: "astilla-sostiene", grupo: "modificadas", titulo: "¿Qué sostiene a la cultura?", tipo: "Micrositio · La Astilla en el Ojo", url: "https://laaao.com/que-sostiene-a-la-cultura/", img: "assets/web/astilla-sostiene.jpg", anio: "2026",
+      hice: "Diseñé y armé esta interna completa dentro del sitio de La Astilla.", con: "WordPress + Elementor",
+      funciona: "Es la memoria digital de un proyecto del Programa Nacional de Concertación Cultural 2026: encuentros, modelo, voces y descargas en una sola página." },
+    { id: "astilla-ciclo", grupo: "modificadas", titulo: "Ciclo de Comunicación Cultural", tipo: "Micrositio · La Astilla en el Ojo", url: "https://laaao.com/ciclo-de-comunicacion-cultural/", img: "assets/web/astilla-ciclo.jpg", anio: "2026",
+      hice: "Diseñé y armé esta interna completa dentro del sitio de La Astilla.", con: "WordPress + Elementor",
+      funciona: "Guarda las memorias de los 3 encuentros, el kit de herramientas y la venta del libro del ciclo, ganador de la Concertación Municipal de Pereira." }
   ]
 };

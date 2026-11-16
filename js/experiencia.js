@@ -8,6 +8,7 @@
    · Presentación: «¿Quién soy?» se arma y se desarma ............ (inicio)
    · El programa: las 5 escenas pasan por un mismo cuadro ......... (inicio)
    · El reel: una columna de escenas con su ficha a los lados ..... (audiovisual)
+   · Web: cada sitio en una ventana de navegador, con su ficha ...... (web)
    Todo respeta "reducir movimiento": sin animaciones, todo visible.
    ============================================================================= */
 (function () {
@@ -27,7 +28,7 @@
   /* ---------- 1 · Escena actual en la barra lateral ---------- */
   var scene = $("#rail-scene");
   if (scene) {
-    var names = { "inicio": "Escena 00 · Inicio", "sobre-mi": "El origen", "audiovisual": "Escenas", "grafico": "Gráfico", "editorial": "Editorial", "contacto": "Próxima escena", "404": "Toma perdida" };
+    var names = { "inicio": "Escena 00 · Inicio", "sobre-mi": "El origen", "audiovisual": "Escenas", "grafico": "Gráfico", "editorial": "Editorial", "web": "Web", "contacto": "Próxima escena", "404": "Toma perdida" };
     var label = names[page] || "";
     if (page === "proyecto") {
       var id = body.dataset.id, i = LIST.findIndex(function (d) { return d.id === id; });
@@ -311,5 +312,39 @@
     var chipsEl = $("#fbar-chips");
     if (chipsEl) chipsEl.addEventListener("click", function () { setTimeout(pick, 60); setTimeout(pick, 500); });
     fill(0); pick();
+  }
+
+  /* ---------- 8 · Web: cada sitio en su ventana, con lo que hice y con qué ---------- */
+  var websEl = $("#webs");
+  if (page === "web" && websEl && D.web) {
+    var GROUPS = [
+      ["cero", "Hechas de cero", "Diseño y código míos, de principio a fin"],
+      ["modificadas", "Páginas que sumé", "Sitios de otros: home, páginas y micrositios en WordPress + Elementor"]
+    ];
+    var host = function (u) { try { var x = new URL(u); return x.host.replace(/^www\./, "") + (x.pathname.length > 1 ? x.pathname.replace(/\/$/, "") : ""); } catch (e) { return u; } };
+    var k = 0;
+    websEl.innerHTML = GROUPS.map(function (g, gi) {
+      var items = D.web.filter(function (w) { return w.grupo === g[0]; });
+      if (!items.length) return "";
+      return '<div class="wb-group"><header class="bhead reveal"><span class="kf"></span><h2>' + esc(T(g[1])) + '</h2><p class="label">' + esc(T(g[2])) + '</p><span class="tcode">' + pad(gi + 1) + "</span></header>" +
+        items.map(function (w) {
+          k++;
+          var scr = w.img
+            ? '<img src="' + esc(w.img) + '" alt="' + esc(T("Captura de") + " " + w.titulo) + '" loading="lazy">'
+            : '<span class="wb-tile"><b>' + esc(w.titulo) + "</b><small>" + esc(T(w.tipo)) + "</small></span>";
+          return '<article class="wb reveal">' +
+            '<a class="wb-win" href="' + esc(w.url) + '" target="_blank" rel="noopener" aria-label="' + esc(T("Abrir") + " " + w.titulo + " " + T("en una pestaña nueva")) + '">' +
+            '<span class="wb-bar" aria-hidden="true"><i></i><i></i><i></i><span class="wb-url">' + esc(host(w.url)) + '</span><span class="wb-go">' + esc(T("Abrir")) + ' ↗</span></span>' +
+            '<span class="wb-scr">' + scr + "</span></a>" +
+            '<div class="wb-meta"><p class="label"><span class="wb-n">' + pad(k) + "</span>" + esc(T(w.tipo)) + "</p><h3>" + esc(w.titulo) + "</h3>" +
+            '<dl class="ficha"><div><dt>' + esc(T("Lo que hice")) + "</dt><dd>" + esc(T(w.hice)) + "</dd></div><div><dt>" + esc(T("Con qué")) + "</dt><dd>" + esc(T(w.con)) + "</dd></div>" +
+            (w.anio ? "<div><dt>" + esc(T("Año")) + "</dt><dd>" + esc(w.anio) + "</dd></div>" : "") + "</dl>" +
+            '<p class="wb-why">' + esc(T(w.funciona)) + "</p>" +
+            '<a class="plink" href="' + esc(w.url) + '" target="_blank" rel="noopener">' + esc(T("Ver en vivo")) + " ↗</a></div></article>";
+        }).join("") + "</div>";
+    }).join("");
+    var wr = $$(".reveal", websEl);
+    if (reduce || !("IntersectionObserver" in window)) wr.forEach(function (r) { r.classList.add("in"); });
+    else { var wio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); wio.unobserve(e.target); } }); }, { rootMargin: "0px 0px -8% 0px" }); wr.forEach(function (r) { wio.observe(r); }); }
   }
 })();

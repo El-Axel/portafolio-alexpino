@@ -835,46 +835,109 @@
   renderRecap(D.destacados);
   renderCredits(D.creditos);
 
-  /* ---------- claqueta de entrada ----------
-     El visitante da REC y el sitio "empieza a grabar". Si no toca nada,
-     arranca solo a los 3,5 s. Solo sale una vez por visita. */
+  /* ---------- intro ----------
+     1 · Un monitor muestra una recopilación de escenas (con su rótulo).
+     2 · Play: tus tomas cortan a pantalla completa, cada vez más rápido;
+         la cámara se aleja y el montaje queda dentro del isotipo, que gira
+         en 3D, se frena en el árbol, se vuelve arena y todo queda amarillo.
+     3 · Cuenta 3·2·1 amarilla (un segundo por número), destello, obturador
+         y portada. Los tiempos son largos a propósito: que se disfrute.
+     Solo sale una vez por visita; "Saltar intro" (o Esc) entra directo. */
   window.APP.rolling = new Promise(function (resolve) {
     var pre = $("#pre");
     if (!pre || !root.classList.contains("pre-on")) { if (pre) pre.remove(); return resolve(); }
+    var T_ = window.T || function (x) { return x; };
     var btn = $("#pre-rec"), tc = $("#pre-tc"), state = $(".pre-state em", pre), num = $("#pre-n", pre);
-    var t0 = performance.now(), done = false, raf = 0;
+    var skip = $("#pre-skip"), snd = $("#pre-sound"), reel = $("#pre-reel"), mont = $("#pre-mont"), obj = $("#x-obj");
+    var t0 = performance.now(), done = false, raf = 0, sound = false, ac = null, timers = [];
     document.body.style.overflow = "hidden";
     (function tick(now) {
       var f = Math.floor((now - t0) / 40);
       tc.textContent = "00:00:" + pad(Math.floor(f / 25) % 60) + ":" + pad(f % 25);
       raf = requestAnimationFrame(tick);
     })(t0);
-    setTimeout(function () { btn.focus({ preventScroll: true }); }, 50);
-    var at = function (ms, fn) { setTimeout(fn, ms); };
+    setTimeout(function () { btn.focus({ preventScroll: true }); }, 60);
+    if (reel && reel.play) { var rp = reel.play(); if (rp && rp.catch) rp.catch(function () {}); }
+
+    // rótulos del monitor: una escena cada 4 s, sincronizados con el video
+    var LT = [
+      ["Escena 03", "Por encima de la mesa", "Al aire en Telecafé"],
+      ["Escena 02", "La Cepa · Hotel Pinares Plaza", "+40 % en reservas"],
+      ["Escena 03", "Por encima de la mesa", "Cámara · Foto fija · Edición"],
+      ["Escena 02", "La Cepa · Hotel Pinares Plaza", "Cámara · Edición · Diseño gráfico"],
+      ["Escena 03", "Por encima de la mesa", "Serie documental para televisión"]
+    ];
+    var lt = $(".pre-lt", pre), ltN = $("#lt-n"), ltT = $("#lt-t"), ltS = $("#lt-s"), ltCur = 0;
+    function setLT(i) {
+      if (i === ltCur) return; ltCur = i;
+      lt.classList.add("swap");
+      setTimeout(function () { var d = LT[i] || LT[0]; ltN.textContent = T_(d[0]); ltT.textContent = d[1]; ltS.textContent = T_(d[2]); lt.classList.remove("swap"); }, 420);
+    }
+    if (reel) reel.addEventListener("timeupdate", function () { setLT(Math.min(LT.length - 1, Math.floor(reel.currentTime / 4))); });
+
+    // el volumen del isotipo: copias apiladas detrás de la cara
+    function buildDepth() {
+      if (!obj || obj.dataset.built) return; obj.dataset.built = "1";
+      var S = Math.min(innerHeight * .46, innerWidth * (innerWidth <= 760 ? .62 : .36)), step = S / 150, face = $(".x-face", obj), html = "";
+      for (var k = 18; k >= 1; k--) {
+        var c = k === 1 ? "#F2C572" : k === 2 ? "#C9974E" : k <= 4 ? "#7A5A33" : "rgb(" + (42 - k) + "," + Math.round(70 - k * 2.2) + "," + Math.round(78 - k * 2.4) + ")";
+        html += '<span class="x-l" style="background:' + c + ";transform:translateZ(" + (-k * step).toFixed(2) + 'px)"></span>';
+      }
+      face.insertAdjacentHTML("beforebegin", html);
+    }
+
+    // sonido (apagado por defecto): pitidos de la cuenta
+    function beep(f, d, v) {
+      if (!sound) return;
+      try {
+        ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+        var o = ac.createOscillator(), g = ac.createGain();
+        o.type = "sine"; o.frequency.value = f; g.gain.value = v || .12;
+        g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + d);
+        o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime + d);
+      } catch (e) {}
+    }
+    if (snd) snd.addEventListener("click", function () { sound = !sound; snd.setAttribute("aria-pressed", sound); if (sound) beep(660, .08, .06); });
+
+    var at = function (ms, fn) { timers.push(setTimeout(fn, ms)); };
+    function finish(fast) {
+      timers.forEach(clearTimeout);
+      root.classList.add("revealing");
+      pre.classList.remove("flash", "counting", "x"); pre.classList.add("opening");
+      root.classList.remove("pre-on"); document.body.style.overflow = "";
+      requestAnimationFrame(function () { requestAnimationFrame(function () { pre.classList.add("go"); }); });
+      setTimeout(function () { cancelAnimationFrame(raf); if (reel) reel.pause(); if (mont) mont.pause(); pre.remove(); resolve(); }, fast ? 900 : 1400);
+      setTimeout(function () { root.classList.remove("revealing"); }, fast ? 2200 : 3000);
+    }
+    function count(n) { num.textContent = n; num.classList.remove("tick"); void num.offsetWidth; num.classList.add("tick"); beep(1000, .14); }
     function go() {
       if (done) return; done = true;
       try { sessionStorage.setItem("ap-rec", "1"); } catch (e) {}
-      // 1 · REC: el cuadro se pone rojo
-      pre.classList.add("rolling"); state.textContent = "REC";
-      // 2 · cuenta regresiva de película: 3, 2, 1
-      at(380, function () { pre.classList.add("counting"); num.textContent = "3"; });
-      at(800, function () { num.textContent = "2"; });
-      at(1220, function () { num.textContent = "1"; });
-      // 3 · destello blanco y el obturador se abre sobre la portada, que "se revela"
-      at(1640, function () { pre.classList.add("flash"); });
-      at(1760, function () {
-        pre.classList.remove("flash", "counting"); pre.classList.add("opening");
-        root.classList.add("revealing");
-        root.classList.remove("pre-on"); document.body.style.overflow = "";
-        requestAnimationFrame(function () { requestAnimationFrame(function () { pre.classList.add("go"); }); });
-      });
-      at(2600, function () { cancelAnimationFrame(raf); pre.remove(); resolve(); });
-      at(4200, function () { root.classList.remove("revealing"); });
+      buildDepth();
+      state.textContent = "REC";
+      if (mont) { try { mont.currentTime = 0; } catch (e) {} var mp = mont.play(); if (mp && mp.catch) mp.catch(function () {}); }
+      pre.classList.add("x");
+      if (reel) setTimeout(function () { reel.pause(); }, 900);
+      // 3 · cuenta amarilla: un segundo por número
+      at(10500, function () { pre.classList.add("counting"); count("3"); });
+      at(11500, function () { count("2"); });
+      at(12500, function () { count("1"); });
+      at(13500, function () { pre.classList.add("flash"); beep(1400, .3, .08); });
+      at(13700, function () { finish(false); });
     }
     btn.addEventListener("click", go);
-    document.addEventListener("keydown", function k(e) { if (e.key === "Enter" || e.key === " " || e.key === "Escape") { document.removeEventListener("keydown", k); e.preventDefault(); go(); } });
-    pre.classList.add("auto");
-    setTimeout(go, 3600);
+    if (skip) skip.addEventListener("click", function () {
+      if (pre.classList.contains("opening")) return;
+      done = true;
+      try { sessionStorage.setItem("ap-rec", "1"); } catch (e) {}
+      finish(true);
+    });
+    document.addEventListener("keydown", function k(e) {
+      if (!document.body.contains(pre)) { document.removeEventListener("keydown", k); return; }
+      if (e.target === skip || e.target === snd) return;
+      if ((e.key === "Enter" || e.key === " ") && !done) { e.preventDefault(); go(); }
+      if (e.key === "Escape") { document.removeEventListener("keydown", k); skip.click(); }
+    });
   });
 
   /* ---------- la cámara de la portada ----------
@@ -1018,9 +1081,9 @@
      1–5: saltar a cada sección · 0: quitar el filtro · ?: ver los atajos */
   (function keys() {
     var help = $("#keys"), hint = $("#kbd-hint"), hud = $("#hud"), hudT = 0;
-    var SECS = ["sobre-mi", "audiovisual", "grafico", "editorial", "contacto"];
-    var PAGES = ["sobre-mi.html", "audiovisual.html", "grafico.html", "editorial.html", "contacto.html"];
-    var NAMES = { audiovisual: "Audiovisual", "reels-wrap": "Reels", grafico: "Gráfico", editorial: "Editorial", "sobre-mi": "Sobre mí", contacto: "Contacto" };
+    var SECS = ["sobre-mi", "audiovisual", "grafico", "editorial", "web", "contacto"];
+    var PAGES = ["sobre-mi.html", "audiovisual.html", "grafico.html", "editorial.html", "web.html", "contacto.html"];
+    var NAMES = { audiovisual: "Audiovisual", "reels-wrap": "Reels", grafico: "Gráfico", editorial: "Editorial", web: "Web", "sobre-mi": "Sobre mí", contacto: "Contacto" };
     function nameOf(el) {
       if (el.classList.contains("project")) return $("h3", el).textContent;
       if (el.classList.contains("scard")) return $(".sc-title", el).textContent;

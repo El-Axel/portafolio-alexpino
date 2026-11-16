@@ -127,3 +127,16 @@
 - Audiovisual (experiencia.js §7): `.reelv` envuelve `#escenas` (clase `.reel-col`): palabra «Escenas» fija detrás (`.reel-word`), la tarjeta del centro se enciende (`.on`) y su ficha se escribe en `.rv-l`/`.rv-r`. Snap suave (`html.snap-reel`). Los filtros por oficio siguen igual.
 - Proyecto (proyecto.js): entrada `#entry` con el título partido en diagonal (`.en-a`/`.en-b`, `--e` por scroll); «El caso» en `.cas` (un paso por pantalla, índice fijo a la izquierda); `.remate` con la cifra contando (solo si el proyecto tiene `cifra`; no se inventan cifras); `.crt` en Telecafé (tv) y Nos fui (sala de control); `.nxt` = siguiente escena a lo ancho.
 - `.entry`, `.nxt-go` y `.crt` son islas oscuras en gen_light.py.
+
+## Intro (index.html · #pre)
+- 1 · Monitor (`.pre-mon`) con `assets/video/monitor-reel.mp4` (5 escenas de 4 s) y rótulos sincronizados por `timeupdate` (lista LT en main.js). Botón Play amarillo al centro.
+- 2 · Play → `.pre.x`: `assets/video/montaje.mp4` (cortes que aceleran y frenan, ~10,8 s, termina congelado en el árbol) a pantalla completa dentro de `.x-face`, cuya máscara del isotipo encoge (3,3–5,7 s). Luego el isotipo gira en 3D (18 capas `.x-l` creadas por JS: filo arena + laterales petróleo), reflejo, se llena de arena (8,4 s), la cámara entra (9,5 s) y todo queda amarillo.
+- 3 · Cuenta amarilla 3·2·1, un segundo por número (10,5–13,5 s), destello, obturador lento y portada. Tiempos largos a propósito (pedido de Alex: que las cosas tomen su tiempo).
+- "Saltar intro" o Esc entra directo. Una vez por sesión (`ap-rec`); no sale con "reducir movimiento".
+- Austin, Paisajes Íntimos y Nos fui pues mijo aún no están en los videos (solo existen en YouTube): cuando Alex mande clips mp4, regenerar monitor-reel.mp4 y montaje.mp4 (ver comandos ffmpeg en el historial) y añadir sus rótulos a LT.
+
+## Vidrio y sección Web
+- Sección 31 de style.css: vidrio esmerilado (tokens `--gl-fill`, `--gl-hi`, `--gl-rim`, `--gl-drop`) aplicado con un solo `:is(...)` a paneles, chips, botones, barra lateral. Versión clara con los mismos tokens bajo `html[data-theme="light"]`; gen_light.py no regenera esas reglas.
+- web.html (Capítulo 05 · Web): datos en `D.web` (grupo "cero" = hechas de cero en código; "modificadas" = WordPress + Elementor), render en experiencia.js §8, CSS sección 32. Capturas en assets/web (primer pantallazo, 1280 px). Contacto pasó a ser 06 en el menú; atajos 1–6.
+- Mis Finanzas va sin captura a propósito: la app abierta mostraba datos personales de Alex. Tarjeta tipográfica hasta que él mande una captura con datos de ejemplo.
+- Pendiente: Pregón de la plaza como Escena 06 (falta su rol en cápsulas/podcast y resultados). Tráiler: YouTube 9jISh5-TYGk.
