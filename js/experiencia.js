@@ -501,7 +501,7 @@
     var gPieces = G.map(function (g, i) {
       var el = document.createElement("a"); el.className = "gp" + (i ? " in" : ""); el.href = "grafico.html";
       el.innerHTML = '<img src="' + esc(gSrc(g)) + '" alt="' + esc(g.titulo) + '" loading="lazy">';
-      var im = el.firstChild, setW = function () { if (im.naturalWidth / im.naturalHeight > 1.3) el.classList.add("wide"); };
+      var im = el.firstChild, setW = function () { if (im.naturalWidth) el.style.setProperty("--ar", (im.naturalWidth / im.naturalHeight).toFixed(4)); };
       if (im.complete) setW(); else im.addEventListener("load", setW);
       gBox.appendChild(el); return el;
     });
