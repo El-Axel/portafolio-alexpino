@@ -493,18 +493,44 @@
   }
 
   // los adelantos de la portada (gráfico, editorial, web), armados con data.js
-  var mesaEl = $("#mesa-t"), booksEl = $("#books"), wtEl = $("#wtrav");
-  // capítulo 03 · mesa de luz: las piezas regadas sobre la mesa; con el scroll la cámara baja y cada una se levanta
-  if (mesaEl && D.grafico) {
-    var G = D.grafico.slice(0, 5), extra = [];
-    G.forEach(function (g) { if (g.paginas && g.paginas[1] && extra.length < 2) extra.push({ g: g, src: g.paginas[1] }); });
-    var piezas = G.map(function (g) { return { g: g, src: g.portada || (g.paginas || [])[0] || (g.imagenes || [])[0] || "" }; }).concat(extra);
-    // x, y, ancho (en % de la mesa), giro, altura máxima
-    var SPOT = [[6, 10, 22, -8, 70], [32, 4, 19, 6, 150], [58, 12, 26, -4, 100], [10, 52, 27, 5, 40], [41, 46, 19, -10, 190], [66, 54, 21, 8, 120], [37, 76, 15, -3, 80]];
-    mesaEl.innerHTML = piezas.slice(0, SPOT.length).map(function (it, i) {
-      var s = SPOT[i];
-      return '<a class="mp" href="grafico.html" style="left:' + s[0] + "%;top:" + s[1] + "%;width:" + s[2] + "%;--r:" + s[3] + "deg;--zm:" + s[4] + '"><img src="' + esc(it.src) + '" alt="' + esc(it.g.titulo) + '" loading="lazy"><span>' + esc(it.g.titulo) + "</span></a>";
-    }).join("");
+  var gEl = $("#gfx"), booksEl = $("#books"), wtEl = $("#wtrav");
+  // capítulo 03 · diseño gráfico «uno a uno»: una pieza grande a la vez; con el scroll se aparta como una hoja y entra la siguiente
+  if (gEl && D.grafico) {
+    var G = D.grafico.slice(0, 5), gBox = $("#gfx-box"), gInfo = $("#gfx-info"), gTh = $("#gfx-th");
+    var gSrc = function (g) { return g.portada || (g.paginas || [])[0] || (g.imagenes || [])[0] || ""; };
+    var gPieces = G.map(function (g, i) {
+      var el = document.createElement("a"); el.className = "gp" + (i ? " in" : ""); el.href = "grafico.html";
+      el.innerHTML = '<img src="' + esc(gSrc(g)) + '" alt="' + esc(g.titulo) + '" loading="lazy">';
+      var im = el.firstChild, setW = function () { if (im.naturalWidth / im.naturalHeight > 1.3) el.classList.add("wide"); };
+      if (im.complete) setW(); else im.addEventListener("load", setW);
+      gBox.appendChild(el); return el;
+    });
+    gTh.innerHTML = G.map(function (g) { return '<button type="button" style="background-image:url(\'' + esc(gSrc(g)) + '\')" aria-label="' + esc(g.titulo) + '"></button>'; }).join("");
+    var gThumbs = $$("button", gTh), gCur = -1, gT = 0;
+    var gSet = function (i) {
+      if (i === gCur) return; gCur = i;
+      gPieces.forEach(function (el, k) { el.classList.toggle("out", k < i); el.classList.toggle("in", k > i); el.style.transform = ""; el.tabIndex = k === i ? 0 : -1; });
+      gThumbs.forEach(function (b, k) { b.classList.toggle("on", k === i); b.setAttribute("aria-current", k === i ? "true" : "false"); });
+      gInfo.classList.add("swap"); clearTimeout(gT);
+      gT = setTimeout(function () {
+        var g = G[i];
+        $(".gi-ct", gInfo).textContent = pad(i + 1) + " / " + pad(G.length); $(".gi-k", gInfo).textContent = T(g.tipo);
+        $(".gi-t", gInfo).textContent = g.titulo; $(".gi-p", gInfo).textContent = T(g.texto || ""); gInfo.classList.remove("swap");
+      }, reduce ? 0 : 260);
+    };
+    gSet(0);
+    if (reduce) { gEl.classList.add("static"); gThumbs.forEach(function (b, k) { b.addEventListener("click", function () { gSet(k); }); }); }
+    else {
+      var gTick = false;
+      var gUpd = function () { gTick = false; var r = gEl.getBoundingClientRect(), span = gEl.offsetHeight - innerHeight, p = span > 0 ? clamp(-r.top / span, 0, 1) : 0; gSet(Math.min(G.length - 1, Math.floor(p * G.length * .999))); };
+      window.addEventListener("scroll", function () { if (!gTick) { gTick = true; requestAnimationFrame(gUpd); } }, { passive: true });
+      window.addEventListener("resize", gUpd); gUpd();
+      // las miniaturas llevan a su pieza
+      gThumbs.forEach(function (b, k) { b.addEventListener("click", function () { var span = gEl.offsetHeight - innerHeight; window.scrollTo({ top: gEl.getBoundingClientRect().top + scrollY + span * (k + .5) / G.length, behavior: "smooth" }); }); });
+      // la pieza se inclina con el mouse, como si la tuvieras en la mano
+      gBox.addEventListener("pointermove", function (e) { if (e.pointerType !== "mouse") return; var r = gBox.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5, el = gPieces[gCur]; if (el) el.style.transform = "rotateY(" + (x * 14).toFixed(2) + "deg) rotateX(" + (-y * 10).toFixed(2) + "deg)"; });
+      gBox.addEventListener("pointerleave", function () { var el = gPieces[gCur]; if (el) el.style.transform = ""; });
+    }
   }
   if (booksEl && D.editorial) {
     booksEl.innerHTML = D.editorial.slice(0, 4).map(function (b, i) {

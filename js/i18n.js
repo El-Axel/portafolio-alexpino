@@ -62,6 +62,8 @@
     "Conoce el origen": "Meet the origin",
     "Entrar a la sala de proyección": "Enter the screening room",
     "Ver los impresos": "See the print work",
+    "Ver el diseño gráfico": "See the graphic design",
+    "Diseño gráfico.": "Graphic design.",
     "Hojear las publicaciones": "Flip through the publications",
     "Ver los sitios": "See the sites",
     "Revistas, catálogos y libros.": "Magazines, catalogs and books.",

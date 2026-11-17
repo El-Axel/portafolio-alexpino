@@ -2033,18 +2033,31 @@ html[data-theme="light"] .sala::before{background:radial-gradient(60% 55% at 50%
 .pill.on{transform:none;opacity:1}
 .pill img{width:100%;height:100%;object-fit:cover}
 .pill:hover{width:3.4em}
-/* capítulo 03: mesa de luz. Arranca cenital (mesa inclinada) y con el scroll la cámara baja; cada pieza se levanta a su altura */
-.mesa{--p:0;position:relative;height:clamp(400px,66vh,660px);margin-top:clamp(40px,8vh,90px);perspective:1100px;perspective-origin:50% 30%}
-.mesa-t{position:absolute;left:50%;top:50%;width:min(1000px,92%);aspect-ratio:1.5;translate:-50% -50%;transform-style:preserve-3d;border-radius:28px;
-  transform:rotateX(calc(52deg - var(--p) * 46deg)) rotateZ(calc(-12deg + var(--p) * 12deg)) scale(calc(.8 + var(--p) * .14));
-  background:radial-gradient(55% 55% at 50% 50%,rgba(242,197,114,.2),rgba(42,81,89,.22) 60%,transparent 76%);transition:transform .25s linear}
-.mp{position:absolute;display:block;border-radius:4px;color:inherit;text-decoration:none;transform-style:preserve-3d;
-  transform:translateZ(calc(var(--p) * var(--zm) * 1px)) rotate(var(--r));transition:transform .25s linear}
-.mp img{display:block;width:100%;height:auto;border-radius:4px;box-shadow:0 calc(6px + var(--p) * var(--zm) * .25px) calc(10px + var(--p) * var(--zm) * .5px) rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.1);transition:box-shadow .4s}
-.mp span{position:absolute;left:0;bottom:-2.2em;white-space:nowrap;font-size:var(--fs-sm);font-weight:700;color:var(--ink);opacity:0;transition:opacity .4s}
-.mp:hover,.mp:focus-visible{z-index:5;transform:translateZ(calc(var(--p) * var(--zm) * 1px + 60px)) rotate(0deg);transition:transform .5s var(--ease)}
-.mp:hover img,.mp:focus-visible img{box-shadow:0 30px 60px -10px rgba(0,0,0,.7),0 0 0 2px var(--sand)}
-.mp:hover span,.mp:focus-visible span{opacity:1}
+/* capítulo 03: diseño gráfico «uno a uno». La sección se fija; una pieza grande a la vez que se inclina con el mouse (JS: experiencia.js) */
+.gfx{position:relative;height:calc(100vh + 5 * 60vh);margin-top:var(--space-6)}
+.gfx-st{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:center;gap:var(--space-8)}
+.gfx-box{position:relative;height:72vh;perspective:1400px}
+.gp{position:absolute;left:50%;top:50%;translate:-50% -50%;width:min(64%,440px);transform-style:preserve-3d;transition:transform .9s var(--ease),opacity .6s;color:inherit}
+.gp.wide{width:min(94%,660px)}
+.gp img{display:block;width:100%;height:auto;max-height:68vh;object-fit:contain;border-radius:3px;box-shadow:0 2px 2px rgba(0,0,0,.25),0 30px 60px -10px rgba(0,0,0,.65)}
+.gp.out{opacity:0;transform:translateY(-38%) rotate(-6deg) scale(.9);pointer-events:none}
+.gp.in{opacity:0;transform:translateY(40%) rotate(5deg) scale(.95);pointer-events:none}
+.gp:focus-visible{outline:2px solid var(--sand);outline-offset:6px}
+.gfx-info{display:grid;align-content:center;gap:var(--space-3)}
+.gfx-info > *{transition:opacity .4s,transform .5s var(--ease)}
+.gfx-info.swap > :not(.gfx-th){opacity:0;transform:translateY(12px)}
+.gi-ct{font-size:var(--fs-xs);font-weight:700;letter-spacing:.16em;color:var(--faint);font-variant-numeric:tabular-nums}
+.gi-k{color:var(--sand)}
+.gi-t{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,3.6vw,3.4rem);line-height:1;letter-spacing:-.025em}
+.gi-p{margin:0;max-width:34ch;color:var(--soft);font-size:var(--fs-base)}
+.gfx-th{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-4)}
+.gfx-th button{width:44px;height:44px;border:0;padding:0;border-radius:4px;background-size:cover;background-position:center;opacity:.4;cursor:pointer;outline:1px solid transparent;transition:opacity .3s,outline-color .3s}
+.gfx-th button:hover{opacity:.75}
+.gfx-th button.on{opacity:1;outline-color:var(--sand)}
+.gfx-th button:focus-visible{outline:2px solid var(--sand);outline-offset:2px}
+/* reducir movimiento: sin fijar; las miniaturas cambian de pieza */
+.gfx.static{height:auto}
+.gfx.static .gfx-st{position:relative;height:auto;padding-block:var(--space-8)}
 /* capítulo 04: las portadas giran hacia ti */
 .books{--p:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2.4vw,32px);margin-top:clamp(20px,4vh,40px);perspective:1200px}
 .book-c{display:flex;flex-direction:column;gap:var(--space-3);color:inherit;text-decoration:none}
@@ -2094,14 +2107,18 @@ html[data-theme="light"] .sala::before{background:radial-gradient(60% 55% at 50%
 .nc-back:hover{color:var(--sand)}
 @media (max-width:760px){
   .books{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .mesa{height:340px;perspective:800px}
-  .mesa-t{width:100%}
-  .mp span{display:none}
+  .gfx{height:calc(100vh + 5 * 50vh)}
+  .gfx-st{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;align-content:center;gap:var(--space-4);padding-block:var(--space-10) var(--space-6)}
+  .gfx-box{height:auto;min-height:0}
+  .gp{width:min(64%,280px)}
+  .gp.wide{width:94%}
+  .gp img{max-height:44vh}
+  .gi-t{font-size:var(--fs-h3)}
   .wtrav{height:calc(100vh + 7 * 38vh)}
   .wt-win{width:74vw}
   .wt-rail{top:42%}
 }
-@media (prefers-reduced-motion:reduce){.mesa-t,.mp,.bk,.wt-view img,.pill,.ch-say .wd{transition:none}}
+@media (prefers-reduced-motion:reduce){.gp,.gfx-info > *,.bk,.wt-view img,.pill,.ch-say .wd{transition:none}}
 
 .kin-replay{display:none;font-size:var(--fs-xs);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);text-decoration:none}
 .kin-replay:hover{color:var(--sand)}
