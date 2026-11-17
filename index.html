@@ -59,44 +59,66 @@
 </head>
 <body data-page="inicio">
   <!-- ========== CLAQUETA DE ENTRADA: foco, REC, cuenta regresiva y obturador ========== -->
-  <!-- ========== INTRO: el monitor con la recopilación → Play → montaje dentro del isotipo → 3·2·1 → portada ========== -->
-  <div class="pre" id="pre" role="dialog" aria-modal="true" aria-labelledby="pre-t">
-    <div class="pre-idle">
-      <div class="pre-head"><svg class="pre-iso" viewBox="70 50 360 370" aria-hidden="true"><path d="M117 384 Q106 384 111 374 L246 104 Q262 72 278 104 L331 230 C368 244 389 288 387 322 C385 362 357 389 319 389 C288 389 263 373 257 352 C254 340 262 333 271 341 C283 351 300 355 317 351 C337 345 345 323 341 300 C337 276 323 259 304 259 C279 259 259 285 247 318 C239 340 233 362 227 375 C200 383 150 384 117 384 Z"/></svg><h2 id="pre-t">Alexander Pino Caro</h2></div>
-      <div class="pre-mon">
-        <video id="pre-reel" src="assets/video/monitor-reel.mp4" poster="assets/poster/monitor-reel.jpg" muted loop playsinline autoplay preload="auto"></video>
-        <span class="pre-shade" aria-hidden="true"></span>
-        <span class="pre-c tl" aria-hidden="true"></span><span class="pre-c tr" aria-hidden="true"></span><span class="pre-c bl" aria-hidden="true"></span><span class="pre-c br" aria-hidden="true"></span>
-        <div class="pre-top" aria-hidden="true"><span class="pre-state"><b class="rec"></b><em>STBY</em></span><span>Reel 2026</span><span id="pre-tc">00:00:00:00</span></div>
-        <div class="pre-lt" aria-hidden="true"><span class="lt-n" id="lt-n">Escena 03</span><b id="lt-t">Por encima de la mesa</b><span id="lt-s">Al aire en Telecafé</span></div>
-        <button class="pre-play" id="pre-rec" type="button" aria-label="Play reel: entrar al portafolio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4v16l12-8z"/></svg></button>
-      </div>
-      <p class="pre-role">Diseño crossmedia · Cámara · Edición</p>
+  <!-- ========== INICIO · EL SET (v2): llegada → encender el PC → Play → dolly → edición en vivo → portada (js/set.js) ========== -->
+  <div class="set" id="set" role="dialog" aria-modal="true" aria-labelledby="set-t">
+    <canvas id="set-cv" class="set-cv" role="img" aria-label="El escritorio de Alex de noche: dos monitores, PC, audífonos, lámpara y una cámara grabando en su trípode"></canvas>
+    <video id="set-amb" src="assets/set/ambiente.mp4" poster="assets/set/ambiente.jpg" muted loop playsinline preload="auto" aria-hidden="true" class="set-src"></video>
+    <video id="set-dol" src="assets/set/dolly.mp4" muted playsinline preload="auto" aria-hidden="true" class="set-src"></video>
+    <video id="set-scr" src="assets/set/pantalla.mp4" muted loop playsinline preload="auto" aria-hidden="true" class="set-src"></video>
+    <div class="set-ui">
+      <div class="set-bar"><b>Alex Pino</b><span class="set-r"><button class="set-chip" id="set-snd" type="button" aria-pressed="false"><i class="set-snd-i" aria-hidden="true"></i>Sonido</button><button class="set-chip" id="set-skip" type="button"><span class="lg">Saltar al portafolio</span><span class="sm">Saltar</span></button></span></div>
+      <div class="set-hello" id="set-hello"><h2 id="set-t">Bienvenido al set.</h2><p>Diseñador crossmedia · Director audiovisual</p><button class="set-chip set-power" id="set-power" type="button"><i aria-hidden="true">⏻</i> Encender el PC</button></div>
+      <button class="set-hit" id="set-hit-pc" type="button" aria-label="Encender el PC"></button>
+      <span class="set-ring" id="set-ring" aria-hidden="true"></span>
+      <span class="set-hint" id="set-hint-pc" aria-hidden="true">Enciende el PC</span>
+      <button class="set-hit" id="set-hit-play" type="button" aria-label="Reproducir la intro" hidden></button>
+      <span class="set-hint" id="set-hint-play" aria-hidden="true">Dale play</span>
+      <span class="set-tag" id="set-tag" aria-hidden="true"></span>
+      <span class="set-load" id="set-load">Preparando el set</span>
     </div>
-    <div class="pre-x" aria-hidden="true">
-      <div class="x-glow"></div>
-      <div class="x-zoom"><div class="x-obj" id="x-obj">
-        <div class="x-face"><video id="pre-mont" src="assets/video/montaje.mp4" poster="assets/poster/montaje.jpg" muted playsinline preload="auto"></video><span class="x-sheen"></span><span class="x-sand"></span></div>
-        <svg class="x-rim" viewBox="70 50 360 370" aria-hidden="true"><path pathLength="1" stroke="#F2C572" d="M117 384 Q106 384 111 374 L246 104 Q262 72 278 104 L331 230 C368 244 389 288 387 322 C385 362 357 389 319 389 C288 389 263 373 257 352 C254 340 262 333 271 341 C283 351 300 355 317 351 C337 345 345 323 341 300 C337 276 323 259 304 259 C279 259 259 285 247 318 C239 340 233 362 227 375 C200 383 150 384 117 384 Z"/></svg>
+    <!-- dentro del PC: el editor abierto -->
+    <div class="nle" id="nle" aria-hidden="true">
+      <div class="nle-top"><b>¿Quién soy?</b><span>Secuencia 01 · Alex Pino · Reel 2026</span><span class="nle-tc" id="nle-tc">00:00:00:00</span></div>
+      <div class="nle-pgm"><div class="nle-scr">
+        <video id="set-mont" src="assets/set/montaje.mp4" muted playsinline preload="auto"></video>
+        <div class="nle-ttl" id="nle-ttl"></div>
+        <div class="nle-lead" id="nle-lead"><svg viewBox="0 0 200 200"><path class="sw" d="M100 100 L100 4 A96 96 0 0 1 196 100 Z"/><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="80"/><line x1="-400" y1="100" x2="600" y2="100"/><line x1="100" y1="-400" x2="100" y2="600"/></svg><b id="nle-n">3</b></div>
+        <span class="nle-badge"><i></i>PGM</span>
       </div></div>
-      <div class="x-yel"></div>
+      <div class="nle-tl">
+        <div class="nle-row"><i></i><div class="nle-ruler" id="nle-ruler"></div></div>
+        <div class="nle-row"><i>V2</i><div class="nle-lane t" id="nle-v2"></div></div>
+        <div class="nle-row"><i>V1</i><div class="nle-lane" id="nle-v1"></div></div>
+        <div class="nle-row"><i>A1</i><div class="nle-lane a"><span class="nle-wave"></span></div></div>
+        <div class="nle-headwrap"><span class="nle-head" id="nle-head"></span></div>
+      </div>
     </div>
-    <div class="pre-count" aria-hidden="true">
-      <svg class="leader" viewBox="0 0 200 200"><path class="sweep" d="M100 100 L100 4 A96 96 0 0 1 196 100 Z"/><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="80"/><line x1="-400" y1="100" x2="600" y2="100"/><line x1="100" y1="-400" x2="100" y2="600"/></svg>
-      <b id="pre-n">3</b>
-      <div class="cnt-top"><span><i></i>REC</span><span>Alex Pino · Portafolio 2026</span><span>Escena 00 · Toma 01</span></div>
-    </div>
-    <div class="pre-ctl"><button type="button" class="pre-sound" id="pre-sound" aria-pressed="false">Sonido <i aria-hidden="true"></i></button><button type="button" class="pre-skip" id="pre-skip">Saltar intro →</button></div>
-    <div class="pre-shutter" aria-hidden="true"><i class="t"></i><i class="b"></i></div>
+    <div class="set-flash" id="set-flash" aria-hidden="true"></div>
+    <div class="set-shutter" aria-hidden="true"><i class="t"></i><i class="b"></i></div>
   </div>
   <main id="contenido">
     <!-- ========== PRESENTACIÓN: la pregunta se arma y se desarma con el scroll ========== -->
     <div class="hero-pin" id="hero-pin">
     <section class="hero hero-x" aria-labelledby="hero-title">
-      <picture>
-        <source media="(max-width: 760px)" srcset="assets/img/hero-glass-movil.jpg">
-        <img class="hero-img" src="assets/img/hero-glass.jpg" alt="Alex Pino de perfil, con gafas, a contraluz teal; un vidrio estriado refracta la luz frente a su rostro" fetchpriority="high">
-      </picture>
+      <!-- la foto en capas: con el scroll el foco corre del fondo a Alex (rack focus) -->
+      <div class="hero-ph">
+        <picture class="hp hp-bg">
+          <source media="(max-width: 760px)" srcset="assets/img/hero-glass-movil.jpg">
+          <img class="hero-img" src="assets/img/hero-glass.jpg" alt="" fetchpriority="high">
+        </picture>
+        <picture class="hp hp-bgb" aria-hidden="true">
+          <source media="(max-width: 760px)" srcset="assets/img/hero/fondo-blur-movil.jpg">
+          <img class="hero-img" src="assets/img/hero/fondo-blur.jpg" alt="" decoding="async">
+        </picture>
+        <picture class="hp hp-fg">
+          <source media="(max-width: 760px)" srcset="assets/img/hero/sujeto-movil.webp">
+          <img class="hero-img" src="assets/img/hero/sujeto.webp" alt="Alex Pino de perfil, con gafas, a contraluz teal; un vidrio estriado refracta la luz frente a su rostro" decoding="async">
+        </picture>
+        <picture class="hp hp-fgs" aria-hidden="true">
+          <source media="(max-width: 760px)" srcset="assets/img/hero/sujeto-soft-movil.webp">
+          <img class="hero-img" src="assets/img/hero/sujeto-soft.webp" alt="" decoding="async">
+        </picture>
+      </div>
       <!-- capas que reaccionan a los controles de la cámara -->
       <div class="fx fx-dof" aria-hidden="true"></div>
       <div class="fx fx-wb" aria-hidden="true"></div>
@@ -166,11 +188,11 @@
 
     <div class="ch-go wrap ch-after"><a class="ch-btn" href="audiovisual.html">Entrar a la sala de proyección <i aria-hidden="true">→</i></a></div>
 
-    <!-- ========== CAPÍTULO 03 · GRÁFICO: las piezas se abren en abanico ========== -->
+    <!-- ========== CAPÍTULO 03 · GRÁFICO: mesa de luz (de cenital a frontal con el scroll) ========== -->
     <section class="chap" id="cap-03" data-light="terra" data-chap="Capítulo 03 · Gráfico" aria-labelledby="h-c3">
       <header class="ch-head wrap"><span class="ch-n" aria-hidden="true">03</span><p class="label"><b class="rec"></b>Capítulo 03 · Gráfico</p></header>
       <h2 class="ch-title wrap" id="h-c3">Impresos que se tocan.<br><span>Cartas, habladores, marcas y piezas para redes.</span></h2>
-      <div class="fan" data-scrub id="fan"></div>
+      <div class="mesa" data-scrub id="mesa"><div class="mesa-t" id="mesa-t"></div></div>
       <div class="ch-go wrap"><a class="ch-btn" href="grafico.html">Ver los impresos <i aria-hidden="true">→</i></a></div>
     </section>
 
@@ -182,11 +204,11 @@
       <div class="ch-go wrap"><a class="ch-btn" href="editorial.html">Hojear las publicaciones <i aria-hidden="true">→</i></a></div>
     </section>
 
-    <!-- ========== CAPÍTULO 05 · WEB: las ventanas se despliegan ========== -->
+    <!-- ========== CAPÍTULO 05 · WEB: travelling lateral de ventanas (la sección se fija mientras pasan) ========== -->
     <section class="chap" id="cap-05" data-light="teal" data-chap="Capítulo 05 · Web" aria-labelledby="h-c5">
       <header class="ch-head wrap"><span class="ch-n" aria-hidden="true">05</span><p class="label"><b class="rec"></b>Capítulo 05 · Web</p></header>
       <h2 class="ch-title wrap" id="h-c5">Sitios que se navegan.<br><span>Unos los hice de cero; a otros les sumé páginas.</span></h2>
-      <div class="wins" data-scrub id="wins"></div>
+      <div class="wtrav" id="wtrav"><div class="wt-stage"><div class="wt-rail" id="wt-rail"></div><div class="wt-cap" id="wt-cap" aria-live="polite"></div></div></div>
       <div class="ch-go wrap"><a class="ch-btn" href="web.html">Ver los sitios <i aria-hidden="true">→</i></a></div>
     </section>
 
@@ -205,6 +227,7 @@
   <script src="js/i18n.js"></script>
   <script src="js/shell.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/set.js"></script>
   <script src="js/experiencia.js"></script>
   <script src="js/cursors.js"></script>
 </body>

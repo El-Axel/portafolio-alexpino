@@ -215,16 +215,17 @@
     title.innerHTML = '<span class="kin-vis" aria-hidden="true">' + out + "</span>";
     var pin = $("#hero-pin"), hero = $(".hero-x");
     if (pin && hero && !reduce) {
-      var tick = false;
-      var upd = function () {
-        tick = false;
+      // nombres propios: «tick»/«upd» ya existen más abajo en esta misma función y se pisaban
+      var kTick = false;
+      var kUpd = function () {
+        kTick = false;
         var r = pin.getBoundingClientRect(), span = pin.offsetHeight - innerHeight;
         var k = span > 0 ? clamp(-r.top / span, 0, 1) : 0;
         hero.style.setProperty("--k", k.toFixed(4));
         hero.classList.toggle("kin-moving", k > .02);
       };
-      window.addEventListener("scroll", function () { if (!tick) { tick = true; requestAnimationFrame(upd); } }, { passive: true });
-      window.addEventListener("resize", upd); upd();
+      window.addEventListener("scroll", function () { if (!kTick) { kTick = true; requestAnimationFrame(kUpd); } }, { passive: true });
+      window.addEventListener("resize", kUpd); kUpd();
     } else if (pin) { pin.classList.add("static"); }
   }
 
@@ -492,12 +493,17 @@
   }
 
   // los adelantos de la portada (gráfico, editorial, web), armados con data.js
-  var fanEl = $("#fan"), booksEl = $("#books"), winsEl = $("#wins");
-  if (fanEl && D.grafico) {
-    var G = D.grafico.slice(0, 5), mid = (G.length - 1) / 2;
-    fanEl.innerHTML = G.map(function (g, i) {
-      var src = g.portada || (g.paginas || [])[0] || (g.imagenes || [])[0] || "", d = i - mid;
-      return '<a class="fan-c" href="grafico.html#' + esc(g.id) + '" style="--d:' + d + ";--d2:" + (d * d) + '"><img src="' + esc(src) + '" alt="' + esc(g.titulo) + '" loading="lazy"><span>' + esc(g.titulo) + "</span></a>";
+  var mesaEl = $("#mesa-t"), booksEl = $("#books"), wtEl = $("#wtrav");
+  // capítulo 03 · mesa de luz: las piezas regadas sobre la mesa; con el scroll la cámara baja y cada una se levanta
+  if (mesaEl && D.grafico) {
+    var G = D.grafico.slice(0, 5), extra = [];
+    G.forEach(function (g) { if (g.paginas && g.paginas[1] && extra.length < 2) extra.push({ g: g, src: g.paginas[1] }); });
+    var piezas = G.map(function (g) { return { g: g, src: g.portada || (g.paginas || [])[0] || (g.imagenes || [])[0] || "" }; }).concat(extra);
+    // x, y, ancho (en % de la mesa), giro, altura máxima
+    var SPOT = [[6, 10, 22, -8, 70], [32, 4, 19, 6, 150], [58, 12, 26, -4, 100], [10, 52, 27, 5, 40], [41, 46, 19, -10, 190], [66, 54, 21, 8, 120], [37, 76, 15, -3, 80]];
+    mesaEl.innerHTML = piezas.slice(0, SPOT.length).map(function (it, i) {
+      var s = SPOT[i];
+      return '<a class="mp" href="grafico.html" style="left:' + s[0] + "%;top:" + s[1] + "%;width:" + s[2] + "%;--r:" + s[3] + "deg;--zm:" + s[4] + '"><img src="' + esc(it.src) + '" alt="' + esc(it.g.titulo) + '" loading="lazy"><span>' + esc(it.g.titulo) + "</span></a>";
     }).join("");
   }
   if (booksEl && D.editorial) {
@@ -506,10 +512,46 @@
       return '<a class="book-c" href="editorial.html" style="--i:' + i + '"><span class="bk"><img src="' + esc(src) + '" alt="' + esc(b.titulo) + '" loading="lazy"></span><span class="bk-t">' + esc(b.titulo) + "</span></a>";
     }).join("");
   }
-  if (winsEl && D.web) {
-    winsEl.innerHTML = D.web.filter(function (w) { return w.img; }).slice(0, 3).map(function (w, i) {
-      return '<a class="win-c" href="web.html" style="--i:' + i + '"><span class="wb-bar" aria-hidden="true"><i></i><i></i><i></i><span class="wb-url">' + esc(w.titulo) + '</span></span><img src="' + esc(w.img) + '" alt="' + esc(w.titulo) + '" loading="lazy"></a>';
+  // capítulo 05 · travelling: la sección se fija y las ventanas pasan de derecha a izquierda;
+  // la del centro se endereza y su captura baja sola, como si alguien la navegara
+  if (wtEl && D.web) {
+    var W = D.web, rail = $("#wt-rail"), wcap = $("#wt-cap");
+    var whost = function (u) { try { var x = new URL(u); return x.host.replace(/^www\./, "") + (x.pathname.length > 1 ? x.pathname.replace(/\/$/, "") : ""); } catch (e) { return u; } };
+    rail.innerHTML = W.map(function (w, i) {
+      var src = w.larga || w.img;
+      var body = src ? '<img src="' + esc(src) + '" alt="' + esc(T("Captura de") + " " + w.titulo) + '" loading="lazy">'
+        : '<span class="wt-tile"><b>' + esc(w.titulo) + "</b><small>" + esc(T(w.tipo)) + "</small></span>";
+      return '<a class="wt-win" href="web.html" style="--i:' + i + '"><span class="wb-bar" aria-hidden="true"><i></i><i></i><i></i><span class="wb-url">' + esc(whost(w.url)) + '</span></span><span class="wt-view">' + body + "</span></a>";
     }).join("");
+    var wins = $$(".wt-win", rail), wNear = -1;
+    var wtCap = function (i) {
+      var w = W[i]; if (!w) return;
+      wcap.innerHTML = '<span class="wt-n">' + pad(i + 1) + " / " + pad(W.length) + '</span><b>' + esc(w.titulo) + "</b><span>" + esc(T(w.tipo)) + '</span><em class="wt-chip' + (w.grupo === "cero" ? "" : " wp") + '">' + esc(T(w.grupo === "cero" ? "Hechas de cero" : "Páginas que sumé")) + "</em>";
+    };
+    var wtSet = function (p) {
+      var c = p * (W.length - 1), near = Math.round(c);
+      var span = wins[0] ? wins[0].offsetWidth * 1.08 : 400;
+      wins.forEach(function (el, k) {
+        var d = k - c, ad = Math.abs(d);
+        el.style.transform = "translate(-50%,-50%) translate3d(" + (d * span).toFixed(1) + "px,0," + (-ad * 170).toFixed(1) + "px) rotateY(" + Math.max(-50, Math.min(50, -d * 34)).toFixed(2) + "deg)";
+        el.style.opacity = Math.max(0, 1 - ad * .34).toFixed(3);
+        el.style.zIndex = 100 - Math.round(ad * 10);
+        el.style.setProperty("--sy", clamp(.5 - d * .85, 0, 1).toFixed(3)); // entra arriba, baja mientras cruza
+        el.classList.toggle("on", k === near);
+      });
+      if (near !== wNear) { wNear = near; wtCap(near); }
+    };
+    if (reduce) { wtEl.classList.add("static"); wtCap(0); }
+    else {
+      var wtTick = false;
+      var wtUpd = function () {
+        wtTick = false;
+        var r = wtEl.getBoundingClientRect(), span = wtEl.offsetHeight - innerHeight;
+        wtSet(span > 0 ? clamp(-r.top / span, 0, 1) : 0);
+      };
+      window.addEventListener("scroll", function () { if (!wtTick) { wtTick = true; requestAnimationFrame(wtUpd); } }, { passive: true });
+      window.addEventListener("resize", wtUpd); wtUpd();
+    }
   }
 
   // --p de 0 a 1 mientras el elemento cruza la pantalla (los adelantos se arman con el scroll)

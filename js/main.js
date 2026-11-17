@@ -835,110 +835,7 @@
   renderRecap(D.destacados);
   renderCredits(D.creditos);
 
-  /* ---------- intro ----------
-     1 · Un monitor muestra una recopilación de escenas (con su rótulo).
-     2 · Play: cinco escenas a pantalla completa (1,5 s cada una) y un campo
-         en cámara lenta que queda dentro del isotipo; un filo arena dibuja
-         el contorno, gira en 3D, se vuelve arena y todo queda amarillo.
-     3 · Cuenta 3·2·1 amarilla (un segundo por número), destello, obturador
-         y portada. Los tiempos son largos a propósito: que se disfrute.
-     Solo sale una vez por visita; "Saltar intro" (o Esc) entra directo. */
-  window.APP.rolling = new Promise(function (resolve) {
-    var pre = $("#pre");
-    if (!pre || !root.classList.contains("pre-on")) { if (pre) pre.remove(); return resolve(); }
-    var T_ = window.T || function (x) { return x; };
-    var btn = $("#pre-rec"), tc = $("#pre-tc"), state = $(".pre-state em", pre), num = $("#pre-n", pre);
-    var skip = $("#pre-skip"), snd = $("#pre-sound"), reel = $("#pre-reel"), mont = $("#pre-mont"), obj = $("#x-obj");
-    var t0 = performance.now(), done = false, raf = 0, sound = false, ac = null, timers = [];
-    document.body.style.overflow = "hidden";
-    (function tick(now) {
-      var f = Math.floor((now - t0) / 40);
-      tc.textContent = "00:00:" + pad(Math.floor(f / 25) % 60) + ":" + pad(f % 25);
-      raf = requestAnimationFrame(tick);
-    })(t0);
-    setTimeout(function () { btn.focus({ preventScroll: true }); }, 60);
-    if (reel && reel.play) { var rp = reel.play(); if (rp && rp.catch) rp.catch(function () {}); }
-
-    // rótulos del monitor: una escena cada 4 s, sincronizados con el video
-    var LT = [
-      ["Escena 03", "Por encima de la mesa", "Al aire en Telecafé"],
-      ["Escena 04", "Paisajes Íntimos", "Serie de cápsulas documentales"],
-      ["Escena 01", "Austin Marchese", "80.000 seguidores en 4 meses"],
-      ["Escena 02", "La Cepa · Hotel Pinares Plaza", "+40 % en reservas"],
-      ["Escena 06", "Pregón de la plaza", "Cápsulas documentales y sitio web"]
-    ];
-    var lt = $(".pre-lt", pre), ltN = $("#lt-n"), ltT = $("#lt-t"), ltS = $("#lt-s"), ltCur = 0;
-    function setLT(i) {
-      if (i === ltCur) return; ltCur = i;
-      lt.classList.add("swap");
-      setTimeout(function () { var d = LT[i] || LT[0]; ltN.textContent = T_(d[0]); ltT.textContent = d[1]; ltS.textContent = T_(d[2]); lt.classList.remove("swap"); }, 420);
-    }
-    if (reel) reel.addEventListener("timeupdate", function () { setLT(Math.min(LT.length - 1, Math.floor(reel.currentTime / 4))); });
-
-    // el volumen del isotipo: copias apiladas detrás de la cara
-    function buildDepth() {
-      if (!obj || obj.dataset.built) return; obj.dataset.built = "1";
-      var S = Math.min(innerHeight * .46, innerWidth * (innerWidth <= 760 ? .62 : .36)), step = S / 150, face = $(".x-face", obj), html = "";
-      for (var k = 18; k >= 1; k--) {
-        var c = k === 1 ? "#F2C572" : k === 2 ? "#C9974E" : k <= 4 ? "#7A5A33" : "rgb(" + (42 - k) + "," + Math.round(70 - k * 2.2) + "," + Math.round(78 - k * 2.4) + ")";
-        html += '<span class="x-l" style="background:' + c + ";transform:translateZ(" + (-k * step).toFixed(2) + 'px)"></span>';
-      }
-      face.insertAdjacentHTML("beforebegin", html);
-    }
-
-    // sonido (apagado por defecto): pitidos de la cuenta
-    function beep(f, d, v) {
-      if (!sound) return;
-      try {
-        ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-        var o = ac.createOscillator(), g = ac.createGain();
-        o.type = "sine"; o.frequency.value = f; g.gain.value = v || .12;
-        g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + d);
-        o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime + d);
-      } catch (e) {}
-    }
-    if (snd) snd.addEventListener("click", function () { sound = !sound; snd.setAttribute("aria-pressed", sound); if (sound) beep(660, .08, .06); });
-
-    var at = function (ms, fn) { timers.push(setTimeout(fn, ms)); };
-    function finish(fast) {
-      timers.forEach(clearTimeout);
-      root.classList.add("revealing");
-      pre.classList.remove("flash", "counting", "x"); pre.classList.add("opening");
-      root.classList.remove("pre-on"); document.body.style.overflow = "";
-      requestAnimationFrame(function () { requestAnimationFrame(function () { pre.classList.add("go"); }); });
-      setTimeout(function () { cancelAnimationFrame(raf); if (reel) reel.pause(); if (mont) mont.pause(); pre.remove(); resolve(); }, fast ? 900 : 1400);
-      setTimeout(function () { root.classList.remove("revealing"); }, fast ? 2200 : 3000);
-    }
-    function count(n) { num.textContent = n; num.classList.remove("tick"); void num.offsetWidth; num.classList.add("tick"); beep(1000, .14); }
-    function go() {
-      if (done) return; done = true;
-      try { sessionStorage.setItem("ap-rec", "1"); } catch (e) {}
-      buildDepth();
-      state.textContent = "REC";
-      if (mont) { try { mont.currentTime = 0; } catch (e) {} var mp = mont.play(); if (mp && mp.catch) mp.catch(function () {}); }
-      pre.classList.add("x");
-      if (reel) setTimeout(function () { reel.pause(); }, 900);
-      // 3 · cuenta amarilla: un segundo por número
-      at(14800, function () { pre.classList.add("counting"); count("3"); });
-      at(15800, function () { count("2"); });
-      at(16800, function () { count("1"); });
-      at(17800, function () { pre.classList.add("flash"); beep(1400, .3, .08); });
-      at(18000, function () { finish(false); });
-    }
-    btn.addEventListener("click", go);
-    if (skip) skip.addEventListener("click", function () {
-      if (pre.classList.contains("opening")) return;
-      done = true;
-      try { sessionStorage.setItem("ap-rec", "1"); } catch (e) {}
-      finish(true);
-    });
-    document.addEventListener("keydown", function k(e) {
-      if (!document.body.contains(pre)) { document.removeEventListener("keydown", k); return; }
-      if (e.target === skip || e.target === snd) return;
-      if ((e.key === "Enter" || e.key === " ") && !done) { e.preventDefault(); go(); }
-      if (e.key === "Escape") { document.removeEventListener("keydown", k); skip.click(); }
-    });
-  });
+  /* ---------- intro: ahora vive en js/set.js (el set → edición en vivo); define window.APP.rolling ---------- */
 
   /* ---------- la cámara de la portada ----------
      Cuatro controles reales: ISO (grano), diafragma (desenfoque del fondo),
@@ -954,7 +851,7 @@
       s:   { v: [8, 15, 30, 50, 125, 250, 500, 1000], d: 3, f: function (x) { return "1/" + x; } },
       wb:  { v: [3200, 4300, 5600, 6500, 7500], d: 2, f: function (x) { return x + "K"; } }
     };
-    var state = {}, img = $(".hero-img"), blurG = $("#mblur-g"), needle = $("#vf-needle");
+    var state = {}, img = $(".hero-ph") || $(".hero-img"), blurG = $("#mblur-g"), needle = $("#vf-needle");
     var BLUR = { 1.4: 9, 1.8: 5 }, GRAIN = { 1600: .18, 3200: .32, 6400: .5, 12800: .7 }, MB = { 8: 7, 15: 3.5, 30: 1.2 };
     function apply() {
       var iso = V.iso.v[state.iso], f = V.f.v[state.f], s = V.s.v[state.s], wb = V.wb.v[state.wb];

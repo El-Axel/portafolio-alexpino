@@ -155,7 +155,13 @@
 - Orden: Inicio → Sobre mí (01) → Audiovisual (02) → Gráfico (03) → Editorial (04) → Web (05) → Contacto (06). Lista CHAPS en experiencia.js §10.
 - La portada es un tráiler por capítulos (`.chap#cap-0n`, data-chap, data-light). Ningún elemento de la portada lleva directo a un proyecto: el programa de escenas lleva a `audiovisual.html?e=N` (la sala abre en esa escena). Las cifras ya no son enlaces.
 - Capítulo 01: frase con imágenes dentro (`[data-words]` + `.pill`, referencia Hero Studio); las palabras se encienden con el scroll. Si se cambia el texto, actualizar los fragmentos en i18n.js (se traducen antes de partir en palabras).
-- Capítulos 03–05: adelantos con `[data-scrub]` (`--p` 0→1 al cruzar la pantalla): abanico de impresos, portadas que giran, ventanas que se despliegan.
+- Capítulos 03–05 (adelantos, elegidos por Alex en el artifact «Home con profundidad», nov. 2026):
+  - 03 Gráfico = mesa de luz (`#mesa` con `[data-scrub]`, `.mesa-t` + `.mp`): arranca cenital (mesa inclinada) y con el scroll se endereza; cada pieza sube a su altura (`--zm`). Piezas: portadas de `D.grafico` + 2 páginas internas.
+  - 04 Editorial: portadas que giran (`[data-scrub]`).
+  - 05 Web = travelling lateral (`#wtrav`, sticky `.wt-stage`, JS en experiencia.js): las ventanas pasan de derecha a izquierda, la del centro se endereza y su captura baja sola (`--sy`). Usa `larga` de `D.web` (capturas de página entera en `assets/web/largas/`, 900 px de ancho; se tomaron con Edge sin ventana por CDP). Mis Finanzas sigue sin captura (tarjeta `.wt-tile`). `.wt-view` es isla oscura.
+- Portada = rack focus: la foto del hero va en capas (`.hero-ph`: `.hp-bg` original, `.hp-bgb` fondo desenfocado sin el sujeto, `.hp-fg` Alex + vidrio recortados, `.hp-fgs` el recorte suave). Con `--k` el foco pasa del fondo a Alex. Archivos en `assets/img/hero/` (recorte por luminancia de hero-glass*.jpg). Si cambia la foto del hero, hay que regenerarlos. El filtro de la cámara jugable se aplica a `.hero-ph`.
+- Ojo en experiencia.js: todo vive en una sola función; no repetir `var upd`/`var tick` entre secciones (se pisaban y la portada no recibía el scroll).
+- gen_light.py en Windows: correrlo con `PYTHONUTF8=1`.
 - Cada página (01–05) termina con `.nextch` «Siguiente capítulo» (y «← Capítulo anterior»). En Sobre mí reemplaza su cierre anterior.
 - En la portada, la barra lateral muestra el capítulo actual.
 
