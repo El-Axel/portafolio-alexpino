@@ -55,7 +55,7 @@
   }
   </script>
   <!-- la claqueta de entrada solo sale la primera vez en la visita y nunca con "reducir movimiento" -->
-  <script>try{var d=document.documentElement;d.classList.add("js");if(!sessionStorage.getItem("ap-rec")&&!matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("pre-on")}catch(e){}</script>
+  <script>try{var d=document.documentElement,q=location.search,f=/[?&]intro\b/.test(q);d.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(f||(!sessionStorage.getItem("ap-rec")&&!localStorage.getItem("ap-set")&&!/[?&]lang=/.test(q))))d.classList.add("pre-on");else d.classList.add("intro-skip")}catch(e){}</script>
 </head>
 <body data-page="inicio">
   <!-- ========== CLAQUETA DE ENTRADA: foco, REC, cuenta regresiva y obturador ========== -->
@@ -151,7 +151,7 @@
         <h1 id="hero-title" class="kin-title" data-kin>¿Quién soy?</h1>
         <p class="kin-sub">Depende del <span class="uw" data-cur="hero-uw">proyecto<svg viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C60 30 140 30 196 6"/></svg></span>.</p>
         <p class="intro" id="intro"></p>
-        <div class="kin-go"><a class="btn primary" href="#programa">Ver escenas</a><span class="kin-hint" aria-hidden="true">Baja para rodar ↓</span></div>
+        <div class="kin-go"><a class="btn primary" href="#programa">Ver escenas</a><span class="kin-hint" aria-hidden="true">Baja para rodar ↓</span><a class="kin-replay" href="?intro">Ver la intro ↺</a></div>
       </div>
     </section>
     </div>
@@ -188,19 +188,19 @@
 
     <div class="ch-go wrap ch-after"><a class="ch-btn" href="audiovisual.html">Entrar a la sala de proyección <i aria-hidden="true">→</i></a></div>
 
-    <!-- ========== CAPÍTULO 03 · GRÁFICO: mesa de luz (de cenital a frontal con el scroll) ========== -->
+    <!-- ========== CAPÍTULO 03 · DISEÑO GRÁFICO: uno a uno, una pieza grande a la vez (la sección se fija) ========== -->
     <section class="chap" id="cap-03" data-light="terra" data-chap="Capítulo 03 · Gráfico" aria-labelledby="h-c3">
       <header class="ch-head wrap"><span class="ch-n" aria-hidden="true">03</span><p class="label"><b class="rec"></b>Capítulo 03 · Gráfico</p></header>
-      <h2 class="ch-title wrap" id="h-c3">Impresos que se tocan.<br><span>Cartas, habladores, marcas y piezas para redes.</span></h2>
-      <div class="mesa" data-scrub id="mesa"><div class="mesa-t" id="mesa-t"></div></div>
-      <div class="ch-go wrap"><a class="ch-btn" href="grafico.html">Ver los impresos <i aria-hidden="true">→</i></a></div>
+      <h2 class="ch-title wrap" id="h-c3">Diseño gráfico.<br><span>Cartas, habladores, marcas y piezas para redes.</span></h2>
+      <div class="gfx" id="gfx"><div class="gfx-st wrap"><div class="gfx-box" id="gfx-box"></div><div class="gfx-info" id="gfx-info"><span class="gi-ct"></span><span class="gi-k label"></span><h3 class="gi-t"></h3><p class="gi-p"></p><div class="gfx-th" id="gfx-th"></div></div></div></div>
+      <div class="ch-go wrap"><a class="ch-btn" href="grafico.html">Ver el diseño gráfico <i aria-hidden="true">→</i></a></div>
     </section>
 
-    <!-- ========== CAPÍTULO 04 · EDITORIAL: las portadas giran hacia ti ========== -->
+    <!-- ========== CAPÍTULO 04 · EDITORIAL: la mesa de revisión (tabla de corte vista desde arriba + cuentahílos; la sección se fija) ========== -->
     <section class="chap" id="cap-04" data-light="petrol" data-chap="Capítulo 04 · Editorial" aria-labelledby="h-c4">
       <header class="ch-head wrap"><span class="ch-n" aria-hidden="true">04</span><p class="label"><b class="rec"></b>Capítulo 04 · Editorial</p></header>
       <h2 class="ch-title wrap" id="h-c4">Publicaciones para hojear.<br><span>Revistas, catálogos y libros.</span></h2>
-      <div class="books" data-scrub id="books"></div>
+      <div class="mr" id="mesar"><div class="mr-st" id="mr-st"><div class="mr-mat" id="mr-mat"></div><div class="mr-lp" id="mr-lp" aria-hidden="true"><div class="mr-zin"></div><div class="mr-ret"></div></div><span class="mr-help">Cuentahílos: pasa por las páginas para acercarte</span></div></div>
       <div class="ch-go wrap"><a class="ch-btn" href="editorial.html">Hojear las publicaciones <i aria-hidden="true">→</i></a></div>
     </section>
 
