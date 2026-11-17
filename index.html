@@ -55,7 +55,7 @@
   }
   </script>
   <!-- la claqueta de entrada solo sale la primera vez en la visita y nunca con "reducir movimiento" -->
-  <script>try{var d=document.documentElement,q=location.search,f=/[?&]intro\b/.test(q);d.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(f||(!sessionStorage.getItem("ap-rec")&&!localStorage.getItem("ap-set")&&!/[?&]lang=/.test(q))))d.classList.add("pre-on");else d.classList.add("intro-skip")}catch(e){}</script>
+  <script>try{var d=document.documentElement,q=location.search,f=/[?&]intro\b/.test(q),nv=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0],nt=nv?nv.type:"navigate",inn=document.referrer.indexOf(location.origin)===0;d.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(f||(!/[?&]lang=/.test(q)&&(nt==="reload"||(nt!=="back_forward"&&!inn)))))d.classList.add("pre-on");else d.classList.add("intro-skip")}catch(e){}</script>
 </head>
 <body data-page="inicio">
   <!-- ========== CLAQUETA DE ENTRADA: foco, REC, cuenta regresiva y obturador ========== -->

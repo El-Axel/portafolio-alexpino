@@ -139,7 +139,7 @@
   6. El monitor llena la pantalla, destello, obturador y portada. Unos 10 s del Play a la portada.
 - Pantallas: posición rastreada cuadro a cuadro (`TRK`, 12 por segundo del video original) y medida exacta sobre el cuadro del loop para el reposo (`STILL`). Se dibujan como luz (modo «screen»): el humo pasa por delante, tienen reflejo de vidrio y alumbran el cuarto con su color promedio.
 - Sonido apagado por defecto (botón «Sonido»): `assets/set/sfx/` (sala en loop, encendido, pantallas, play, dolly, golpes de los títulos, riser, obturador), normalizados bajito.
-- Cuándo sale: primera visita (sessionStorage `ap-rec` + localStorage `ap-set`), nunca con `?lang=` (enlaces a clientes entran directo) ni con «reducir movimiento». `?intro` la fuerza. Si no salió, la portada muestra «Ver la intro ↺» (`.kin-replay`, `html.intro-skip`). «Saltar» o Esc entra directo.
+- Cuándo sale: al entrar desde fuera del sitio y en cada recarga (pedido de Alex); no al volver al Inicio desde otra página del portafolio (referrer del mismo sitio o atrás/adelante). Nunca con `?lang=` (enlaces a clientes entran directo) ni con «reducir movimiento». `?intro` la fuerza. Si no salió, la portada muestra «Ver la intro ↺» (`.kin-replay`, `html.intro-skip`). «Saltar» o Esc entra directo.
 - Textos nuevos traducidos en i18n.js (Bienvenido al set., Encender el PC, Alex Pino presenta, Cuento historias., etc.).
 
 ## Vidrio y sección Web

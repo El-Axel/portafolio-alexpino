@@ -7,7 +7,7 @@
    5 · Edición en vivo: dentro del PC está abierto el editor; leader 3·2·1, el
        tráiler corre en el monitor de programa, los títulos son clips de la pista V2.
    6 · El monitor de programa llena la pantalla, destello, obturador y portada.
-   Una vez por visita (ap-rec). «Saltar» o Esc entra directo. Sin «reducir movimiento».
+   Sale al entrar desde fuera del sitio y en cada recarga; no al volver al Inicio desde otra página del portafolio (gate en el <head> de index.html). «Saltar» o Esc entra directo. Sin «reducir movimiento».
    Las pantallas se dibujan como LUZ (modo trama): el humo pasa por delante y alumbran el cuarto.
    Medios en assets/set/ (escena generada con IA en Magnific; reemplazable por el set real).
    ========================================================================= */
