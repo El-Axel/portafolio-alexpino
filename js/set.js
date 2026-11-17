@@ -129,7 +129,7 @@
       tag.textContent = t ? T_(t) : ""; tag.style.opacity = t ? 1 : 0; tag.style.left = (mouse.x + 16) + "px"; tag.style.top = (mouse.y + 16) + "px";
     }
     function powerOn() {
-      if (state !== "idle") return; state = "booting"; tBoot = performance.now();
+      if (state !== "idle") return; clearTimeout(autoT); state = "booting"; tBoot = performance.now();
       sfx("power"); sfx("screens", .9);
       hitPc.hidden = true; ring.style.opacity = 0; hintPc.style.opacity = 0; hello.classList.add("gone");
       play(scr);
@@ -137,7 +137,7 @@
     }
     function goPlay() {
       if (state !== "ready") return; state = "dolly"; tState = performance.now();
-      try { sessionStorage.setItem("ap-rec", "1"); } catch (e) {}
+      try { sessionStorage.setItem("ap-rec", "1"); localStorage.setItem("ap-set", "1"); } catch (e) {}
       sfx("play"); sfx("dolly", .02, 1.2);
       hitPlay.hidden = true; hintPlay.style.opacity = 0; tag.style.opacity = 0;
       dol.currentTime = 0; dol.playbackRate = 1.13; play(dol); // 1,13 s de video → 1 s
@@ -147,10 +147,10 @@
     dol.addEventListener("ended", function () { if (state === "dolly") startEdit(); });
 
     /* ---------- Edición en vivo ---------- */
-    var LEAD = 3, END = 13.8; // en segundos de la línea de tiempo; el montaje empieza en LEAD
+    var LEAD = 1.5, END = 8.9; // en segundos de la línea de tiempo; el montaje (7,4 s) empieza en LEAD
     // segmentos del montaje (segundos del video): planos y títulos (pista V2)
-    var SHOTS = [[.9, 2.2, "telecafe", "Por encima de la mesa"], [2.9, 4.2, "paisajes", "Paisajes Íntimos"], [4.9, 6.2, "austin", "Austin Marchese"], [6.9, 7.7, "lacepa", "La Cepa"], [7.7, 8.5, "pregon", "Pregón de la plaza"], [9.3, 10.8, "campo", "Por encima de la mesa"]];
-    var TITLES = [[0, .9, "Alex Pino presenta", "s"], [2.2, 2.9, "Grabo."], [4.2, 4.9, "Edito."], [6.2, 6.9, "Cuento historias."], [8.5, 10.8, "¿Quién soy?", "b"]];
+    var SHOTS = [[.6, 1.6, "telecafe", "Por encima de la mesa"], [2.1, 3.1, "paisajes", "Paisajes Íntimos"], [3.6, 4.6, "austin", "Austin Marchese"], [5.1, 5.6, "lacepa", "La Cepa"], [5.6, 6.1, "pregon", "Pregón de la plaza"], [6.1, 7.4, "campo", "Por encima de la mesa"]];
+    var TITLES = [[0, .6, "Alex Pino presenta", "s"], [1.6, 2.1, "Grabo."], [3.1, 3.6, "Edito."], [4.6, 5.1, "Cuento historias."], [6.1, 7.4, "¿Quién soy?", "b"]];
     var nle = $("nle"), v1 = $("nle-v1"), v2 = $("nle-v2"), ruler = $("nle-ruler"), head = $("nle-head"), lead = $("nle-lead"), leadN = $("nle-n"), ttl = $("nle-ttl"), nTc = $("nle-tc");
     function pct(t) { return (t / END * 100).toFixed(3) + "%"; }
     var html = '<span class="nle-clip lead" style="left:0;width:calc(' + pct(LEAD) + ' - 2px)"><em>Leader 3·2·1</em></span>';
@@ -159,7 +159,7 @@
     v2.innerHTML = TITLES.map(function (t, i) { return '<span class="nle-clip ttl" style="left:' + pct(LEAD + t[0]) + ';width:calc(' + pct(t[1] - t[0]) + ' - 2px);--i:' + (i + 2) + '"><em>T · ' + T_(t[2]) + "</em></span>"; }).join("");
     ttl.innerHTML = TITLES.map(function (t) { return '<span class="' + (t[3] || "") + '">' + T_(t[2]) + "</span>"; }).join("");
     var ttlEls = ttl.children, rh = "";
-    for (var r = 0; r <= 13; r++) rh += '<span style="left:' + pct(r) + '">' + tc(r).slice(3, 8) + "</span>";
+    for (var r = 0; r <= 8; r++) rh += '<span style="left:' + pct(r) + '">' + tc(r).slice(3, 8) + "</span>";
     ruler.innerHTML = rh;
     var tEdit = 0, lastTitle = -1, lastN = 0, riser = false, montOn = false, outT = 0;
     function startEdit() {
@@ -172,14 +172,14 @@
       var t = editTime();
       if (!montOn && t >= LEAD) { montOn = true; play(mont); }
       // leader 3·2·1
-      var n = t < LEAD ? Math.ceil(LEAD - t) : 0;
+      var n = t < LEAD ? Math.ceil((LEAD - t) / .5) : 0; // 3·2·1, medio segundo cada uno
       lead.classList.toggle("on", n > 0);
       if (n !== lastN) { lastN = n; if (n > 0) { leadN.textContent = n; leadN.classList.remove("tick"); void leadN.offsetWidth; leadN.classList.add("tick"); beep(1000, .12, .035); } }
       // títulos (pista V2), sincronizados con el montaje
       var m = t - LEAD, on = -1;
       if (m >= 0) for (var i = 0; i < TITLES.length; i++) if (m >= TITLES[i][0] && m < TITLES[i][1]) on = i;
       if (on !== lastTitle) { for (var j = 0; j < ttlEls.length; j++) ttlEls[j].classList.toggle("on", j === on); if (on >= 0) sfx("hit"); lastTitle = on; }
-      if (!riser && m >= 7.7) { riser = true; sfx("riser"); }
+      if (!riser && m >= 5.2) { riser = true; sfx("riser"); }
       head.style.left = pct(Math.min(END, t));
       nTc.textContent = tc(t);
       if (t >= END && state === "edit") { state = "out"; outT = performance.now(); set.classList.add("exiting"); setTimeout(function () { finish(false); }, 650); }
@@ -189,7 +189,7 @@
     var done = false;
     function finish(fast) {
       if (done) return; done = true;
-      try { sessionStorage.setItem("ap-rec", "1"); } catch (e) {}
+      try { sessionStorage.setItem("ap-rec", "1"); localStorage.setItem("ap-set", "1"); } catch (e) {}
       sfx("shutter"); stopRoom(1.2);
       root.classList.add("revealing");
       set.classList.add("opening");
@@ -211,6 +211,9 @@
     var need = [amb, dol, scr, mont], ready = 0;
     need.forEach(function (v) { v.addEventListener("canplay", function h() { v.removeEventListener("canplay", h); ready++; if (ready === need.length) load.style.opacity = 0; }); });
     play(amb);
+    var autoT = setTimeout(powerOn, 1500);
+    function early(e) { if (e && e.target && e.target.closest && e.target.closest(".set-bar")) return; powerOn(); }
+    set.addEventListener("pointerdown", early); addEventListener("wheel", early, { passive: true }); addEventListener("keydown", function (e) { if (e.key !== "Escape" && e.key !== "Tab") early(e); });
 
     /* ---------- dibujo ---------- */
     function frame(now) {
@@ -259,12 +262,12 @@
           place(hitPc, V, PC, 8);
           var pcs = toScreen(V, .925, .31); ring.style.left = pcs[0] + "px"; ring.style.top = pcs[1] + "px";
           ring.style.opacity = (now - tState) > 1400 ? 1 : 0;
-          var hp = toScreen(V, .925, .245); hintPc.style.left = (hp[0] - hintPc.offsetWidth / 2) + "px"; hintPc.style.top = (hp[1] - 6) + "px";
+          var hp = toScreen(V, .925, .245); hintPc.style.left = clamp(hp[0] - hintPc.offsetWidth / 2, 12, W - hintPc.offsetWidth - 12) + "px"; hintPc.style.top = (hp[1] - 6) + "px";
           hintPc.style.opacity = (now - tState) > 4200 ? 1 : 0;
         }
         if (state === "ready") {
           place(hitPlay, V, Lr, 0);
-          var hq = toScreen(V, (Lr[0] + Lr[2]) / 2, Lr[1]); hintPlay.style.left = (hq[0] - hintPlay.offsetWidth / 2) + "px"; hintPlay.style.top = (hq[1] - 26) + "px";
+          var hq = toScreen(V, (Lr[0] + Lr[2]) / 2, Lr[1]); hintPlay.style.left = clamp(hq[0] - hintPlay.offsetWidth / 2, 12, W - hintPlay.offsetWidth - 12) + "px"; hintPlay.style.top = (hq[1] - 26) + "px";
           hintPlay.style.opacity = sinceS > 3.5 ? 1 : 0;
         }
         hoverTag(V);

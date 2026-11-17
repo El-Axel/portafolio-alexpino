@@ -128,12 +128,19 @@
 - Proyecto (proyecto.js): entrada `#entry` con el título partido en diagonal (`.en-a`/`.en-b`, `--e` por scroll); «El caso» en `.cas` (un paso por pantalla, índice fijo a la izquierda); `.remate` con la cifra contando (solo si el proyecto tiene `cifra`; no se inventan cifras); `.crt` en Telecafé (tv) y Nos fui (sala de control); `.nxt` = siguiente escena a lo ancho.
 - `.entry`, `.nxt-go` y `.crt` son islas oscuras en gen_light.py.
 
-## Intro (index.html · #pre)
-- 1 · Monitor (`.pre-mon`) con `assets/video/monitor-reel.mp4` (5 escenas de 4 s) y rótulos sincronizados por `timeupdate` (lista LT en main.js). Botón Play amarillo al centro.
-- 2 · Play → `.pre.x`: `assets/video/montaje.mp4` (1080p, 11,8 s): Telecafé, Paisajes, Austin, La Cepa (3 reels) y Pregón, 1,5 s cada uno, y termina con un campo de Telecafé en cámara lenta. La máscara del isotipo encoge (7–10 s), un filo arena (`.x-rim`, SVG) dibuja el contorno (9 s), las 18 capas `.x-l` aparecen con fundido y el isotipo gira suave (9,7 s), se llena de arena (12,5 s), la cámara entra (13,6 s) y todo queda amarillo.
-- 3 · Cuenta amarilla 3·2·1, un segundo por número (14,8–17,8 s), destello, obturador lento y portada. Tiempos largos a propósito (pedido de Alex: que las cosas tomen su tiempo y los planos no pasen rápido).
-- "Saltar intro" o Esc entra directo. Una vez por sesión (`ap-rec`); no sale con "reducir movimiento".
-- monitor-reel.mp4 (20 s, 5 escenas de 4 s): Telecafé, Paisajes, Austin, La Cepa (3 reels lado a lado) y Pregón; rótulos en LT. Material en bruto en `Videos/` (ignorado en git). Nos fui pues mijo aún no está (falta mp4 sin la canción con derechos).
+## Inicio «El set» (v2, rama `v2`) · reemplaza a la intro #pre
+- Marcado `#set` en index.html, lógica en `js/set.js` (define `window.APP.rolling`), CSS sección 36 de style.css (todo bajo `.set`; `.set` está en ISL de gen_light.py). La intro vieja (#pre) salió de index.html y de main.js; sus CSS (secciones 22/30) y `assets/video/monitor-reel.mp4`, `montaje.mp4` quedaron sin uso.
+- Recorrido:
+  1. Llegada: escritorio de Alex de noche en loop (`assets/set/ambiente.mp4`: humo, lámpara, luz REC). Escena generada con IA en Magnific (Seedance 2.5 desde una imagen); se puede reemplazar por el set real.
+  2. El PC se enciende solo a los 1,5 s (o antes con clic, tecla o scroll, o el botón «Encender el PC»): parpadeo e isotipo en las dos pantallas.
+  3. Pantalla izquierda = reproductor con el Play amarillo; derecha = recap de proyectos (`pantalla.mp4`).
+  4. Play: dolly de 1 s directo a la pantalla izquierda (`dolly.mp4`, ya acelerado 7× con desenfoque de movimiento; se reproduce a 1,13×).
+  5. Edición en vivo (`.nle`): leader 3·2·1 (1,5 s, medio segundo cada número), tráiler de 7,4 s en el monitor de programa (`montaje.mp4`, con negros para los títulos), títulos como clips de la pista V2 sincronizados al cuadro (TITLES en set.js), línea de tiempo con miniaturas (`assets/set/clips/`).
+  6. El monitor llena la pantalla, destello, obturador y portada. Unos 10 s del Play a la portada.
+- Pantallas: posición rastreada cuadro a cuadro (`TRK`, 12 por segundo del video original) y medida exacta sobre el cuadro del loop para el reposo (`STILL`). Se dibujan como luz (modo «screen»): el humo pasa por delante, tienen reflejo de vidrio y alumbran el cuarto con su color promedio.
+- Sonido apagado por defecto (botón «Sonido»): `assets/set/sfx/` (sala en loop, encendido, pantallas, play, dolly, golpes de los títulos, riser, obturador), normalizados bajito.
+- Cuándo sale: primera visita (sessionStorage `ap-rec` + localStorage `ap-set`), nunca con `?lang=` (enlaces a clientes entran directo) ni con «reducir movimiento». `?intro` la fuerza. Si no salió, la portada muestra «Ver la intro ↺» (`.kin-replay`, `html.intro-skip`). «Saltar» o Esc entra directo.
+- Textos nuevos traducidos en i18n.js (Bienvenido al set., Encender el PC, Alex Pino presenta, Cuento historias., etc.).
 
 ## Vidrio y sección Web
 - Sección 31 de style.css: vidrio esmerilado (tokens `--gl-fill`, `--gl-hi`, `--gl-rim`, `--gl-drop`) aplicado con un solo `:is(...)` a paneles, chips, botones, barra lateral. Versión clara con los mismos tokens bajo `html[data-theme="light"]`; gen_light.py no regenera esas reglas.

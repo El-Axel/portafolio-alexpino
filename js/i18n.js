@@ -88,6 +88,7 @@
     "Dale play": "Hit play",
     "Saltar al portafolio": "Skip to the portfolio",
     "Saltar": "Skip",
+    "Ver la intro ↺": "Watch the intro ↺",
     "Preparando el set": "Preparing the set",
     "Alex Pino presenta": "Alex Pino presents",
     "Cuento historias.": "I tell stories.",

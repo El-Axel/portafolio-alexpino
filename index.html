@@ -55,7 +55,7 @@
   }
   </script>
   <!-- la claqueta de entrada solo sale la primera vez en la visita y nunca con "reducir movimiento" -->
-  <script>try{var d=document.documentElement;d.classList.add("js");if(!sessionStorage.getItem("ap-rec")&&!matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("pre-on")}catch(e){}</script>
+  <script>try{var d=document.documentElement,q=location.search,f=/[?&]intro\b/.test(q);d.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&(f||(!sessionStorage.getItem("ap-rec")&&!localStorage.getItem("ap-set")&&!/[?&]lang=/.test(q))))d.classList.add("pre-on");else d.classList.add("intro-skip")}catch(e){}</script>
 </head>
 <body data-page="inicio">
   <!-- ========== CLAQUETA DE ENTRADA: foco, REC, cuenta regresiva y obturador ========== -->
@@ -151,7 +151,7 @@
         <h1 id="hero-title" class="kin-title" data-kin>¿Quién soy?</h1>
         <p class="kin-sub">Depende del <span class="uw" data-cur="hero-uw">proyecto<svg viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C60 30 140 30 196 6"/></svg></span>.</p>
         <p class="intro" id="intro"></p>
-        <div class="kin-go"><a class="btn primary" href="#programa">Ver escenas</a><span class="kin-hint" aria-hidden="true">Baja para rodar ↓</span></div>
+        <div class="kin-go"><a class="btn primary" href="#programa">Ver escenas</a><span class="kin-hint" aria-hidden="true">Baja para rodar ↓</span><a class="kin-replay" href="?intro">Ver la intro ↺</a></div>
       </div>
     </section>
     </div>
