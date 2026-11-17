@@ -130,10 +130,10 @@
 
 ## Intro (index.html · #pre)
 - 1 · Monitor (`.pre-mon`) con `assets/video/monitor-reel.mp4` (5 escenas de 4 s) y rótulos sincronizados por `timeupdate` (lista LT en main.js). Botón Play amarillo al centro.
-- 2 · Play → `.pre.x`: `assets/video/montaje.mp4` (cortes que aceleran y frenan, ~10,8 s, termina congelado en el árbol) a pantalla completa dentro de `.x-face`, cuya máscara del isotipo encoge (3,3–5,7 s). Luego el isotipo gira en 3D (18 capas `.x-l` creadas por JS: filo arena + laterales petróleo), reflejo, se llena de arena (8,4 s), la cámara entra (9,5 s) y todo queda amarillo.
-- 3 · Cuenta amarilla 3·2·1, un segundo por número (10,5–13,5 s), destello, obturador lento y portada. Tiempos largos a propósito (pedido de Alex: que las cosas tomen su tiempo).
+- 2 · Play → `.pre.x`: `assets/video/montaje.mp4` (1080p, 11,8 s): Telecafé, Paisajes, Austin, La Cepa (3 reels) y Pregón, 1,5 s cada uno, y termina con un campo de Telecafé en cámara lenta. La máscara del isotipo encoge (7–10 s), un filo arena (`.x-rim`, SVG) dibuja el contorno (9 s), las 18 capas `.x-l` aparecen con fundido y el isotipo gira suave (9,7 s), se llena de arena (12,5 s), la cámara entra (13,6 s) y todo queda amarillo.
+- 3 · Cuenta amarilla 3·2·1, un segundo por número (14,8–17,8 s), destello, obturador lento y portada. Tiempos largos a propósito (pedido de Alex: que las cosas tomen su tiempo y los planos no pasen rápido).
 - "Saltar intro" o Esc entra directo. Una vez por sesión (`ap-rec`); no sale con "reducir movimiento".
-- Austin, Paisajes Íntimos y Nos fui pues mijo aún no están en los videos (solo existen en YouTube): cuando Alex mande clips mp4, regenerar monitor-reel.mp4 y montaje.mp4 (ver comandos ffmpeg en el historial) y añadir sus rótulos a LT.
+- monitor-reel.mp4 (20 s, 5 escenas de 4 s): Telecafé, Paisajes, Austin, La Cepa (3 reels lado a lado) y Pregón; rótulos en LT. Material en bruto en `Videos/` (ignorado en git). Nos fui pues mijo aún no está (falta mp4 sin la canción con derechos).
 
 ## Vidrio y sección Web
 - Sección 31 de style.css: vidrio esmerilado (tokens `--gl-fill`, `--gl-hi`, `--gl-rim`, `--gl-drop`) aplicado con un solo `:is(...)` a paneles, chips, botones, barra lateral. Versión clara con los mismos tokens bajo `html[data-theme="light"]`; gen_light.py no regenera esas reglas.

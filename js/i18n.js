@@ -78,6 +78,7 @@
     "Al aire en Telecafé": "On air on Telecafé",
     "Cámara · Foto fija · Edición": "Camera · Stills · Editing",
     "+40 % en reservas": "+40% in bookings",
+    "80.000 seguidores en 4 meses": "80,000 followers in 4 months",
     "Serie documental para televisión": "Documentary series for TV",
     "Escena 00 · Toma 01": "Scene 00 · Take 01",
     "Alex Pino · Portafolio 2026": "Alex Pino · Portfolio 2026",
