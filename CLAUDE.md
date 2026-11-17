@@ -116,7 +116,7 @@
 
 ## Experiencia «transmisión en vivo» (entrega 1)
 - Misma identidad (colores, Krona One + Figtree, vidrio estriado, isotipo); cambia la ESTRUCTURA.
-- `js/experiencia.js` (va después de main.js en todas las páginas): barra lateral con la escena actual, menú a pantalla completa (`.mnu`, Esc/Tab atrapado), corte entre páginas (`.corte`, sessionStorage `ap-cut`), video que se reproduce al pasar el mouse (`video[data-hover]`), título cinético de la portada (`.hero-pin` → `--k`) y «el programa» de escenas (`#prog-pin`, una escena por pantalla, línea de tiempo abajo).
+- `js/experiencia.js` (va después de main.js en todas las páginas): barra lateral con la escena actual, menú «la cámara» (`.mnu` > `.cam`: pantalla con la lista de capítulos + vista previa, rueda de control que se arrastra o gira con el scroll/flechas, SET/▶ = abrir con pantalla REC 0.7 s, MENU = cerrar; Esc/Tab atrapado), corte entre páginas (`.corte`, sessionStorage `ap-cut`; al terminar, las franjas vuelven a su sitio con `.still` para que el telón NO cruce otra vez), video que se reproduce al pasar el mouse (`video[data-hover]`), título cinético de la portada (`.hero-pin` → `--k`) y «el programa» de escenas (`#prog-pin`, una escena por pantalla, línea de tiempo abajo).
 - CSS en style.css sección 28. Escritorio ≥901px: la barra superior es una barra lateral (`--rail: 76px`). Celular: una fila (marca · menú · timecode); los switches viven dentro del menú.
 - Clases nuevas que NO se deben reutilizar: `.mnu`, `.corte`, `.prg`, `.pslide`, `.pframe`, `.ptl-*`, `.kin*`, `.lens-o`.
 - `.prog-stage`, `.mnu` y `.corte` son islas oscuras (también en tema claro); están en la lista ISL de tools/gen_light.py.
@@ -158,3 +158,8 @@
 - Capítulos 03–05: adelantos con `[data-scrub]` (`--p` 0→1 al cruzar la pantalla): abanico de impresos, portadas que giran, ventanas que se despliegan.
 - Cada página (01–05) termina con `.nextch` «Siguiente capítulo» (y «← Capítulo anterior»). En Sobre mí reemplaza su cierre anterior.
 - En la portada, la barra lateral muestra el capítulo actual.
+
+## Menú «la cámara» (v20)
+- Marcado en js/shell.js (TOP), lógica en experiencia.js §2 (`camSelect`, `camStep`, `camGo`), CSS en style.css «menú: el respaldo de una cámara» (todas las reglas van con prefijo `.mnu ` para que gen_light.py las salte).
+- Ojo con nombres que ya existían en el sitio: `.rec` (puntito rojo), `.sel`, y la función `step` de la sala. Por eso el estado es `.is-rec`, la fila elegida `.cam-on` y las funciones llevan prefijo `cam`.
+- Celular (≤900px): sin vista previa; la rueda y los botones quedan debajo de la pantalla; los switches de tema/idioma viven en `#mnu-prefs`.

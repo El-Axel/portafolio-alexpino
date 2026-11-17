@@ -51,35 +51,89 @@
       if (m.tagName === "VIDEO") { if (on && !reduce) { var p = m.play(); if (p && p.catch) p.catch(function () {}); } else m.pause(); }
     });
   }
+  /* la cámara: una lista en la pantalla, la rueda elige, SET abre, MENU cierra */
+  var links = menu ? $$(".mnu-list a", menu) : [], sel = 0, camRot = 0, recT = null;
+  var wheel = $("#cam-wheel"), ring = $(".cam-ring", menu || document);
+  function txt(a, s) { var x = $(s, a); return x ? x.textContent : ""; }
+  function camSelect(i, focus) {
+    if (!links.length) return;
+    sel = (i + links.length) % links.length;
+    links.forEach(function (a, k) { a.classList.toggle("cam-on", k === sel); });
+    var a = links[sel];
+    media(a.dataset.sec);
+    $("#cam-n").textContent = txt(a, "em"); $("#cam-t").textContent = txt(a, "b"); $("#cam-s").textContent = txt(a, "small");
+    $("#cam-pos").textContent = pad(sel + 1) + " / " + pad(links.length);
+    if (focus) a.focus({ preventScroll: true });
+  }
+  function camStep(d) { camRot += d * 30; if (ring) ring.style.transform = "rotate(" + camRot + "deg)"; camSelect(sel + d, true); }
+  function camGo() {
+    if (!links.length || menu.classList.contains("is-rec")) return;
+    var a = links[sel], same = false;
+    try { same = new URL(a.href, location.href).pathname === location.pathname; } catch (er) {}
+    if (same) { closeMenu(); return; }
+    var m = $('.mnu-media > [data-for="' + a.dataset.sec + '"]', menu);
+    $("#cam-ri").src = m ? (m.poster || m.currentSrc || m.src) : "";
+    $("#cam-rn").textContent = $(".cam-pn", menu).textContent;
+    $("#cam-rt").textContent = txt(a, "b");
+    menu.classList.add("is-rec");
+    recT = setTimeout(function () { a.click(); }, reduce ? 0 : 700);
+  }
   var hideT;
   function openMenu() {
     if (!menu) return;
-    clearTimeout(hideT);
+    clearTimeout(hideT); clearTimeout(recT); menu.classList.remove("is-rec");
     lastFocus = document.activeElement;
     menu.hidden = false; requestAnimationFrame(function () { menu.classList.add("open"); });
     html.classList.add("menu-open"); btn.setAttribute("aria-expanded", "true");
-    var cur = $(".mnu-list a.on", menu) || $(".mnu-list a", menu);
-    media(cur ? cur.dataset.sec : "inicio");
-    setTimeout(function () { (cur || closeB).focus(); }, 60);
+    var cur = links.indexOf($(".mnu-list a.on", menu));
+    camSelect(cur < 0 ? 0 : cur, false);
+    setTimeout(function () { if (links[sel]) links[sel].focus({ preventScroll: true }); }, 60);
   }
   function closeMenu() {
     if (!menu || menu.hidden) return;
     menu.classList.remove("open"); html.classList.remove("menu-open"); btn.setAttribute("aria-expanded", "false");
-    hideT = setTimeout(function () { menu.hidden = true; media(""); }, reduce ? 0 : 420);
+    hideT = setTimeout(function () { menu.hidden = true; menu.classList.remove("is-rec"); media(""); }, reduce ? 0 : 420);
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   if (menu && btn) {
     btn.addEventListener("click", function () { menu.hidden ? openMenu() : closeMenu(); });
     closeB.addEventListener("click", closeMenu);
-    $$(".mnu-list a", menu).forEach(function (a) {
-      a.addEventListener("mouseenter", function () { media(a.dataset.sec); });
-      a.addEventListener("focus", function () { media(a.dataset.sec); });
+    $("#cam-go").addEventListener("click", camGo);
+    $("#cam-set").addEventListener("click", camGo);
+    $$(".cam-k", menu).forEach(function (k) { k.addEventListener("click", function () { camStep(+k.dataset.step); }); });
+    links.forEach(function (a, k) {
+      a.addEventListener("mouseenter", function () { camSelect(k, false); });
+      a.addEventListener("focus", function () { if (sel !== k) camSelect(k, false); });
     });
+    // girar la rueda: arrastrando alrededor del centro o con la rueda del mouse
+    var lastW = 0;
+    $(".cam", menu).addEventListener("wheel", function (e) {
+      if (Math.abs(e.deltaY) < 4) return;
+      e.preventDefault();
+      var now = Date.now(); if (now - lastW < 200) return; lastW = now;
+      camStep(e.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
+    var drag = null;
+    function ang(e) { var r = wheel.getBoundingClientRect(); return Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180 / Math.PI; }
+    wheel.addEventListener("pointerdown", function (e) {
+      if (e.target.closest("button")) return;
+      drag = { a: ang(e), acc: 0 }; wheel.setPointerCapture(e.pointerId); wheel.classList.add("grab");
+    });
+    wheel.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      var a = ang(e), d = a - drag.a; if (d > 180) d -= 360; if (d < -180) d += 360;
+      drag.a = a; drag.acc += d;
+      if (Math.abs(drag.acc) >= 30) { camStep(drag.acc > 0 ? 1 : -1); drag.acc = 0; }
+    });
+    function endDrag() { drag = null; wheel.classList.remove("grab"); }
+    wheel.addEventListener("pointerup", endDrag); wheel.addEventListener("pointercancel", endDrag);
     document.addEventListener("keydown", function (e) {
       if (menu.hidden) return;
-      if (e.key === "Escape") { e.preventDefault(); closeMenu(); }
+      if (e.key === "Escape") { e.preventDefault(); closeMenu(); return; }
+      if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); camStep(1); return; }
+      if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); camStep(-1); return; }
       if (e.key === "Tab") { // el foco no sale del menú
-        var f = $$("a, button", menu).filter(function (x) { return x.offsetParent !== null; });
+        var f = $$("a, button", menu).filter(function (x) { return x.offsetParent !== null && x.tabIndex >= 0; });
         if (!f.length) return;
         if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
         else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
@@ -92,13 +146,19 @@
   /* ---------- 3 · Corte de edición entre páginas ---------- */
   var cut = $("#cut");
   if (cut) {
+    var reset = function () {
+      cut.classList.add("still"); cut.classList.remove("go", "leave");
+      void cut.offsetWidth;
+      requestAnimationFrame(function () { cut.classList.remove("still"); });
+    };
     if (html.classList.contains("cutting")) {
       try { sessionStorage.removeItem("ap-cut"); } catch (e) {}
       cut.classList.add("go", "still");
       html.classList.remove("cutting");
       requestAnimationFrame(function () { requestAnimationFrame(function () {
         cut.classList.remove("still"); cut.classList.add("leave");
-        setTimeout(function () { cut.classList.remove("go", "leave"); }, 700);
+        // al terminar, las franjas vuelven a su sitio SIN animación (antes cruzaban la pantalla otra vez)
+        setTimeout(function () { reset(); }, 700);
       }); });
     }
     document.addEventListener("click", function (e) {
@@ -114,7 +174,7 @@
       cut.classList.add("go");
       setTimeout(function () { location.href = url.href; }, 420);
     });
-    window.addEventListener("pageshow", function (e) { if (e.persisted) cut.classList.remove("go", "leave", "still"); });
+    window.addEventListener("pageshow", function (e) { if (e.persisted) reset(); });
   }
 
   /* ---------- 4 · Videos que se reproducen al pasar el mouse ---------- */
@@ -326,7 +386,7 @@
     var inView = false;
     if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { inView = es[0].isIntersecting; }, { threshold: .5 }).observe(sala); else inView = true;
     document.addEventListener("keydown", function (e) {
-      if (!inView || e.metaKey || e.ctrlKey || e.altKey || /input|textarea|select/i.test((e.target.tagName || ""))) return;
+      if (!inView || html.classList.contains("menu-open") || e.metaKey || e.ctrlKey || e.altKey || /input|textarea|select/i.test((e.target.tagName || ""))) return;
       if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
       if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
     });
