@@ -727,7 +727,7 @@
     var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
     var f = Math.round(p * TOTAL), s = Math.floor(f / 25);
     tcEl.textContent = "00:" + pad(Math.floor(s / 60)) + ":" + pad(s % 60) + ":" + pad(f % 25);
-    ph.style.width = (p * 100).toFixed(2) + "%";
+    ph.style.setProperty("--p", p.toFixed(4)); document.documentElement.style.setProperty("--scroll-p", p.toFixed(4));
     if (!reduce) decos.forEach(function (d) {
       var r = d.parentNode.getBoundingClientRect();
       d.style.setProperty("--sy", (-r.top * (parseFloat(d.style.getPropertyValue("--d")) || .1)).toFixed(1));
@@ -835,47 +835,7 @@
   renderRecap(D.destacados);
   renderCredits(D.creditos);
 
-  /* ---------- claqueta de entrada ----------
-     El visitante da REC y el sitio "empieza a grabar". Si no toca nada,
-     arranca solo a los 3,5 s. Solo sale una vez por visita. */
-  window.APP.rolling = new Promise(function (resolve) {
-    var pre = $("#pre");
-    if (!pre || !root.classList.contains("pre-on")) { if (pre) pre.remove(); return resolve(); }
-    var btn = $("#pre-rec"), tc = $("#pre-tc"), state = $(".pre-state em", pre), num = $("#pre-n", pre);
-    var t0 = performance.now(), done = false, raf = 0;
-    document.body.style.overflow = "hidden";
-    (function tick(now) {
-      var f = Math.floor((now - t0) / 40);
-      tc.textContent = "00:00:" + pad(Math.floor(f / 25) % 60) + ":" + pad(f % 25);
-      raf = requestAnimationFrame(tick);
-    })(t0);
-    setTimeout(function () { btn.focus({ preventScroll: true }); }, 50);
-    var at = function (ms, fn) { setTimeout(fn, ms); };
-    function go() {
-      if (done) return; done = true;
-      try { sessionStorage.setItem("ap-rec", "1"); } catch (e) {}
-      // 1 · REC: el cuadro se pone rojo
-      pre.classList.add("rolling"); state.textContent = "REC";
-      // 2 · cuenta regresiva de película: 3, 2, 1
-      at(380, function () { pre.classList.add("counting"); num.textContent = "3"; });
-      at(800, function () { num.textContent = "2"; });
-      at(1220, function () { num.textContent = "1"; });
-      // 3 · destello blanco y el obturador se abre sobre la portada, que "se revela"
-      at(1640, function () { pre.classList.add("flash"); });
-      at(1760, function () {
-        pre.classList.remove("flash", "counting"); pre.classList.add("opening");
-        root.classList.add("revealing");
-        root.classList.remove("pre-on"); document.body.style.overflow = "";
-        requestAnimationFrame(function () { requestAnimationFrame(function () { pre.classList.add("go"); }); });
-      });
-      at(2600, function () { cancelAnimationFrame(raf); pre.remove(); resolve(); });
-      at(4200, function () { root.classList.remove("revealing"); });
-    }
-    btn.addEventListener("click", go);
-    document.addEventListener("keydown", function k(e) { if (e.key === "Enter" || e.key === " " || e.key === "Escape") { document.removeEventListener("keydown", k); e.preventDefault(); go(); } });
-    pre.classList.add("auto");
-    setTimeout(go, 3600);
-  });
+  /* ---------- intro: ahora vive en js/set.js (el set → edición en vivo); define window.APP.rolling ---------- */
 
   /* ---------- la cámara de la portada ----------
      Cuatro controles reales: ISO (grano), diafragma (desenfoque del fondo),
@@ -891,7 +851,7 @@
       s:   { v: [8, 15, 30, 50, 125, 250, 500, 1000], d: 3, f: function (x) { return "1/" + x; } },
       wb:  { v: [3200, 4300, 5600, 6500, 7500], d: 2, f: function (x) { return x + "K"; } }
     };
-    var state = {}, img = $(".hero-img"), blurG = $("#mblur-g"), needle = $("#vf-needle");
+    var state = {}, img = $(".hero-ph") || $(".hero-img"), blurG = $("#mblur-g"), needle = $("#vf-needle");
     var BLUR = { 1.4: 9, 1.8: 5 }, GRAIN = { 1600: .18, 3200: .32, 6400: .5, 12800: .7 }, MB = { 8: 7, 15: 3.5, 30: 1.2 };
     function apply() {
       var iso = V.iso.v[state.iso], f = V.f.v[state.f], s = V.s.v[state.s], wb = V.wb.v[state.wb];
@@ -1018,9 +978,9 @@
      1–5: saltar a cada sección · 0: quitar el filtro · ?: ver los atajos */
   (function keys() {
     var help = $("#keys"), hint = $("#kbd-hint"), hud = $("#hud"), hudT = 0;
-    var SECS = ["sobre-mi", "audiovisual", "grafico", "editorial", "contacto"];
-    var PAGES = ["sobre-mi.html", "audiovisual.html", "grafico.html", "editorial.html", "contacto.html"];
-    var NAMES = { audiovisual: "Audiovisual", "reels-wrap": "Reels", grafico: "Gráfico", editorial: "Editorial", "sobre-mi": "Sobre mí", contacto: "Contacto" };
+    var SECS = ["sobre-mi", "audiovisual", "grafico", "editorial", "web", "contacto"];
+    var PAGES = ["sobre-mi.html", "audiovisual.html", "grafico.html", "editorial.html", "web.html", "contacto.html"];
+    var NAMES = { audiovisual: "Audiovisual", "reels-wrap": "Reels", grafico: "Gráfico", editorial: "Editorial", web: "Web", "sobre-mi": "Sobre mí", contacto: "Contacto" };
     function nameOf(el) {
       if (el.classList.contains("project")) return $("h3", el).textContent;
       if (el.classList.contains("scard")) return $(".sc-title", el).textContent;

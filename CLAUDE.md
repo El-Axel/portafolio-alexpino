@@ -113,3 +113,59 @@
 - Clips en LOG con su versión etalonada, y material en bruto, para `comparar`.
 - Marcar "Color" en los `roles` de los proyectos donde hizo el color.
 - Revisar los rangos de presupuesto del pedido de WhatsApp.
+
+## Experiencia «transmisión en vivo» (entrega 1)
+- Misma identidad (colores, Krona One + Figtree, vidrio estriado, isotipo); cambia la ESTRUCTURA.
+- `js/experiencia.js` (va después de main.js en todas las páginas): barra lateral con la escena actual, menú «la cámara» (`.mnu` > `.cam`: pantalla con la lista de capítulos + vista previa, rueda de control que se arrastra o gira con el scroll/flechas, SET/▶ = abrir con pantalla REC 0.7 s, MENU = cerrar; Esc/Tab atrapado), corte entre páginas (`.corte`, sessionStorage `ap-cut`; al terminar, las franjas vuelven a su sitio con `.still` para que el telón NO cruce otra vez), video que se reproduce al pasar el mouse (`video[data-hover]`), título cinético de la portada (`.hero-pin` → `--k`) y «el programa» de escenas (`#prog-pin`, una escena por pantalla, línea de tiempo abajo).
+- CSS en style.css sección 28. Escritorio ≥901px: la barra superior es una barra lateral (`--rail: 76px`). Celular: una fila (marca · menú · timecode); los switches viven dentro del menú.
+- Clases nuevas que NO se deben reutilizar: `.mnu`, `.corte`, `.prg`, `.pslide`, `.pframe`, `.ptl-*`, `.kin*`, `.lens-o`.
+- `.prog-stage`, `.mnu` y `.corte` son islas oscuras (también en tema claro); están en la lista ISL de tools/gen_light.py.
+- Reducir movimiento: sin corte, título quieto y todas las escenas una debajo de otra.
+
+## Experiencia, entrega 2
+- Portada: el bloque de texto de la derecha es grande en escritorio (título 8.4vw, subtítulo 2.9vw); reglas al final de style.css.
+- Audiovisual (experiencia.js §7): `.reelv` envuelve `#escenas` (clase `.reel-col`): palabra «Escenas» fija detrás (`.reel-word`), la tarjeta del centro se enciende (`.on`) y su ficha se escribe en `.rv-l`/`.rv-r`. Snap suave (`html.snap-reel`). Los filtros por oficio siguen igual.
+- Proyecto (proyecto.js): entrada `#entry` con el título partido en diagonal (`.en-a`/`.en-b`, `--e` por scroll); «El caso» en `.cas` (un paso por pantalla, índice fijo a la izquierda); `.remate` con la cifra contando (solo si el proyecto tiene `cifra`; no se inventan cifras); `.crt` en Telecafé (tv) y Nos fui (sala de control); `.nxt` = siguiente escena a lo ancho.
+- `.entry`, `.nxt-go` y `.crt` son islas oscuras en gen_light.py.
+
+## Intro (index.html · #pre)
+- 1 · Monitor (`.pre-mon`) con `assets/video/monitor-reel.mp4` (5 escenas de 4 s) y rótulos sincronizados por `timeupdate` (lista LT en main.js). Botón Play amarillo al centro.
+- 2 · Play → `.pre.x`: `assets/video/montaje.mp4` (1080p, 11,8 s): Telecafé, Paisajes, Austin, La Cepa (3 reels) y Pregón, 1,5 s cada uno, y termina con un campo de Telecafé en cámara lenta. La máscara del isotipo encoge (7–10 s), un filo arena (`.x-rim`, SVG) dibuja el contorno (9 s), las 18 capas `.x-l` aparecen con fundido y el isotipo gira suave (9,7 s), se llena de arena (12,5 s), la cámara entra (13,6 s) y todo queda amarillo.
+- 3 · Cuenta amarilla 3·2·1, un segundo por número (14,8–17,8 s), destello, obturador lento y portada. Tiempos largos a propósito (pedido de Alex: que las cosas tomen su tiempo y los planos no pasen rápido).
+- "Saltar intro" o Esc entra directo. Una vez por sesión (`ap-rec`); no sale con "reducir movimiento".
+- monitor-reel.mp4 (20 s, 5 escenas de 4 s): Telecafé, Paisajes, Austin, La Cepa (3 reels lado a lado) y Pregón; rótulos en LT. Material en bruto en `Videos/` (ignorado en git). Nos fui pues mijo aún no está (falta mp4 sin la canción con derechos).
+
+## Vidrio y sección Web
+- Sección 31 de style.css: vidrio esmerilado (tokens `--gl-fill`, `--gl-hi`, `--gl-rim`, `--gl-drop`) aplicado con un solo `:is(...)` a paneles, chips, botones, barra lateral. Versión clara con los mismos tokens bajo `html[data-theme="light"]`; gen_light.py no regenera esas reglas.
+- web.html (Capítulo 05 · Web): datos en `D.web` (grupo "cero" = hechas de cero en código; "modificadas" = WordPress + Elementor), render en experiencia.js §8, CSS sección 32. Capturas en assets/web (primer pantallazo, 1280 px). Contacto pasó a ser 06 en el menú; atajos 1–6.
+- Mis Finanzas va sin captura a propósito: la app abierta mostraba datos personales de Alex. Tarjeta tipográfica hasta que él mande una captura con datos de ejemplo.
+- Pregón de la plaza = Escena 06 (proyecto universitario; cámara, dirección de fotografía y producción de las cápsulas + la web). El podcast NO se menciona (pedido de Alex). Sin cifra: el resultado es el tráiler publicado y el sitio en línea. El número de escenas en el Inicio sale de `D.destacados.length` (`--n`).
+
+## Audiovisual = sala de proyección
+- experiencia.js §7 crea `.sala` (fuera del `.wrap`, antes de `#audiovisual`): pantallas en arco con `transform` calculado en JS (`layout()`), títulos `.sala-tt`, anterior/siguiente, flechas del teclado (solo con la sala en pantalla), arrastre, filtros por oficio (lee `.f-out` de las `.scard` ocultas de `#escenas`, que siguen existiendo solo para eso).
+- Imagen de cada pantalla: campo `sala` en `D.destacados` (assets/poster/sala-*.jpg; las de YouTube son sus portadas guardadas en el repo). La central corre su video si es local y horizontal (Telecafé).
+- CSS sección 33. `.sala` es isla oscura (también en tema claro).
+
+## Fondo unificado («luz de set»)
+- Sección 34 de style.css: `.bg` ya no pinta las manchas SVG (oculto); es el fondo liso + una luz radial (`--lc`, `--lc2`, `--lx`, `--ly`, registradas con @property para que transicionen). experiencia.js §9 cambia la luz según la sección en pantalla (data-light="teal|sand|terra|petrol" opcional; si no, se alternan; CTA/remate = terra).
+- Las franjas `.tone*` ya no pintan fondo ni textura (::before/::after ocultos). Hero, entrada de proyecto, programa y siguiente escena se funden con el fondo por degradado. No volver a poner fondos propios con bordes duros por sección.
+- cursors.js: las cifras de la portada tienen red de seguridad (si el cursor no las anima en 6 s, cuentan solas).
+
+## Recorrido lineal (pedido de Alex: que el visitante no se salte capítulos)
+- Orden: Inicio → Sobre mí (01) → Audiovisual (02) → Gráfico (03) → Editorial (04) → Web (05) → Contacto (06). Lista CHAPS en experiencia.js §10.
+- La portada es un tráiler por capítulos (`.chap#cap-0n`, data-chap, data-light). Ningún elemento de la portada lleva directo a un proyecto: el programa de escenas lleva a `audiovisual.html?e=N` (la sala abre en esa escena). Las cifras ya no son enlaces.
+- Capítulo 01: frase con imágenes dentro (`[data-words]` + `.pill`, referencia Hero Studio); las palabras se encienden con el scroll. Si se cambia el texto, actualizar los fragmentos en i18n.js (se traducen antes de partir en palabras).
+- Capítulos 03–05 (adelantos, elegidos por Alex en el artifact «Home con profundidad», nov. 2026):
+  - 03 Gráfico = mesa de luz (`#mesa` con `[data-scrub]`, `.mesa-t` + `.mp`): arranca cenital (mesa inclinada) y con el scroll se endereza; cada pieza sube a su altura (`--zm`). Piezas: portadas de `D.grafico` + 2 páginas internas.
+  - 04 Editorial: portadas que giran (`[data-scrub]`).
+  - 05 Web = travelling lateral (`#wtrav`, sticky `.wt-stage`, JS en experiencia.js): las ventanas pasan de derecha a izquierda, la del centro se endereza y su captura baja sola (`--sy`). Usa `larga` de `D.web` (capturas de página entera en `assets/web/largas/`, 900 px de ancho; se tomaron con Edge sin ventana por CDP). Mis Finanzas sigue sin captura (tarjeta `.wt-tile`). `.wt-view` es isla oscura.
+- Portada = rack focus: la foto del hero va en capas (`.hero-ph`: `.hp-bg` original, `.hp-bgb` fondo desenfocado sin el sujeto, `.hp-fg` Alex + vidrio recortados, `.hp-fgs` el recorte suave). Con `--k` el foco pasa del fondo a Alex. Archivos en `assets/img/hero/` (recorte por luminancia de hero-glass*.jpg). Si cambia la foto del hero, hay que regenerarlos. El filtro de la cámara jugable se aplica a `.hero-ph`.
+- Ojo en experiencia.js: todo vive en una sola función; no repetir `var upd`/`var tick` entre secciones (se pisaban y la portada no recibía el scroll).
+- gen_light.py en Windows: correrlo con `PYTHONUTF8=1`.
+- Cada página (01–05) termina con `.nextch` «Siguiente capítulo» (y «← Capítulo anterior»). En Sobre mí reemplaza su cierre anterior.
+- En la portada, la barra lateral muestra el capítulo actual.
+
+## Menú «la cámara» (v20)
+- Marcado en js/shell.js (TOP), lógica en experiencia.js §2 (`camSelect`, `camStep`, `camGo`), CSS en style.css «menú: el respaldo de una cámara» (todas las reglas van con prefijo `.mnu ` para que gen_light.py las salte).
+- Ojo con nombres que ya existían en el sitio: `.rec` (puntito rojo), `.sel`, y la función `step` de la sala. Por eso el estado es `.is-rec`, la fila elegida `.cam-on` y las funciones llevan prefijo `cam`.
+- Celular (≤900px): sin vista previa; la rueda y los botones quedan debajo de la pantalla; los switches de tema/idioma viven en `#mnu-prefs`.

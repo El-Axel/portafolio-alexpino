@@ -37,7 +37,7 @@
   <link rel="preload" as="image" href="assets/img/hero-glass.jpg" media="(min-width: 761px)">
   <link rel="preload" as="image" href="assets/img/hero-glass-movil.jpg" media="(max-width: 760px)">
   <!-- tema (claro/oscuro) e idioma (es/en): se deciden antes de pintar para que no parpadee -->
-  <script>(function(){var d=document.documentElement,q=null,l=null,t=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}try{l=localStorage.getItem("ap-lang");t=localStorage.getItem("ap-theme")}catch(e){}if(q==="en"||q==="es"){l=q;try{localStorage.setItem("ap-lang",q)}catch(e){}}if(l!=="en"&&l!=="es")l=/^en/i.test(navigator.language||"")?"en":"es";d.lang=l;d.setAttribute("data-theme",t==="light"?"light":"dark");if(l==="en"){d.classList.add("i18n-wait");setTimeout(function(){d.classList.remove("i18n-wait")},2500)}})()</script>
+  <script>(function(){var d=document.documentElement,q=null,l=null,t=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}try{l=localStorage.getItem("ap-lang");t=localStorage.getItem("ap-theme")}catch(e){}if(q==="en"||q==="es"){l=q;try{localStorage.setItem("ap-lang",q)}catch(e){}}if(l!=="en"&&l!=="es")l=/^en/i.test(navigator.language||"")?"en":"es";d.lang=l;d.setAttribute("data-theme",t==="light"?"light":"dark");if(l==="en"){d.classList.add("i18n-wait");setTimeout(function(){d.classList.remove("i18n-wait")},2500)}try{if(sessionStorage.getItem("ap-cut")){d.classList.add("cutting");setTimeout(function(){d.classList.remove("cutting")},1500)}}catch(e){}})()</script>
   <link rel="stylesheet" href="css/vendor/open-props.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/claro.css">
@@ -59,31 +59,66 @@
 </head>
 <body data-page="inicio">
   <!-- ========== CLAQUETA DE ENTRADA: foco, REC, cuenta regresiva y obturador ========== -->
-  <div class="pre" id="pre" role="dialog" aria-modal="true" aria-labelledby="pre-t">
-    <div class="pre-leak" aria-hidden="true"></div>
-    <div class="pre-grain" aria-hidden="true"></div>
-    <div class="pre-vf" aria-hidden="true"><i></i><i></i><i></i><i></i><span class="pre-cross"></span></div>
-    <div class="pre-top" aria-hidden="true"><span class="pre-state"><b class="rec"></b><em>STBY</em></span><span class="pre-meta">4K · 25p · ISO 800 · f/2.8 · 1/50</span><span id="pre-tc">00:00:00:00</span></div>
-    <div class="pre-meter" aria-hidden="true"><i></i><i></i><i></i></div>
-    <div class="pre-mid">
-      <p class="pre-slate" aria-hidden="true"><span>Escena <b>01</b></span><span>Toma <b>01</b></span><span>Portafolio <b>2026</b></span></p>
-      <h2 class="pre-name" id="pre-t"><span class="af" aria-hidden="true"></span><span class="nm">Alexander Pino Caro</span></h2>
-      <p class="pre-role">Diseño crossmedia · Cámara · Edición</p>
-      <button class="pre-rec" id="pre-rec" type="button"><span class="ring" aria-hidden="true"><span class="prog"></span><span class="dot"></span></span><span class="txt">Dale a grabar</span></button>
+  <!-- ========== INICIO · EL SET (v2): llegada → encender el PC → Play → dolly → edición en vivo → portada (js/set.js) ========== -->
+  <div class="set" id="set" role="dialog" aria-modal="true" aria-labelledby="set-t">
+    <canvas id="set-cv" class="set-cv" role="img" aria-label="El escritorio de Alex de noche: dos monitores, PC, audífonos, lámpara y una cámara grabando en su trípode"></canvas>
+    <video id="set-amb" src="assets/set/ambiente.mp4" poster="assets/set/ambiente.jpg" muted loop playsinline preload="auto" aria-hidden="true" class="set-src"></video>
+    <video id="set-dol" src="assets/set/dolly.mp4" muted playsinline preload="auto" aria-hidden="true" class="set-src"></video>
+    <video id="set-scr" src="assets/set/pantalla.mp4" muted loop playsinline preload="auto" aria-hidden="true" class="set-src"></video>
+    <div class="set-ui">
+      <div class="set-bar"><b>Alex Pino</b><span class="set-r"><button class="set-chip" id="set-snd" type="button" aria-pressed="false"><i class="set-snd-i" aria-hidden="true"></i>Sonido</button><button class="set-chip" id="set-skip" type="button"><span class="lg">Saltar al portafolio</span><span class="sm">Saltar</span></button></span></div>
+      <div class="set-hello" id="set-hello"><h2 id="set-t">Bienvenido al set.</h2><p>Diseñador crossmedia · Director audiovisual</p><button class="set-chip set-power" id="set-power" type="button"><i aria-hidden="true">⏻</i> Encender el PC</button></div>
+      <button class="set-hit" id="set-hit-pc" type="button" aria-label="Encender el PC"></button>
+      <span class="set-ring" id="set-ring" aria-hidden="true"></span>
+      <span class="set-hint" id="set-hint-pc" aria-hidden="true">Enciende el PC</span>
+      <button class="set-hit" id="set-hit-play" type="button" aria-label="Reproducir la intro" hidden></button>
+      <span class="set-hint" id="set-hint-play" aria-hidden="true">Dale play</span>
+      <span class="set-tag" id="set-tag" aria-hidden="true"></span>
+      <span class="set-load" id="set-load">Preparando el set</span>
     </div>
-    <div class="pre-count" aria-hidden="true">
-      <svg class="leader" viewBox="0 0 200 200"><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="78"/><line x1="0" y1="100" x2="200" y2="100"/><line x1="100" y1="0" x2="100" y2="200"/><path class="sweep" d="M100 100 L100 4 A96 96 0 0 1 196 100 Z"/></svg>
-      <b id="pre-n">3</b>
+    <!-- dentro del PC: el editor abierto -->
+    <div class="nle" id="nle" aria-hidden="true">
+      <div class="nle-top"><b>¿Quién soy?</b><span>Secuencia 01 · Alex Pino · Reel 2026</span><span class="nle-tc" id="nle-tc">00:00:00:00</span></div>
+      <div class="nle-pgm"><div class="nle-scr">
+        <video id="set-mont" src="assets/set/montaje.mp4" muted playsinline preload="auto"></video>
+        <div class="nle-ttl" id="nle-ttl"></div>
+        <div class="nle-lead" id="nle-lead"><svg viewBox="0 0 200 200"><path class="sw" d="M100 100 L100 4 A96 96 0 0 1 196 100 Z"/><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="80"/><line x1="-400" y1="100" x2="600" y2="100"/><line x1="100" y1="-400" x2="100" y2="600"/></svg><b id="nle-n">3</b></div>
+        <span class="nle-badge"><i></i>PGM</span>
+      </div></div>
+      <div class="nle-tl">
+        <div class="nle-row"><i></i><div class="nle-ruler" id="nle-ruler"></div></div>
+        <div class="nle-row"><i>V2</i><div class="nle-lane t" id="nle-v2"></div></div>
+        <div class="nle-row"><i>V1</i><div class="nle-lane" id="nle-v1"></div></div>
+        <div class="nle-row"><i>A1</i><div class="nle-lane a"><span class="nle-wave"></span></div></div>
+        <div class="nle-headwrap"><span class="nle-head" id="nle-head"></span></div>
+      </div>
     </div>
-    <div class="pre-shutter" aria-hidden="true"><i class="t"></i><i class="b"></i></div>
-    <p class="pre-bot" aria-hidden="true">Toca el botón o presiona Enter</p>
+    <div class="set-flash" id="set-flash" aria-hidden="true"></div>
+    <div class="set-shutter" aria-hidden="true"><i class="t"></i><i class="b"></i></div>
   </div>
   <main id="contenido">
-    <section class="hero" aria-labelledby="hero-title">
-      <picture>
-        <source media="(max-width: 760px)" srcset="assets/img/hero-glass-movil.jpg">
-        <img class="hero-img" src="assets/img/hero-glass.jpg" alt="Alex Pino de perfil, con gafas, a contraluz teal; un vidrio estriado refracta la luz frente a su rostro" fetchpriority="high">
-      </picture>
+    <!-- ========== PRESENTACIÓN: la pregunta se arma y se desarma con el scroll ========== -->
+    <div class="hero-pin" id="hero-pin">
+    <section class="hero hero-x" aria-labelledby="hero-title">
+      <!-- la foto en capas: con el scroll el foco corre del fondo a Alex (rack focus) -->
+      <div class="hero-ph">
+        <picture class="hp hp-bg">
+          <source media="(max-width: 760px)" srcset="assets/img/hero-glass-movil.jpg">
+          <img class="hero-img" src="assets/img/hero-glass.jpg" alt="" fetchpriority="high">
+        </picture>
+        <picture class="hp hp-bgb" aria-hidden="true">
+          <source media="(max-width: 760px)" srcset="assets/img/hero/fondo-blur-movil.jpg">
+          <img class="hero-img" src="assets/img/hero/fondo-blur.jpg" alt="" decoding="async">
+        </picture>
+        <picture class="hp hp-fg">
+          <source media="(max-width: 760px)" srcset="assets/img/hero/sujeto-movil.webp">
+          <img class="hero-img" src="assets/img/hero/sujeto.webp" alt="Alex Pino de perfil, con gafas, a contraluz teal; un vidrio estriado refracta la luz frente a su rostro" decoding="async">
+        </picture>
+        <picture class="hp hp-fgs" aria-hidden="true">
+          <source media="(max-width: 760px)" srcset="assets/img/hero/sujeto-soft-movil.webp">
+          <img class="hero-img" src="assets/img/hero/sujeto-soft.webp" alt="" decoding="async">
+        </picture>
+      </div>
       <!-- capas que reaccionan a los controles de la cámara -->
       <div class="fx fx-dof" aria-hidden="true"></div>
       <div class="fx fx-wb" aria-hidden="true"></div>
@@ -92,7 +127,6 @@
       <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="mblur" x="-5%" y="0" width="110%" height="100%"><feGaussianBlur id="mblur-g" stdDeviation="0 0"/></filter></svg>
       <div class="hero-leaks" aria-hidden="true"><i></i><i></i><i></i></div>
       <span class="hero-flare" aria-hidden="true"></span>
-      <div class="guides" aria-hidden="true"></div>
       <div class="hero-lbox" aria-hidden="true"></div>
 
       <!-- visor de cámara sobre el retrato -->
@@ -113,70 +147,75 @@
         <button class="lv-auto" type="button" id="lens-auto" aria-label="Volver a los valores automáticos">A</button>
       </div>
 
-      <div class="glass-edge" aria-hidden="true"></div>
-      <div class="hero-text">
-        <div class="sel" data-cur="hero-sel"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b>
-          <h1 id="hero-title">¿Quién soy?</h1>
-        </div>
-        <p class="sub">Depende del <span class="uw" data-cur="hero-uw">proyecto<svg viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C60 30 140 30 196 6"/></svg></span>.</p>
+      <div class="kin">
+        <h1 id="hero-title" class="kin-title" data-kin>¿Quién soy?</h1>
+        <p class="kin-sub">Depende del <span class="uw" data-cur="hero-uw">proyecto<svg viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C60 30 140 30 196 6"/></svg></span>.</p>
         <p class="intro" id="intro"></p>
+        <div class="kin-go"><a class="btn primary" href="#programa">Ver escenas</a><span class="kin-hint" aria-hidden="true">Baja para rodar ↓</span></div>
       </div>
+    </section>
+    </div>
 
-      <!-- isotipo de vidrio -->
-      <div class="float iso-glass" style="--d:30" aria-hidden="true">
-        <span class="bob"><span class="fill"></span><svg viewBox="70 50 360 370"><defs><linearGradient id="isoEdge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".5" stop-color="#fff" stop-opacity=".15"/><stop offset="1" stop-color="#F29863" stop-opacity=".8"/></linearGradient></defs><use href="#iso"/></svg></span>
+    <!-- ========== CAPÍTULO 01 · SOBRE MÍ: una frase que se escribe mientras bajas ========== -->
+    <section class="chap" id="cap-01" data-light="sand" data-chap="Capítulo 01 · Sobre mí" aria-labelledby="h-c1">
+      <header class="ch-head wrap"><span class="ch-n" aria-hidden="true">01</span><p class="label"><b class="rec"></b>Capítulo 01 · Sobre mí</p></header>
+      <h2 class="ch-say wrap" id="h-c1" data-words>Me preguntaron qué hacía <span class="pill" aria-hidden="true"><img src="assets/img/alex-avatar.jpg" alt=""></span> y no supe responder con un solo oficio. Así que respondo con proyectos: grabo <span class="pill" aria-hidden="true"><img src="assets/poster/por-encima-de-la-mesa.jpg" alt=""></span>, edito <span class="pill" aria-hidden="true"><img src="assets/poster/sala-austin.jpg" alt=""></span> y cuento historias <span class="pill" aria-hidden="true"><img src="assets/poster/sala-pregon.jpg" alt=""></span>.</h2>
+      <div class="ch-go wrap"><a class="ch-btn" href="sobre-mi.html">Conoce el origen <i aria-hidden="true">→</i></a></div>
+    </section>
+
+    <!-- ========== CAPÍTULO 02 · AUDIOVISUAL: cifras + el programa ========== -->
+    <section class="chap ch-tight" id="cap-02" data-light="teal" data-chap="Capítulo 02 · Audiovisual" aria-labelledby="h-c2">
+      <header class="ch-head wrap"><span class="ch-n" aria-hidden="true">02</span><p class="label"><b class="rec"></b>Capítulo 02 · Audiovisual</p></header>
+      <h2 class="ch-title wrap" id="h-c2">Seis escenas.<br><span>Un papel distinto en cada una.</span></h2>
+      <div class="stats wrap" aria-label="Resultados" id="trabajo">
+        <div class="stat reveal glass-teal"><span class="v" data-count="80000" data-fmt="miles">80.000</span><span class="t">seguidores en 4 meses<small>Austin Marchese · edición</small></span></div>
+        <div class="stat reveal glass-peach"><span class="v" data-count="40" data-fmt="pct">+40 %</span><span class="t">en reservas<small>Hotel Pinares Plaza · contenido para Meta</small></span></div>
+        <div class="stat reveal glass-sand"><span class="v">Al aire</span><span class="t">en Telecafé<small>Por encima de la mesa · serie documental</small></span></div>
       </div>
+    </section>
 
-      <!-- dock: prompt + línea de tiempo -->
-      <div class="dock">
-        <div class="prompt" aria-live="polite">
-          <span class="in"><span id="typed">Editor de video</span><span class="caret"></span></span>
-          <a class="go" href="#escenas-sec">Ver escenas</a>
+    <!-- ========== EL PROGRAMA: las escenas pasan por un mismo cuadro mientras bajas (llevan a la sala) ========== -->
+    <section class="prg" id="programa" aria-labelledby="h-prog">
+      <div class="prog-pin" id="prog-pin">
+        <div class="prog-stage">
+          <div class="prog-bg" aria-hidden="true"></div>
+          <header class="prog-head"><span class="kf"></span><h2 id="h-prog">Escenas</h2><p class="label">Un proyecto, un papel distinto</p><span class="prog-count" aria-hidden="true"><b id="prog-n">01</b> / <span id="prog-total">05</span></span></header>
+          <div class="prog-slides" id="prog-slides"></div>
+          <div class="prog-tl" id="prog-tl" aria-label="Escenas"></div>
         </div>
-        <div class="tl" aria-hidden="true">
-          <div class="tl-ruler"></div>
-          <div class="trk"><span class="tn">V2</span><span class="lane"><b class="clip c-sand" style="left:6%;width:14%">Título</b><b class="clip c-peach" style="left:48%;width:10%">Gráfico</b><b class="clip c-sand" style="left:78%;width:16%">Logo</b></span></div>
-          <div class="trk"><span class="tn">V1</span><span class="lane"><b class="clip c-teal" style="left:0;width:22%">Hook</b><b class="clip c-petrol" style="left:22.5%;width:30%">Entrevista</b><b class="clip c-teal" style="left:53%;width:19%" data-cur="hero-clip">B-roll</b><b class="clip c-petrol" style="left:72.5%;width:27.5%">Cierre</b></span></div>
-          <div class="trk"><span class="tn">A1</span><span class="lane"><b class="clip wave" style="left:0;width:100%"></b></span></div>
-          <span class="tl-head"></span>
-        </div>
       </div>
     </section>
 
-    <!-- ========== GANCHO AL ORIGEN ========== -->
-    <a class="gancho wrap reveal" href="sobre-mi.html#origen">
-      <span class="gc-tag"><b class="rec"></b>Escena 00</span>
-      <span class="gc-text" data-gancho></span>
-      <span class="gc-go">Empieza por el origen →</span>
-    </a>
-    <!-- ========== CIFRAS (cada una lleva a su escena) ========== -->
-    <section class="stats wrap" aria-label="Resultados" id="trabajo">
-      <a class="stat reveal glass-teal" href="proyecto-austin.html"><span class="v" data-count="80000" data-fmt="miles">80.000</span><span class="t">seguidores en 4 meses<small>Austin Marchese · edición</small></span></a>
-      <a class="stat reveal glass-peach" href="proyecto-la-cepa.html"><span class="v" data-count="40" data-fmt="pct">+40 %</span><span class="t">en reservas<small>Hotel Pinares Plaza · contenido para Meta</small></span></a>
-      <a class="stat reveal glass-sand" href="proyecto-telecafe.html"><span class="v">Al aire</span><span class="t">en Telecafé<small>Por encima de la mesa · serie documental</small></span></a>
+    <div class="ch-go wrap ch-after"><a class="ch-btn" href="audiovisual.html">Entrar a la sala de proyección <i aria-hidden="true">→</i></a></div>
+
+    <!-- ========== CAPÍTULO 03 · GRÁFICO: mesa de luz (de cenital a frontal con el scroll) ========== -->
+    <section class="chap" id="cap-03" data-light="terra" data-chap="Capítulo 03 · Gráfico" aria-labelledby="h-c3">
+      <header class="ch-head wrap"><span class="ch-n" aria-hidden="true">03</span><p class="label"><b class="rec"></b>Capítulo 03 · Gráfico</p></header>
+      <h2 class="ch-title wrap" id="h-c3">Impresos que se tocan.<br><span>Cartas, habladores, marcas y piezas para redes.</span></h2>
+      <div class="mesa" data-scrub id="mesa"><div class="mesa-t" id="mesa-t"></div></div>
+      <div class="ch-go wrap"><a class="ch-btn" href="grafico.html">Ver los impresos <i aria-hidden="true">→</i></a></div>
     </section>
 
-    <!-- ========== ESCENAS ========== -->
-    <section id="escenas-sec" class="block wrap tone tone-film pad" aria-labelledby="h-escenas">
-      <header class="bhead reveal"><span class="kf"></span><h2 id="h-escenas">Escenas</h2><p class="label">Un proyecto, un papel distinto</p><span class="tcode">01</span></header>
-      <div class="ruler" aria-hidden="true"></div>
-      <div id="escenas" class="scenes"></div>
+    <!-- ========== CAPÍTULO 04 · EDITORIAL: las portadas giran hacia ti ========== -->
+    <section class="chap" id="cap-04" data-light="petrol" data-chap="Capítulo 04 · Editorial" aria-labelledby="h-c4">
+      <header class="ch-head wrap"><span class="ch-n" aria-hidden="true">04</span><p class="label"><b class="rec"></b>Capítulo 04 · Editorial</p></header>
+      <h2 class="ch-title wrap" id="h-c4">Publicaciones para hojear.<br><span>Revistas, catálogos y libros.</span></h2>
+      <div class="books" data-scrub id="books"></div>
+      <div class="ch-go wrap"><a class="ch-btn" href="editorial.html">Hojear las publicaciones <i aria-hidden="true">→</i></a></div>
     </section>
 
-    <!-- ========== MÁS TRABAJO ========== -->
-    <section class="block wrap stop tone tone-petrol pad" data-name="Más trabajo" aria-labelledby="h-mas">
-      <header class="bhead reveal"><span class="kf"></span><h2 id="h-mas">Más trabajo</h2><p class="label">Videoclips · reels · impresos</p><span class="tcode">02</span></header>
-      <div class="ruler" aria-hidden="true"></div>
-      <div class="doors">
-        <a class="door reveal" href="audiovisual.html#reels-wrap"><span class="door-pic phone-mini"><img src="assets/poster/corto-02.jpg" alt="" loading="lazy"></span><b>Reels y videoclips</b><small>Formato vertical, videoclips y piezas cortas</small></a>
-        <a class="door reveal" href="grafico.html"><span class="door-pic"><img src="assets/grafico/carta-la-cepa/p01.jpg" alt="" loading="lazy"></span><b>Gráfico</b><small>Cartas, habladores, marcas y piezas para redes</small></a>
-        <a class="door reveal" href="editorial.html"><span class="door-pic"><img src="assets/editorial/voces-libres/p01.jpg" alt="" loading="lazy"></span><b>Editorial</b><small>Revistas, catálogos y libros para hojear</small></a>
-      </div>
+    <!-- ========== CAPÍTULO 05 · WEB: travelling lateral de ventanas (la sección se fija mientras pasan) ========== -->
+    <section class="chap" id="cap-05" data-light="teal" data-chap="Capítulo 05 · Web" aria-labelledby="h-c5">
+      <header class="ch-head wrap"><span class="ch-n" aria-hidden="true">05</span><p class="label"><b class="rec"></b>Capítulo 05 · Web</p></header>
+      <h2 class="ch-title wrap" id="h-c5">Sitios que se navegan.<br><span>Unos los hice de cero; a otros les sumé páginas.</span></h2>
+      <div class="wtrav" id="wtrav"><div class="wt-stage"><div class="wt-rail" id="wt-rail"></div><div class="wt-cap" id="wt-cap" aria-live="polite"></div></div></div>
+      <div class="ch-go wrap"><a class="ch-btn" href="web.html">Ver los sitios <i aria-hidden="true">→</i></a></div>
     </section>
 
     <!-- ========== LLAMADO ========== -->
-    <section class="cta wrap stop tone tone-terra pad" data-name="Contacto">
-      <p class="label"><b class="rec"></b>Próxima escena</p>
+    <section class="cta wrap stop tone tone-terra pad" id="cap-06" data-name="Contacto" data-light="terra" data-chap="Capítulo 06 · Contacto">
+      <span class="ch-n" aria-hidden="true">06</span>
+      <p class="label"><b class="rec"></b>Capítulo 06 · Próxima escena</p>
       <h2>¿Y en tu proyecto, quién soy?<br><span>Eso lo decidimos juntos.</span></h2>
       <div class="cta-actions">
         <a class="btn primary" href="contacto.html">Arma tu pedido</a>
@@ -188,6 +227,8 @@
   <script src="js/i18n.js"></script>
   <script src="js/shell.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/set.js"></script>
+  <script src="js/experiencia.js"></script>
   <script src="js/cursors.js"></script>
 </body>
 </html>

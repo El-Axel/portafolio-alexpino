@@ -44,17 +44,18 @@ Abrir `index.html` con doble clic también funciona, pero los videos de YouTube 
 ## Estructura
 
 ```
-├── index.html                 Inicio
+├── index.html                 Inicio (tráiler por capítulos 01–06)
 ├── sobre-mi.html              Sobre mí (origen, Grabo/Edito/Cuento, línea de tiempo)
 ├── audiovisual.html           Escenas audiovisuales + reels y videoclips
 ├── grafico.html               Diseño gráfico (vitrinas interactivas)
 ├── editorial.html             Diseño editorial (estantería + libro)
+├── web.html                   Sitios y apps web (hechas de cero / páginas que sumé)
 ├── contacto.html              "Arma tu pedido" → WhatsApp
-├── proyecto-*.html            Una página por proyecto (5), armadas por js/proyecto.js
+├── proyecto-*.html            Una página por proyecto (6), armadas por js/proyecto.js
 ├── 404.html
 ├── css/
 │   ├── vendor/open-props.min.css   Framework (tokens base)
-│   ├── style.css              Tokens + base + componentes (secciones numeradas 01–27)
+│   ├── style.css              Tokens + base + componentes (secciones numeradas 01–32)
 │   ├── sets.css               "Sets" de cada proyecto (editor, celulares, TV, cine, control)
 │   ├── impresos.css           Vitrinas de gráfico y editorial
 │   └── claro.css              Tema claro (GENERADO por tools/gen_light.py)
@@ -63,7 +64,8 @@ Abrir `index.html` con doble clic también funciona, pero los videos de YouTube 
 │   ├── i18n.js                Traducción ES → EN
 │   ├── shell.js               Barra superior, pie, visor y ayudas comunes a todas las páginas
 │   ├── main.js                Lógica común (línea de tiempo, claqueta, filtros, pedido…)
-│   ├── proyecto.js            Páginas de proyecto
+│   ├── experiencia.js         Menú a pantalla completa, cortes entre páginas, portada cinética, «el programa» y el reel de Audiovisual
+│   ├── proyecto.js            Páginas de proyecto (entrada en diagonal, el caso paso a paso, cifra de remate, CRT)
 │   ├── impresos.js            Vitrinas y libros
 │   ├── paginas.js             Sobre mí
 │   └── cursors.js             Cursores animados que "diseñan" la página
@@ -117,9 +119,9 @@ Tema claro (`html[data-theme="light"]`): `--ground #EEF2F0` y `--ink #10201F`, m
 |---|---|
 | **Átomos** | Tokens de color, tipo y espacio · `.btn` (+ `.primary`) · `.chip` · `.label` · `.tc` (timecode) · `.dot` · iconos SVG · `.tgl` (switch) |
 | **Moléculas** | `.stat` (cifra + texto) · `.opt` (opción del pedido) · campo con etiqueta del pedido · `.ficha` (dato de ficha técnica) · grupo de botones del cierre · `.prefs` (tema + idioma) |
-| **Organismos** | `.topbar` (marca + `.layers` nav + prefs + timecode) · `.scard` (tarjeta de escena) · `.bhead` (encabezado de sección: rombo + título + etiqueta + número) · `.tlx` (línea de tiempo de video) · `.brief` (formulario "Arma tu pedido") · `.viewer` (visor) · `.cta` (cierre "Próxima escena") · `footer` / créditos · `.pre` (claqueta) |
-| **Plantillas** | `data-page="inicio"`, `"sobre-mi"`, `"audiovisual"`, `"grafico"`, `"editorial"`, `"contacto"` y `"proyecto"`. Esta última es una sola plantilla que se rellena con `data-id` + `data.js` para los 5 proyectos. |
-| **Páginas** | `index.html`, `sobre-mi.html`, `audiovisual.html`, `grafico.html`, `editorial.html`, `contacto.html` y las 5 páginas `proyecto-*.html` |
+| **Organismos** | `.topbar` (barra lateral: marca + botón de menú + escena actual + prefs + timecode) · `.mnu` (menú a pantalla completa) · `.pslide` (escena del programa) · `.corte` (transición) · `.scard` (tarjeta de escena) · `.bhead` (encabezado de sección: rombo + título + etiqueta + número) · `.tlx` (línea de tiempo de video) · `.brief` (formulario "Arma tu pedido") · `.viewer` (visor) · `.cta` (cierre "Próxima escena") · `footer` / créditos · `.pre` (claqueta) |
+| **Plantillas** | `data-page="inicio"`, `"sobre-mi"`, `"audiovisual"`, `"grafico"`, `"editorial"`, `"web"`, `"contacto"` y `"proyecto"`. Esta última es una sola plantilla que se rellena con `data-id` + `data.js` para los 6 proyectos. |
+| **Páginas** | `index.html`, `sobre-mi.html`, `audiovisual.html`, `grafico.html`, `editorial.html`, `web.html`, `contacto.html` y las 6 páginas `proyecto-*.html` |
 
 ### Reglas de uso
 - No hay barras, porcentajes ni puntos para medir habilidades.
@@ -128,7 +130,7 @@ Tema claro (`html[data-theme="light"]`): `--ground #EEF2F0` y `--ink #10201F`, m
 - Se respeta "reducir movimiento": sin claqueta ni cursores, y el sitio se ve terminado.
 
 ### Responsive
-Puntos de quiebre en **900px** (la barra pasa a dos filas y los proyectos a una columna) y **760px** (celular: la portada pasa a vertical). Probado en 1440, 1024, 390 y 360px, sin scroll horizontal.
+Puntos de quiebre en **900px** (la barra lateral pasa a ser una fila arriba y los proyectos a una columna) y **760px** (celular: la portada pasa a vertical). Probado en 1440, 1024, 390 y 360px, sin scroll horizontal.
 
 ---
 
@@ -139,4 +141,4 @@ Puntos de quiebre en **900px** (la barra pasa a dos filas y los proyectos a una 
 - Textos alternativos en las imágenes.
 - `lang` correcto en ES y EN.
 - Contraste revisado en los dos temas.
-- Atajos de teclado: `1–5` secciones, `J K L` reproducción, `?` ayuda.
+- Atajos de teclado: `1–6` secciones, `J K L` reproducción, `?` ayuda.
