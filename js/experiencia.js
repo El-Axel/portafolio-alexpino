@@ -493,7 +493,7 @@
   }
 
   // los adelantos de la portada (gráfico, editorial, web), armados con data.js
-  var gEl = $("#gfx"), booksEl = $("#books"), wtEl = $("#wtrav");
+  var gEl = $("#gfx"), wtEl = $("#wtrav");
   // capítulo 03 · diseño gráfico «uno a uno»: una pieza grande a la vez; con el scroll se aparta como una hoja y entra la siguiente
   if (gEl && D.grafico) {
     var G = D.grafico.slice(0, 5), gBox = $("#gfx-box"), gInfo = $("#gfx-info"), gTh = $("#gfx-th");
@@ -532,11 +532,71 @@
       gBox.addEventListener("pointerleave", function () { var el = gPieces[gCur]; if (el) el.style.transform = ""; });
     }
   }
-  if (booksEl && D.editorial) {
-    booksEl.innerHTML = D.editorial.slice(0, 4).map(function (b, i) {
-      var src = b.portada || (b.paginas || [])[0] || "";
-      return '<a class="book-c" href="editorial.html" style="--i:' + i + '"><span class="bk"><img src="' + esc(src) + '" alt="' + esc(b.titulo) + '" loading="lazy"></span><span class="bk-t">' + esc(b.titulo) + "</span></a>";
-    }).join("");
+  // capítulo 04 · editorial «la mesa de revisión»: las publicaciones abiertas sobre una tabla de corte;
+  // el scroll recorre la mesa y el cursor es un cuentahílos que agranda la página (copia de la mesa escalada dentro del lente)
+  var mrEl = $("#mesar");
+  if (mrEl && D.editorial) {
+    var mrSt = $("#mr-st"), mrMat = $("#mr-mat"), mrLp = $("#mr-lp"), mrZin = $(".mr-zin", mrLp), mrRet = $(".mr-ret", mrLp);
+    var mrZ = 2.6, mrW = 0, mrH = 0, mrL = 0, mrX = null, mrY = null, mrAuto = true, mrPX = 0, mrPY = 0;
+    // páginas en orden; las dobles (una imagen = dos páginas) se parten en mitad izquierda y derecha
+    var mrPubs = D.editorial.slice(0, 4).map(function (b) {
+      var pg = b.paginas || [], dob = b.dobles || [], out = [{ u: b.portada || pg[0], h: "" }];
+      for (var k = 1; k < pg.length; k++) { if (dob.indexOf(k) > -1) { out.push({ u: pg[k], h: "l" }); out.push({ u: pg[k], h: "r" }); } else out.push({ u: pg[k], h: "" }); }
+      var ar = b.ar ? String(b.ar).split("/") : [3, 4];
+      return { b: b, pg: out, ar: (+ar[0]) / (+ar[1] || 1) };
+    });
+    // dónde cae cada publicación (fracción de la mesa), qué doble muestra abierta y cuánto está girada
+    var MR_LAY = [{ x: .04, y: .08, w: .44, r: -4, i: 5 }, { x: .5, y: .12, w: .44, r: 3.5, i: 1 }, { x: .06, y: .5, w: .44, r: 2.5, i: 5 }, { x: .53, y: .56, w: .4, r: -3, i: 9 }];
+    var mrBg = function (o) { return "background-image:url('" + esc(o.u) + "');background-size:" + (o.h ? "200% 100%" : "cover") + ";background-position:" + (o.h === "l" ? "0 0" : o.h === "r" ? "100% 0" : "center"); };
+    var mrBuild = function () {
+      var sw = mrSt.clientWidth, sh = mrSt.clientHeight;
+      // celular: la mesa más angosta y menos alta para que las publicaciones no queden sueltas
+      if (sw < 700) { mrW = sw * 1.9; mrH = Math.max(sh * 1.15, mrW * 1.25); } else { mrW = Math.max(sw * 1.08, 760); mrH = Math.max(sh * 1.55, mrW * .78); }
+      var cm = Math.max(mrW / 48, 14), h = "";
+      mrMat.style.width = mrW + "px"; mrMat.style.height = mrH + "px";
+      mrMat.style.setProperty("--cm", cm + "px"); mrMat.style.setProperty("--cm10", cm * 5 + "px");
+      // regla de la tabla de corte cada 5 cm y su diagonal de 45°
+      for (var x = 1; x * cm * 5 < mrW; x++) h += '<span class="ru" style="left:' + (x * cm * 5 + 3) + 'px;top:4px">' + x * 5 + "</span>";
+      for (var y = 1; y * cm * 5 < mrH; y++) h += '<span class="ru" style="top:' + (y * cm * 5 + 3) + 'px;left:4px">' + y * 5 + "</span>";
+      h += '<i class="dg" style="width:' + Math.hypot(mrW, mrH) + "px;transform:rotate(" + Math.atan2(mrH, mrW) + 'rad)"></i>';
+      MR_LAY.forEach(function (o, k) {
+        var P = mrPubs[k]; if (!P) return;
+        var w = mrW * o.w, hh = w / (2 * P.ar), x0 = mrW * o.x, y0 = mrH * o.y, a = P.pg[o.i] || P.pg[1], b = P.pg[o.i + 1] || null;
+        h += '<span class="mr-cv" style="left:' + (x0 + w * .62) + "px;top:" + (y0 - hh * .1) + "px;width:" + w / 2 + "px;height:" + hh + "px;transform:rotate(" + (o.r + 7) + "deg);" + mrBg(P.pg[0]) + '"></span>';
+        h += '<a class="mr-it" href="editorial.html" aria-label="' + esc(P.b.titulo) + '" style="left:' + x0 + "px;top:" + y0 + "px;width:" + w + "px;height:" + hh + "px;transform:rotate(" + o.r + 'deg)"><span style="' + mrBg(a) + '"></span><span style="' + (b ? mrBg(b) : "") + '"></span></a>';
+        h += '<span class="mr-tag" style="left:' + (x0 + w * .04) + "px;top:" + (y0 + hh + 10) + "px;transform:rotate(" + o.r * .6 + 'deg)">' + esc(P.b.titulo) + "<small>" + esc(P.b.tipo) + "</small></span>";
+      });
+      mrMat.innerHTML = h;
+      // la copia que se ve dentro del lente
+      mrZin.innerHTML = ""; var cl = mrMat.cloneNode(true); cl.removeAttribute("id");
+      $$("a", cl).forEach(function (a) { a.tabIndex = -1; a.removeAttribute("aria-label"); });
+      mrZin.appendChild(cl); mrZin.style.transform = "scale(" + mrZ + ")";
+      mrL = Math.min(240, Math.max(140, sw * .2)); mrLp.style.setProperty("--L", mrL + "px");
+      var n = mrL / 2, r = '<i style="left:50%;top:18%;width:1px;height:64%"></i><i style="top:50%;left:18%;height:1px;width:64%"></i>';
+      for (var t = -6; t <= 6; t++) { var tl = t % 5 === 0 ? 10 : 5; r += '<i style="left:' + (n + t * mrL * .05) + "px;top:" + (n - tl) + 'px;width:1px;height:' + tl + 'px"></i>'; }
+      mrRet.innerHTML = r;
+    };
+    var mrPlace = function () {
+      if (mrAuto) { var o = MR_LAY[1]; mrX = mrW * (o.x + o.w * .3) + mrPX; mrY = mrH * (o.y + .12) + mrPY; } // en reposo, sobre Voces Libres
+      mrLp.style.transform = "translate(" + (mrX - mrL / 2) + "px," + (mrY - mrL / 2) + "px)";
+      var cl = mrZin.firstChild; if (cl) cl.style.transform = "translate(" + (mrL / 2 / mrZ - (mrX - mrPX)) + "px," + (mrL / 2 / mrZ - (mrY - mrPY)) + "px)";
+    };
+    var mrTick = false;
+    var mrUpd = function () {
+      mrTick = false;
+      var p = .4;
+      if (!reduce) { var r = mrEl.getBoundingClientRect(), span = mrEl.offsetHeight - innerHeight; p = span > 0 ? clamp(-r.top / span, 0, 1) : 0; }
+      mrPX = -(mrW - mrSt.clientWidth) * p; mrPY = -(mrH - mrSt.clientHeight) * p;
+      mrMat.style.transform = "translate(" + mrPX + "px," + mrPY + "px)";
+      mrPlace();
+    };
+    var mrPoint = function (e) { var r = mrSt.getBoundingClientRect(); mrAuto = false; mrX = e.clientX - r.left; mrY = e.clientY - r.top; mrPlace(); };
+    mrSt.addEventListener("pointermove", function (e) { if (e.pointerType === "mouse") mrPoint(e); });
+    mrSt.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") mrPoint(e); });
+    if (reduce) mrEl.classList.add("static");
+    else window.addEventListener("scroll", function () { if (!mrTick) { mrTick = true; requestAnimationFrame(mrUpd); } }, { passive: true });
+    window.addEventListener("resize", function () { mrBuild(); mrUpd(); });
+    mrBuild(); mrUpd();
   }
   // capítulo 05 · travelling: la sección se fija y las ventanas pasan de derecha a izquierda;
   // la del centro se endereza y su captura baja sola, como si alguien la navegara

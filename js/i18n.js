@@ -91,6 +91,7 @@
     "Saltar al portafolio": "Skip to the portfolio",
     "Saltar": "Skip",
     "Ver la intro ↺": "Watch the intro ↺",
+    "Cuentahílos: pasa por las páginas para acercarte": "Loupe: move over the pages to look closer",
     "Preparando el set": "Preparing the set",
     "Alex Pino presenta": "Alex Pino presents",
     "Cuento historias.": "I tell stories.",
