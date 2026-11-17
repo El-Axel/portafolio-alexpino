@@ -91,6 +91,8 @@
     "Saltar al portafolio": "Skip to the portfolio",
     "Saltar": "Skip",
     "Ver la intro ↺": "Watch the intro ↺",
+    "Cartas, habladores y marcas": "Menus, table tents and brands",
+    "Lente": "Lens",
     "Cuentahílos: pasa por las páginas para acercarte": "Loupe: move over the pages to look closer",
     "Preparando el set": "Preparing the set",
     "Alex Pino presenta": "Alex Pino presents",

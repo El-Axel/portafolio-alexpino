@@ -55,6 +55,62 @@
   var links = menu ? $$(".mnu-list a", menu) : [], sel = 0, camRot = 0, recT = null;
   var wheel = $("#cam-wheel"), ring = $(".cam-ring", menu || document);
   function txt(a, s) { var x = $(s, a); return x ? x.textContent : ""; }
+  // el «look» de cada capítulo: ajustes de cámara que cambian al elegirlo (decoración de la interfaz, no datos de Alex)
+  var CAM_LOOK = {
+    "inicio": ["800", "5600K", "f/2.8", "180°", "0.6", "35 mm"], "sobre-mi": ["640", "4300K", "f/1.8", "180°", "0.3", "50 mm"],
+    "audiovisual": ["800", "5600K", "f/2.8", "180°", "0.9", "24 mm"], "grafico": ["400", "5000K", "f/5.6", "172.8°", "CLEAR", "100 mm"],
+    "editorial": ["400", "3200K", "f/4", "180°", "0.3", "50 mm"], "web": ["1600", "6500K", "f/2", "90°", "CLEAR", "35 mm"],
+    "contacto": ["800", "3200K", "f/1.4", "180°", "0.6", "85 mm"]
+  };
+  var camKeys = ["iso", "wb", "f", "sh", "nd", "lens"], camHist = $("#cam-hist"), camLuma = {};
+  // histograma real de la imagen del capítulo
+  function camHistDraw(src) {
+    if (!camHist || !src) return;
+    var go = function (b) {
+      var r = camHist.getBoundingClientRect(); if (!r.width) return;
+      var W = camHist.width = Math.round(r.width * 2), H = camHist.height = Math.round(r.height * 2), x = camHist.getContext("2d"), m = 0;
+      b.forEach(function (v) { m = Math.max(m, v); });
+      x.clearRect(0, 0, W, H); x.fillStyle = "rgba(255,255,255,.08)"; for (var g = 1; g < 4; g++) x.fillRect(W * g / 4, 0, 1, H);
+      x.beginPath(); x.moveTo(0, H); b.forEach(function (v, k) { x.lineTo(k / (b.length - 1) * W, H - (v / (m || 1)) * H * .92); }); x.lineTo(W, H); x.closePath();
+      x.fillStyle = "rgba(242,197,114,.5)"; x.fill(); x.strokeStyle = "rgba(242,197,114,.95)"; x.lineWidth = 1.5; x.stroke();
+    };
+    if (camLuma[src]) return go(camLuma[src]);
+    var im = new Image();
+    im.onload = function () {
+      try {
+        var w = 120, h = Math.max(1, Math.round(120 * im.naturalHeight / im.naturalWidth)), c = document.createElement("canvas"); c.width = w; c.height = h;
+        var cx = c.getContext("2d"); cx.drawImage(im, 0, 0, w, h);
+        var d = cx.getImageData(0, 0, w, h).data, b = []; for (var k = 0; k < 64; k++) b.push(0);
+        for (var i = 0; i < d.length; i += 4) b[Math.min(63, ((.2126 * d[i] + .7152 * d[i + 1] + .0722 * d[i + 2]) / 255 * 64) | 0)]++;
+        camLuma[src] = b; go(b);
+      } catch (er) {}
+    };
+    im.src = src;
+  }
+  function camLook(sec) {
+    var v = CAM_LOOK[sec] || CAM_LOOK.inicio;
+    $$(".cam-prm u", menu).forEach(function (u) {
+      var nv = v[camKeys.indexOf(u.dataset.k)]; if (u.textContent === nv) return;
+      u.textContent = nv; if (!reduce) { u.classList.remove("roll"); void u.offsetWidth; u.classList.add("roll"); }
+    });
+    var m = $('.mnu-media > [data-for="' + sec + '"]', menu);
+    camHistDraw(m ? (m.tagName === "VIDEO" ? m.poster : m.getAttribute("src")) : "");
+  }
+  // guías de encuadre 2.39 según la proporción de la vista previa
+  function camGuides() {
+    var pv = $(".cam-prev", menu), g = $(".cam-guides", menu); if (!pv || !g) return;
+    var r = pv.getBoundingClientRect(); if (!r.width) return;
+    var h = Math.min(r.height, r.width / 2.39), mg = Math.max(0, (r.height - h) / 2);
+    $(".g-t", g).style.height = mg + "px"; $(".g-b", g).style.height = mg + "px";
+    var fl = $(".g-fl", g); fl.style.top = mg + "px"; fl.style.height = h + "px";
+  }
+  // timecode y medidores de audio mientras el menú está abierto
+  var camLive = 0, camMeters = menu ? $$(".cam-meters i", menu) : [], camTc = $("#cam-tc");
+  function camTick() {
+    var t = performance.now() / 1000 + 3726;
+    if (camTc) camTc.textContent = pad(Math.floor(t / 3600)) + ":" + pad(Math.floor(t / 60) % 60) + ":" + pad(Math.floor(t) % 60) + ":" + pad(Math.floor(t * 24) % 24);
+    camMeters.forEach(function (m, k) { m.style.setProperty("--lv", (reduce ? 40 : 30 + 28 * Math.abs(Math.sin(t * 2.1 + k * 1.7)) * Math.abs(Math.sin(t * .7 + k)) + Math.random() * 8).toFixed(0) + "%"); });
+  }
   function camSelect(i, focus) {
     if (!links.length) return;
     sel = (i + links.length) % links.length;
@@ -63,6 +119,7 @@
     media(a.dataset.sec);
     $("#cam-n").textContent = txt(a, "em"); $("#cam-t").textContent = txt(a, "b"); $("#cam-s").textContent = txt(a, "small");
     $("#cam-pos").textContent = pad(sel + 1) + " / " + pad(links.length);
+    camLook(a.dataset.sec);
     if (focus) a.focus({ preventScroll: true });
   }
   function camStep(d) { camRot += d * 30; if (ring) ring.style.transform = "rotate(" + camRot + "deg)"; camSelect(sel + d, true); }
@@ -87,11 +144,13 @@
     html.classList.add("menu-open"); btn.setAttribute("aria-expanded", "true");
     var cur = links.indexOf($(".mnu-list a.on", menu));
     camSelect(cur < 0 ? 0 : cur, false);
+    clearInterval(camLive); camTick(); camLive = setInterval(camTick, reduce ? 1000 : 90);
+    setTimeout(function () { camGuides(); camLook(links[sel] ? links[sel].dataset.sec : ""); }, 80);
     setTimeout(function () { if (links[sel]) links[sel].focus({ preventScroll: true }); }, 60);
   }
   function closeMenu() {
     if (!menu || menu.hidden) return;
-    menu.classList.remove("open"); html.classList.remove("menu-open"); btn.setAttribute("aria-expanded", "false");
+    menu.classList.remove("open"); html.classList.remove("menu-open"); btn.setAttribute("aria-expanded", "false"); clearInterval(camLive);
     hideT = setTimeout(function () { menu.hidden = true; menu.classList.remove("is-rec"); media(""); }, reduce ? 0 : 420);
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
@@ -100,6 +159,8 @@
     closeB.addEventListener("click", closeMenu);
     $("#cam-go").addEventListener("click", camGo);
     $("#cam-set").addEventListener("click", camGo);
+    var recB = $("#cam-recb"); if (recB) recB.addEventListener("click", camGo);
+    window.addEventListener("resize", function () { if (!menu.hidden) { camGuides(); camLook(links[sel] ? links[sel].dataset.sec : ""); } });
     $$(".cam-k", menu).forEach(function (k) { k.addEventListener("click", function () { camStep(+k.dataset.step); }); });
     links.forEach(function (a, k) {
       a.addEventListener("mouseenter", function () { camSelect(k, false); });
@@ -474,7 +535,7 @@
     ["index.html", "inicio", "00", "Inicio", "¿Quién soy?"],
     ["sobre-mi.html", "sobre-mi", "01", "Sobre mí", "El origen"],
     ["audiovisual.html", "audiovisual", "02", "Audiovisual", "Seis escenas"],
-    ["grafico.html", "grafico", "03", "Gráfico", "Impresos que se tocan"],
+    ["grafico.html", "grafico", "03", "Diseño gráfico", "Cartas, habladores y marcas"],
     ["editorial.html", "editorial", "04", "Editorial", "Publicaciones para hojear"],
     ["web.html", "web", "05", "Web", "Sitios que se navegan"],
     ["contacto.html", "contacto", "06", "Contacto", "Próxima escena"]

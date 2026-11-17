@@ -172,7 +172,8 @@
 - Cada página (01–05) termina con `.nextch` «Siguiente capítulo» (y «← Capítulo anterior»). En Sobre mí reemplaza su cierre anterior.
 - En la portada, la barra lateral muestra el capítulo actual.
 
-## Menú «la cámara» (v20)
+## Menú «la cámara» (v20; cuerpo «Cine» desde nov. 2026)
+- Variante A «Cine» (elegida en el artifact «Menú cámara: tres cuerpos»): asa, empuñadura, tornillos, cuerpo con grano; pantalla con barra de estado (`.cam-stat`, timecode `#cam-tc`, `#cam-pos`), vista previa con guías 2.39 (`.cam-guides`), medidores (`.cam-meters`), histograma real (`#cam-hist`) y ajustes por capítulo (`.cam-prm`, `CAM_LOOK` en experiencia.js §2: decoración, no datos de Alex). Botón REC rojo (`#cam-recb`) también abre. Todo se mide con `--u` (1 % del ancho de la cámara).
 - Marcado en js/shell.js (TOP), lógica en experiencia.js §2 (`camSelect`, `camStep`, `camGo`), CSS en style.css «menú: el respaldo de una cámara» (todas las reglas van con prefijo `.mnu ` para que gen_light.py las salte).
 - Ojo con nombres que ya existían en el sitio: `.rec` (puntito rojo), `.sel`, y la función `step` de la sala. Por eso el estado es `.is-rec`, la fila elegida `.cam-on` y las funciones llevan prefijo `cam`.
 - Celular (≤900px): sin vista previa; la rueda y los botones quedan debajo de la pantalla; los switches de tema/idioma viven en `#mnu-prefs`.
