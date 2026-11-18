@@ -21,7 +21,7 @@ window.PORTFOLIO = {
      bio: entre 50 y 80 palabras (regla del curso). */
   sobre: {
     /* intro: la primera frase que se lee en la portada, debajo de "¿Quién soy? Depende del proyecto." */
-    intro: "Soy Alexander Pino Caro, diseñador crossmedia y creador audiovisual en Pereira. Grabo, edito y cuento historias para marcas, y después las mido.",
+    intro: "Soy Alexander Pino Caro, diseñador crossmedia en Pereira. Grabo, edito y cuento historias para marcas, y después las mido.",
     /* origen: la Escena 00 de Sobre mí. "corte" es la marca de corte entre una línea y otra. */
     origen: [
       "Una reunión. Un cliente: «¿Y tú qué haces? Porque pruebas de todo».",
@@ -32,15 +32,25 @@ window.PORTFOLIO = {
     ],
     /* gancho: la línea del Inicio que lleva al origen */
     gancho: "Me preguntaron qué hacía y no supe responder con un solo oficio. Así que respondo con proyectos.",
-    /* bio sin cifras (las cifras viven en las escenas): 61 palabras, regla del curso 50–80 */
-    bio: "Soy Alexander Pino Caro, Diseñador Crossmedia y Creador Audiovisual en Pereira. Técnico en Elaboración de Medios Audiovisuales y estudiante de octavo semestre de Diseño Crossmedia. Grabo, edito y cuento: tomo material en bruto y lo convierto en piezas que retienen la atención y se pueden medir. Trabajo con marcas, creadores y medios que tienen algo bueno, pero todavía no saben contarlo.",
+    /* bio aprobada (58 palabras, regla del curso 50–80). Título: Diseñador Crossmedia (decisión de Alex, nov. 2026) */
+    bio: "Soy Diseñador Crossmedia. Traduzco conceptos abstractos en narrativas visuales dinámicas que retienen la atención. Soluciono la falta de claridad comunicativa de las marcas mediante dirección de fotografía, edición rítmica y estrategias de contenido digital que generan resultados medibles. Me interesan los proyectos comerciales donde el video marketing sea el motor real de crecimiento para el cliente.",
     pasos: [
       { verbo: "Grabo", pruebas: ["lacepa", "nosfui"], texto: "Cámara, luz y dirección de fotografía. Busco lo que hace única a la marca y lo registro con intención." },
       { verbo: "Edito", pruebas: ["austin", "ckabai"], texto: "Escojo el material, corto con ritmo y le doy color. Si no engancha en los primeros segundos, lo vuelvo a cortar." },
       { verbo: "Cuento", pruebas: ["telecafe", "lacepa"], texto: "Uno video, diseño y web en una sola historia, y la mido: seguidores, reservas, pantalla." }
     ],
     oficios: ["Cámara", "Dirección de fotografía", "Edición", "Color", "Motion graphics", "Diseño gráfico", "Diseño editorial", "Diseño web"],
-    manifiesto: "",
+    /* manifiesto: la «nota del director» de Sobre mí. "negativa" es la línea que dice lo que NO haría (guía de Semana 7) */
+    manifiesto: [
+      "No grabo por grabar: cada plano tiene que ganarse su lugar en el corte.",
+      "Creo en la imagen que se siente antes de entenderse, en el ritmo que no te deja soltar el video y en los números que confirman que funcionó.",
+      "No hago videos bonitos que nadie termina de ver. No tapo con efectos lo que no se resolvió en cámara.",
+      "Cambio de oficio según lo que pida la historia. Lo único fijo es eso: la historia manda."
+    ],
+    negativa: 2,
+    /* el CV en PDF (lo genera tools/cv.html; ver CLAUDE.md) */
+    cv: "assets/cv/CV-Alex-Pino.pdf",
+    herramientas: ["Premiere Pro", "DaVinci Resolve", "After Effects", "Photoshop", "Illustrator", "Figma"],
 
     /* Fuera de cámara: lo que te gusta cuando no estás grabando (música, fútbol, cine…).
        Mientras esté vacío, no aparece. Ej: ["Cine de autor", "Fútbol", "Música urbana"] */
@@ -49,14 +59,15 @@ window.PORTFOLIO = {
 
   /* ---------- MI LÍNEA DE TIEMPO ----------
      Formación y trabajos en orden. "cuando" puede ser un año o un texto corto.
-     Pon el año del técnico donde dice "Formación". */
+     "resultado" es la cifra o el logro real (no inventar). */
   trayectoria: [
-    { cuando: "Formación", que: "Técnico en Elaboración de Medios Audiovisuales", donde: "Aquí aprendí cámara, luz y montaje." },
+    { cuando: "2022", que: "Técnico en Elaboración de Medios Audiovisuales", donde: "Aquí aprendí cámara, luz y montaje." },
     { cuando: "2025", que: "Paisajes Íntimos · Ckabai", donde: "Edición de cápsulas documentales.", href: "proyecto-paisajes-intimos.html" },
     { cuando: "2025", que: "Nos fui pues mijo", donde: "Magazine: dirección de fotografía, cámara y edición.", href: "proyecto-nos-fui-pues-mijo.html" },
-    { cuando: "2026", que: "Austin Marchese", donde: "Edición y motion graphics para un canal de YouTube.", href: "proyecto-austin.html" },
-    { cuando: "2026", que: "La Cepa · Hotel Pinares Plaza", donde: "Cámara, edición y diseño para un hotel y su restaurante.", href: "proyecto-la-cepa.html" },
-    { cuando: "2026", que: "Por encima de la mesa · Telecafé", donde: "Edición, foto fija y making of de una serie documental.", href: "proyecto-telecafe.html" },
+    { cuando: "2026", que: "Austin Marchese", donde: "Edición y motion graphics para un canal de YouTube.", resultado: "+80.000 seguidores en 4 meses", href: "proyecto-austin.html" },
+    { cuando: "2026", que: "La Cepa · Hotel Pinares Plaza", donde: "Cámara, edición y diseño para un hotel y su restaurante.", resultado: "+40 % en reservas", href: "proyecto-la-cepa.html" },
+    { cuando: "2026", que: "Por encima de la mesa · Telecafé", donde: "Edición, foto fija y making of de una serie documental.", resultado: "Emitida en Telecafé", href: "proyecto-telecafe.html" },
+    { cuando: "2026", que: "Pregón de la plaza", donde: "Cámara, dirección de fotografía y producción de las cápsulas, y el sitio web.", resultado: "Proyecto universitario", href: "proyecto-pregon-de-la-plaza.html" },
     { cuando: "Hoy", que: "Diseño Crossmedia · 8.º semestre", donde: "Uno video, diseño y web en una sola historia." }
   ],
 

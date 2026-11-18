@@ -561,7 +561,9 @@
     var put = function (sel, html, text) { var el = $(sel); if (!el) return; if (text) el.textContent = html; else el.innerHTML = html; };
     $$("[data-bio]").forEach(function (el) { el.textContent = s.bio || ""; });
     put("#bio", s.bio || "", true);
-    put("#manifest", s.manifiesto || "", true);
+    var mf = s.manifiesto;
+    if (Array.isArray(mf)) put("#manifest", mf.map(function (l, i) { return '<p' + (i === s.negativa ? ' class="neg"' : "") + ">" + esc(l) + "</p>"; }).join("") + '<p class="cr-sign">— Alex Pino</p>');
+    else put("#manifest", mf || "", true);
     var colors = ["var(--teal)", "var(--petrol)", "var(--sand)"];
     put("#steps", (s.pasos || []).map(function (p, i) {
       return '<li class="step reveal" style="--c:' + colors[i % 3] + '"><span class="n">' + pad(i + 1) + "</span><h3>" + esc(p.verbo) + ".</h3><p>" + esc(p.texto) + "</p></li>";
@@ -577,19 +579,19 @@
         return '<li class="og-line reveal" style="--i:' + i + '">' + esc(l) + "</li>";
       }).join("");
     }
-    var man = $("#manifest"); if (man && !s.manifiesto) man.remove();
+    var man = $("#manifest"); if (man && !(s.manifiesto && s.manifiesto.length)) { var nb = man.closest(".cr-note") || man; nb.remove(); }
     var off = s.fueraDeCamara || [];
     if (off.length && $("#offcam")) { put("#offcam-list", off.map(function (o) { return '<span class="chip">' + esc(o) + "</span>"; }).join("")); $("#offcam").hidden = false; }
   }
 
-  // línea de tiempo: cada hito es un clip sobre la pista
+  // filmografía (Sobre mí): año · proyecto · rol · resultado, una fila por hito
   function renderTray(list) {
     var ol = $("#tray"); if (!ol) return;
     if (!list || !list.length) { if ($("#trayectoria")) $("#trayectoria").hidden = true; return; }
     ol.innerHTML = list.map(function (t, i) {
       var tag = t.href ? "a" : "div", attr = t.href ? ' href="' + esc(t.href) + '"' : "";
-      return '<li class="tr-item reveal" style="--i:' + i + '"><span class="tr-when">' + esc(t.cuando) + '</span><span class="tr-dot" aria-hidden="true"></span>' +
-        "<" + tag + ' class="tr-clip"' + attr + "><b>" + esc(t.que) + "</b><span>" + esc(t.donde || "") + "</span>" + (t.href ? '<i aria-hidden="true">Ver →</i>' : "") + "</" + tag + "></li>";
+      return '<li class="cr-row reveal" style="--i:' + i + '"><' + tag + attr + ' class="cr-rl"><span class="cr-y">' + esc(t.cuando) + "</span><b>" + esc(t.que) + "</b><span class=\"cr-r\">" + esc(t.donde || "") + "</span>" +
+        '<em class="cr-res">' + esc(t.resultado || "") + "</em>" + (t.href ? '<i aria-hidden="true">→</i>' : "<i></i>") + "</" + tag + "></li>";
     }).join("");
   }
 

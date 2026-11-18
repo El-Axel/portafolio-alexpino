@@ -107,7 +107,6 @@
   - confirmar la frase "Aquí soy…".
 - Confirmar "Aquí soy…" y "Lo que hice" de cada proyecto, sobre todo Paisajes Íntimos (Ckabai).
 - Foto fija real de Telecafé para `fotos` (hoy solo hay fotogramas del tráiler).
-- Año del técnico en la línea de tiempo (hoy dice "Formación").
 - `fueraDeCamara`: 3 o 4 gustos personales.
 - Lista real de herramientas para una sección "mesa de trabajo".
 - Clips en LOG con su versión etalonada, y material en bruto, para `comparar`.
@@ -185,3 +184,15 @@
 - Botones en contacto.html: `#wa` y `#mail` (mailto a `D.contacto.correo`), más la línea «o escríbeme directo a…». La vista previa tiene pestañas WhatsApp / Correo (`.bo-t`, `.bo-wa`, `.bo-mail`).
 - Límite: un enlace mailto solo lleva TEXTO PLANO (sin colores, imágenes ni HTML). Un correo con diseño de verdad necesita un servicio de envío (EmailJS, Formspree o Resend con una función de Netlify) y la cuenta de Alex.
 - El mensaje por defecto (`mensajeWhatsapp` en data.js) también lleva emojis; su traducción en i18n.js usa la frase exacta.
+
+## Sobre mí = «los créditos» (propuesta A, elegida por Alex, nov. 2026)
+- Debajo de la Escena 00 (que se queda igual; el diálogo ahora va en Figtree, no en Krona): `.cred#creditos` con cinco bloques tipográficos, sin tarjetas ni vidrio (CSS «Sobre mí · los créditos» al final de style.css):
+  1. «En pocas palabras»: la bio como cita grande (`#bio`, de `D.sobre.bio`).
+  2. «Departamentos»: Grabo / Edito / Cuento (`#verbs`, paginas.js) con «En escena» = enlaces de texto a sus proyectos.
+  3. «Filmografía»: `D.trayectoria` en filas año · proyecto · rol · resultado (`renderTray` en main.js). `resultado` = cifra o logro REAL.
+  4. «Nota del director»: el manifiesto (`D.sobre.manifiesto`, arreglo de líneas; `negativa` = índice de la línea que dice lo que NO haría, va en arena). Versión 1 «La historia manda», elegida por Alex.
+  5. «Hoja de llamado»: botón que descarga `assets/cv/CV-Alex-Pino.pdf` (ruta en `D.sobre.cv`).
+- Se quitaron de esta página: las chips de «Oficios», la línea de tiempo en cuadrícula y la barra de vidrio «Grabo. Edito. Cuento.».
+- Título de Alex en todo el sitio: «Diseñador Crossmedia» (ya no «y Creador Audiovisual» ni «Director Audiovisual»). La bio aprobada quedó en 56 palabras.
+- Años confirmados por Alex: técnico 2022; Paisajes Íntimos y Nos fui 2025; Austin, La Cepa, Por encima de la mesa y Pregón 2026.
+- CV: lo arma `tools/cv.html` con data.js (perfil, formación, oficios, herramientas `D.sobre.herramientas`, resultados, filmografía). Para regenerarlo: abrirlo con Live Server → Ctrl+P → Guardar como PDF, tamaño Carta, márgenes «Ninguno», «Gráficos de fondo» activado.
