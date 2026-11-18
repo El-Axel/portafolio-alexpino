@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Sobre mí · Alex Pino</title>
-  <meta name="description" content="Soy Alexander Pino Caro: grabo, edito y cuento. Diseñador Crossmedia y Creador Audiovisual en Pereira.">
+  <meta name="description" content="Soy Alexander Pino Caro: grabo, edito y cuento. Diseñador Crossmedia en Pereira.">
   <meta name="theme-color" content="#0B1315">
   <link rel="canonical" href="https://alexpino.netlify.app/sobre-mi.html">
 
@@ -13,7 +13,7 @@
   <meta property="og:site_name" content="Alex Pino">
   <meta property="og:url" content="https://alexpino.netlify.app/sobre-mi.html">
   <meta property="og:title" content="Sobre mí · Alex Pino">
-  <meta property="og:description" content="Soy Alexander Pino Caro: grabo, edito y cuento. Diseñador Crossmedia y Creador Audiovisual en Pereira.">
+  <meta property="og:description" content="Soy Alexander Pino Caro: grabo, edito y cuento. Diseñador Crossmedia en Pereira.">
   <meta property="og:image" content="https://alexpino.netlify.app/assets/img/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -45,7 +45,7 @@
     "@type": "Person",
     "name": "Alexander Pino Caro",
     "alternateName": "Alex Pino",
-    "jobTitle": "Diseñador Crossmedia y Creador Audiovisual",
+    "jobTitle": "Diseñador Crossmedia",
     "url": "https://alexpino.netlify.app/",
     "image": "https://alexpino.netlify.app/assets/img/alex-retrato-vertical.jpg",
     "address": { "@type": "PostalAddress", "addressLocality": "Pereira", "addressRegion": "Risaralda", "addressCountry": "CO" },
@@ -69,24 +69,17 @@
       </div>
     </section>
 
-    <!-- quién soy, en una bio + los tres verbos con sus pruebas -->
-    <section class="block wrap tone tone-mist pad" aria-labelledby="h-verbos">
-      <header class="bhead reveal"><span class="kf"></span><h2 id="h-verbos">Grabo. Edito. Cuento.</h2><p class="label">Lo que hago, y dónde se ve</p><span class="tcode">01</span></header>
-      <div class="ruler" aria-hidden="true"></div>
-      <p class="ah-bio reveal" id="bio"></p>
-      <div class="verbs" id="verbs"></div>
-      <div class="kit reveal">
-        <p class="label">Oficios</p>
-        <div class="trades" id="trades" aria-label="Oficios"></div>
-        <div class="offcam" id="offcam" hidden><p class="label">Fuera de cámara</p><div class="chips-row" id="offcam-list"></div></div>
+    <!-- ========== QUIÉN SOY, EN CRÉDITOS (propuesta A, nov. 2026): bio, departamentos, filmografía, nota del director y hoja de llamado ========== -->
+    <section class="cred wrap" id="creditos" aria-labelledby="h-cred">
+      <h2 class="sr-only" id="h-cred">Quién soy, en créditos</h2>
+      <div class="cr-block cr-bio reveal"><p class="cr-k">En pocas palabras</p><blockquote class="cr-quote"><p id="bio"></p></blockquote></div>
+      <div class="cr-block"><p class="cr-k">Departamentos</p><div class="cr-deps" id="verbs"></div></div>
+      <div class="cr-block" id="trayectoria"><p class="cr-k">Filmografía</p><ol class="cr-film" id="tray"></ol></div>
+      <div class="cr-block cr-note reveal"><p class="cr-k">Nota del director</p><div class="cr-man" id="manifest"></div></div>
+      <div class="cr-call reveal">
+        <div><p class="cr-k">Hoja de llamado</p><h3>Mi CV en una página</h3><p>Formación, filmografía, resultados y contacto. PDF liviano para correo.</p></div>
+        <a class="btn primary" id="cv-dl" href="assets/cv/CV-Alex-Pino.pdf" download>Descargar CV (PDF) <i aria-hidden="true">↓</i></a>
       </div>
-    </section>
-
-    <!-- ========== LÍNEA DE TIEMPO ========== -->
-    <section id="trayectoria" class="block wrap tone tone-petrol pad" aria-labelledby="h-tray">
-      <header class="bhead reveal"><span class="kf"></span><h2 id="h-tray">Mi línea de tiempo</h2><p class="label">De dónde vengo</p><span class="tcode">02</span></header>
-      <div class="ruler" aria-hidden="true"></div>
-      <ol class="tray" id="tray"></ol>
     </section>
 
     <section class="cta wrap tone tone-terra pad">

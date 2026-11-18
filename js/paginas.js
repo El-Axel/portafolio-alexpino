@@ -9,19 +9,20 @@
   var S = D.sobre || {}, P = D.destacados || [];
   var byId = {}; P.forEach(function (p, i) { p._n = i + 1; byId[p.id] = p; });
 
-  // Grabo. Edito. Cuento. — cada verbo con las escenas donde se ve
+  // Departamentos: Grabo. Edito. Cuento. — cada verbo con las escenas donde se ve (como en los créditos)
   var verbs = $("#verbs");
   if (verbs) {
     var colors = ["var(--teal)", "var(--sand)", "var(--peach)"];
     verbs.innerHTML = (S.pasos || []).map(function (v, i) {
       var pr = (v.pruebas || []).map(function (id) { return byId[id]; }).filter(Boolean);
-      return '<article class="verb reveal" style="--c:' + colors[i % 3] + ';--i:' + i + '"><span class="vb-n">' + pad(i + 1) + "</span>" +
-        "<h3>" + esc(v.verbo) + ".</h3><p>" + esc(v.texto) + "</p>" +
-        (pr.length ? '<div class="vb-proof"><span class="label">Míralo en</span>' + pr.map(function (p) {
-          return '<a href="' + esc(p.pagina) + '"><img src="' + esc(p.portada || U.posterOf((p.videos || [])[0] || {})) + '" alt="" loading="lazy"><span><small>Escena ' + pad(p._n) + "</small>" + esc(p.titulo.split(" · ")[0]) + "</span></a>";
-        }).join("") + "</div>" : "") + "</article>";
+      return '<article class="cr-dep reveal" style="--c:' + colors[i % 3] + ';--i:' + i + '"><h3>' + esc(v.verbo) + ".</h3><p>" + esc(v.texto) + "</p>" +
+        (pr.length ? '<p class="cr-k">En escena</p><p class="cr-in">' + pr.map(function (p) {
+          return '<a href="' + esc(p.pagina) + '">' + esc(p.titulo.split(" · ")[0]) + "</a>";
+        }).join(" · ") + ' <i aria-hidden="true">→</i></p>' : "") + "</article>";
     }).join("");
   }
+  // el enlace del CV sale de data.js
+  var cvA = $("#cv-dl"); if (cvA && S.cv) cvA.href = S.cv;
 
   // Depende del proyecto: un papel por escena, como en un casting
   var cast = $("#casting");

@@ -107,7 +107,6 @@
   - confirmar la frase "Aquí soy…".
 - Confirmar "Aquí soy…" y "Lo que hice" de cada proyecto, sobre todo Paisajes Íntimos (Ckabai).
 - Foto fija real de Telecafé para `fotos` (hoy solo hay fotogramas del tráiler).
-- Año del técnico en la línea de tiempo (hoy dice "Formación").
 - `fueraDeCamara`: 3 o 4 gustos personales.
 - Lista real de herramientas para una sección "mesa de trabajo".
 - Clips en LOG con su versión etalonada, y material en bruto, para `comparar`.
@@ -116,7 +115,7 @@
 
 ## Experiencia «transmisión en vivo» (entrega 1)
 - Misma identidad (colores, Krona One + Figtree, vidrio estriado, isotipo); cambia la ESTRUCTURA.
-- `js/experiencia.js` (va después de main.js en todas las páginas): barra lateral con la escena actual, menú «la cámara» (`.mnu` > `.cam`: pantalla con la lista de capítulos + vista previa, rueda de control que se arrastra o gira con el scroll/flechas, SET/▶ = abrir con pantalla REC 0.7 s, MENU = cerrar; Esc/Tab atrapado), corte entre páginas (`.corte`, sessionStorage `ap-cut`; al terminar, las franjas vuelven a su sitio con `.still` para que el telón NO cruce otra vez), video que se reproduce al pasar el mouse (`video[data-hover]`), título cinético de la portada (`.hero-pin` → `--k`) y «el programa» de escenas (`#prog-pin`, una escena por pantalla, línea de tiempo abajo).
+- `js/experiencia.js` (va después de main.js en todas las páginas): barra lateral con la escena actual, menú «la cámara» (`.mnu` > `.cam`: pantalla con la lista de capítulos + vista previa, rueda de control que se arrastra o gira con el scroll/flechas, SET/▶ = abrir con pantalla REC 0.7 s, MENU = cerrar; Esc/Tab atrapado), transición entre páginas = DIAFRAGMA DE LENTE (`.corte#cut` con un canvas; experiencia.js §3: 7 hojas que giran y se cierran al salir en 0,62 s y se abren en la página nueva en 0,9 s; sessionStorage `ap-cut` + `html.cutting` en el <head> para que la página nueva arranque tapada). Reemplazó a la cortinilla de franjas, que a Alex no le gustó, video que se reproduce al pasar el mouse (`video[data-hover]`), título cinético de la portada (`.hero-pin` → `--k`) y «el programa» de escenas (`#prog-pin`, una escena por pantalla, línea de tiempo abajo).
 - CSS en style.css sección 28. Escritorio ≥901px: la barra superior es una barra lateral (`--rail: 76px`). Celular: una fila (marca · menú · timecode); los switches viven dentro del menú.
 - Clases nuevas que NO se deben reutilizar: `.mnu`, `.corte`, `.prg`, `.pslide`, `.pframe`, `.ptl-*`, `.kin*`, `.lens-o`.
 - `.prog-stage`, `.mnu` y `.corte` son islas oscuras (también en tema claro); están en la lista ISL de tools/gen_light.py.
@@ -163,9 +162,11 @@
 - La portada es un tráiler por capítulos (`.chap#cap-0n`, data-chap, data-light). Ningún elemento de la portada lleva directo a un proyecto: el programa de escenas lleva a `audiovisual.html?e=N` (la sala abre en esa escena). Las cifras ya no son enlaces.
 - Capítulo 01: frase con imágenes dentro (`[data-words]` + `.pill`, referencia Hero Studio); las palabras se encienden con el scroll. Si se cambia el texto, actualizar los fragmentos en i18n.js (se traducen antes de partir en palabras).
 - Capítulos 03–05 (adelantos, elegidos por Alex en el artifact «Home con profundidad», nov. 2026):
-  - 03 Diseño gráfico = «uno a uno» (`#gfx`, sticky `.gfx-st`, JS en experiencia.js): una pieza grande a la vez (`.gp`, portadas de `D.grafico`), se inclina con el mouse y al bajar se aparta como una hoja; al lado número, tipo, título y texto; miniaturas que llevan a cada pieza. El título del capítulo en el home dice «Diseño gráfico.» (no «Impresos»). Reemplazó a la mesa de luz.
-  - 04 Editorial = «la mesa de revisión» (`#mesar`, sticky `.mr-st`, JS en experiencia.js): las cuatro publicaciones abiertas sobre una tabla de corte vista desde arriba (`.mr-mat`, regla cada 5 cm); el scroll recorre la mesa y el cursor es un cuentahílos (`.mr-lp`: copia de la mesa escalada ×2,6). En celular el lente va donde se toca. `.mr-st` es isla oscura. Elegida en el artifact «Editorial: tres caminos» (se descartaron el pliego, el hojeo rápido y el libro que se abre por parecerse a Gráfico).
-  - 05 Web = travelling lateral (`#wtrav`, sticky `.wt-stage`, JS en experiencia.js): las ventanas pasan de derecha a izquierda, la del centro se endereza y su captura baja sola (`--sy`). Usa `larga` de `D.web` (capturas de página entera en `assets/web/largas/`, 900 px de ancho; se tomaron con Edge sin ventana por CDP). Mis Finanzas sigue sin captura (tarjeta `.wt-tile`). `.wt-view` es isla oscura.
+  - Pedido del profe (nov. 2026): el home estaba demasiado cargado de animaciones e interacciones y se sentía brusco. Los adelantos 03 y 05 pasaron a ser COMPOSICIONES QUIETAS (el detalle de cada pieza vive en su página). No volver a meterles scroll fijo, carruseles ni efectos.
+  - 03 Diseño gráfico = «bento de mockups» (`#gcomp` > `.gb`, HTML estático en index.html; elegido por Alex entre bento, repisa y mosaico): cinco tarjetas en grilla (`grid-template-areas`), cada pieza en su soporte real y GRANDE dentro de su tarjeta: carta de pie con la contraportada atrás (`.gb-stack`), Arbórea en tablet (`.gb-tab`), los dos habladores de pie (`.gb-tents`), Maka logo + paleta (`.gb-mk`), Bai Rural en un celular con historias, post y miniaturas (`.gb-phone`). Las tarjetas son `container-type:size` y todo se mide en cqw/cqh. En celular: 2 columnas (carta+celular, Arbórea, habladores+Maka). Solo hover suave. (Antes hubo una composición «flatlay» con piezas giradas y encimadas: a Alex no le gustó.)
+  - 04 Editorial = «la mesa de revisión» (`#mesar`, sticky `.mr-st`, JS en experiencia.js): las cuatro publicaciones abiertas sobre una tabla de corte; el scroll recorre la mesa. El cuentahílos (lupa/mira) se QUITÓ por pedido del profe. `.mr-st` es isla oscura.
+  - 05 Web = varios equipos (`#wcomp`, HTML estático): monitor central con Pregón, dos monitores atrás (Audigesco, La Astilla, más oscuros) y dos portátiles al frente (Gladys del Campo, Claqueta), dibujados con CSS. Debajo, la leyenda con las etiquetas «Hechas de cero» / «Páginas que sumé» (`.wt-chip`). Mis Finanzas solo va en la leyenda (sin captura). Las capturas largas de `assets/web/largas/` ya no se usan en el home (siguen en el repo).
+  - `.gcomp` y `.wcomp` están en la lista ISL de gen_light.py (son objetos físicos: no cambian con el tema claro).
 - Portada = rack focus: la foto del hero va en capas (`.hero-ph`: `.hp-bg` original, `.hp-bgb` fondo desenfocado sin el sujeto, `.hp-fg` Alex + vidrio recortados, `.hp-fgs` el recorte suave). Con `--k` el foco pasa del fondo a Alex. Archivos en `assets/img/hero/` (recorte por luminancia de hero-glass*.jpg). Si cambia la foto del hero, hay que regenerarlos. El filtro de la cámara jugable se aplica a `.hero-ph`.
 - Ojo en experiencia.js: todo vive en una sola función; no repetir `var upd`/`var tick` entre secciones (se pisaban y la portada no recibía el scroll).
 - gen_light.py en Windows: correrlo con `PYTHONUTF8=1`.
@@ -177,3 +178,21 @@
 - Marcado en js/shell.js (TOP), lógica en experiencia.js §2 (`camSelect`, `camStep`, `camGo`), CSS en style.css «menú: el respaldo de una cámara» (todas las reglas van con prefijo `.mnu ` para que gen_light.py las salte).
 - Ojo con nombres que ya existían en el sitio: `.rec` (puntito rojo), `.sel`, y la función `step` de la sala. Por eso el estado es `.is-rec`, la fila elegida `.cam-on` y las funciones llevan prefijo `cam`.
 - Celular (≤900px): sin vista previa; la rueda y los botones quedan debajo de la pantalla; los switches de tema/idioma viven en `#mnu-prefs`.
+
+## Contacto: WhatsApp + correo (nov. 2026)
+- «Arma tu pedido» (main.js, función `brief`) arma DOS mensajes con lo que el visitante elige: `waMsg` (WhatsApp, con emojis y *negritas* que WhatsApp respeta) y `mailMsg` (correo: asunto «🎬 Proyecto nuevo · nombre» y cuerpo tipo ficha con separadores ━━━ y emojis, más un espacio para que cuente la idea).
+- Botones en contacto.html: `#wa` y `#mail` (mailto a `D.contacto.correo`), más la línea «o escríbeme directo a…». La vista previa tiene pestañas WhatsApp / Correo (`.bo-t`, `.bo-wa`, `.bo-mail`).
+- Límite: un enlace mailto solo lleva TEXTO PLANO (sin colores, imágenes ni HTML). Un correo con diseño de verdad necesita un servicio de envío (EmailJS, Formspree o Resend con una función de Netlify) y la cuenta de Alex.
+- El mensaje por defecto (`mensajeWhatsapp` en data.js) también lleva emojis; su traducción en i18n.js usa la frase exacta.
+
+## Sobre mí = «los créditos» (propuesta A, elegida por Alex, nov. 2026)
+- Debajo de la Escena 00 (que se queda igual; el diálogo ahora va en Figtree, no en Krona): `.cred#creditos` con cinco bloques tipográficos, sin tarjetas ni vidrio (CSS «Sobre mí · los créditos» al final de style.css):
+  1. «En pocas palabras»: la bio como cita grande (`#bio`, de `D.sobre.bio`).
+  2. «Departamentos»: Grabo / Edito / Cuento (`#verbs`, paginas.js) con «En escena» = enlaces de texto a sus proyectos.
+  3. «Filmografía»: `D.trayectoria` en filas año · proyecto · rol · resultado (`renderTray` en main.js). `resultado` = cifra o logro REAL.
+  4. «Nota del director»: el manifiesto (`D.sobre.manifiesto`, arreglo de líneas; `negativa` = índice de la línea que dice lo que NO haría, va en arena). Versión 1 «La historia manda», elegida por Alex.
+  5. «Hoja de llamado»: botón que descarga `assets/cv/CV-Alex-Pino.pdf` (ruta en `D.sobre.cv`).
+- Se quitaron de esta página: las chips de «Oficios», la línea de tiempo en cuadrícula y la barra de vidrio «Grabo. Edito. Cuento.».
+- Título de Alex en todo el sitio: «Diseñador Crossmedia» (ya no «y Creador Audiovisual» ni «Director Audiovisual»). La bio aprobada quedó en 56 palabras.
+- Años confirmados por Alex: técnico 2022; Paisajes Íntimos y Nos fui 2025; Austin, La Cepa, Por encima de la mesa y Pregón 2026.
+- CV: lo arma `tools/cv.html` con data.js (perfil, formación, oficios, herramientas `D.sobre.herramientas`, resultados, filmografía). Para regenerarlo: abrirlo con Live Server → Ctrl+P → Guardar como PDF, tamaño Carta, márgenes «Ninguno», «Gráficos de fondo» activado.

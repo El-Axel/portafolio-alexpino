@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>CV · Alexander Pino Caro</title>
+<!-- Plantilla del CV. Se llena sola con js/data.js.
+     Para regenerar el PDF: abre este archivo con Live Server, Ctrl+P → «Guardar como PDF»,
+     tamaño Carta, márgenes «Ninguno», activa «Gráficos de fondo». Guárdalo como assets/cv/CV-Alex-Pino.pdf -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Krona+One&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+@page{size:Letter;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{width:8.5in;height:11in;overflow:hidden;font-family:Figtree,sans-serif;color:#0F1C1F;background:#F4F1EA;font-size:10.5pt}
+.d{font-family:'Krona One',sans-serif;font-weight:400}
+header{position:relative;height:2.15in;padding:.45in .6in 0;background:#0B1315;color:#F4F1EA;overflow:hidden}
+header::after{content:"";position:absolute;inset:0;background:radial-gradient(45% 90% at 95% 0%,rgba(46,166,144,.35),transparent 70%),radial-gradient(35% 80% at 0% 100%,rgba(242,197,114,.14),transparent 70%)}
+header > *{position:relative;z-index:1}
+.iso{position:absolute;right:.6in;top:.42in;width:.62in;height:.64in}
+h1{margin:0;font-size:26pt;line-height:1.05;letter-spacing:-.01em}
+.role{margin:.08in 0 0;font-size:11pt;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#F2C572}
+.contact{display:flex;flex-wrap:wrap;gap:.08in .28in;margin-top:.24in;font-size:9.5pt;color:rgba(244,241,234,.85)}
+.contact b{color:#F2C572;font-weight:700;margin-right:.05in}
+main{display:grid;grid-template-columns:2.55in 1fr;gap:.42in;padding:.4in .6in 0}
+h2{margin:0 0 .12in;font-size:8pt;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#2A5159}
+h2::before{content:"— ";color:#D9674E}
+section{margin-bottom:.3in}
+.bio{margin:0;line-height:1.55;color:#22343a}
+.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.05in}
+.chips{display:flex;flex-wrap:wrap;gap:.06in}
+.chips span{padding:.03in .1in;border-radius:99px;border:1px solid rgba(42,81,89,.35);font-size:9pt;font-weight:600;color:#2A5159}
+.edu b{display:block;font-size:10.5pt}
+.edu span{font-size:9.5pt;color:#4b5d61}
+.edu + .edu{margin-top:.1in}
+.film{margin:0;padding:0;list-style:none}
+.film li{display:grid;grid-template-columns:.62in 1fr;gap:.12in;padding:.085in 0;border-bottom:1px solid rgba(15,28,31,.12)}
+.film li:first-child{border-top:1px solid rgba(15,28,31,.12)}
+.film .y{font-size:8.5pt;font-weight:700;letter-spacing:.12em;color:#B9832A;padding-top:.02in}
+.film b{display:block;font-family:'Krona One',sans-serif;font-weight:400;font-size:10pt;line-height:1.3}
+.film span{display:block;font-size:9.5pt;color:#4b5d61;margin-top:.02in}
+.film em{display:block;font-style:normal;font-size:9pt;font-weight:700;color:#1F8A77;margin-top:.02in}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:.14in}
+.res div{padding:.14in;border-radius:10px;background:#0B1315;color:#F4F1EA}
+.res b{display:block;font-family:'Krona One',sans-serif;font-weight:400;font-size:15pt;color:#F2C572}
+.res span{display:block;margin-top:.04in;font-size:8.5pt;line-height:1.35;color:rgba(244,241,234,.8)}
+footer{position:absolute;left:.6in;right:.6in;bottom:.35in;display:flex;justify-content:space-between;font-size:8.5pt;color:#4b5d61;border-top:1px solid rgba(15,28,31,.15);padding-top:.1in}
+footer b{color:#0F1C1F}
+</style>
+</head>
+<body>
+<header>
+  <svg class="iso" viewBox="70 50 360 370" aria-hidden="true"><path fill="#F2C572" d="M117 384 Q106 384 111 374 L246 104 Q262 72 278 104 L331 230 C368 244 389 288 387 322 C385 362 357 389 319 389 C288 389 263 373 257 352 C254 340 262 333 271 341 C283 351 300 355 317 351 C337 345 345 323 341 300 C337 276 323 259 304 259 C279 259 259 285 247 318 C239 340 233 362 227 375 C200 383 150 384 117 384 Z"/></svg>
+  <h1 class="d">Alexander Pino Caro</h1>
+  <p class="role">Diseñador Crossmedia</p>
+  <div class="contact" id="contact"></div>
+</header>
+<main>
+  <div>
+    <section><h2>Perfil</h2><p class="bio" id="bio"></p></section>
+    <section><h2>Formación</h2><div id="edu"></div></section>
+    <section><h2>Oficios</h2><div class="chips" id="oficios"></div></section>
+    <section><h2>Herramientas</h2><div class="chips" id="tools"></div></section>
+  </div>
+  <div>
+    <section><h2>Resultados</h2><div class="res" id="res"></div></section>
+    <section><h2>Filmografía</h2><ol class="film" id="film"></ol></section>
+  </div>
+</main>
+<footer><span><b>Portafolio:</b> alexpino.netlify.app</span><span>¿Quién soy? Depende del proyecto.</span></footer>
+<script src="../js/data.js"></script>
+<script>
+(function () {
+  var D = window.PORTFOLIO, S = D.sobre, C = D.contacto, $ = function (s) { return document.getElementById(s); };
+  var esc = function (x) { return String(x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var wa = C.whatsapp.replace(/^57(\d{3})(\d{3})(\d{4})$/, "+57 $1 $2 $3");
+  $("contact").innerHTML = '<span><b>Correo</b>' + esc(C.correo) + '</span><span><b>WhatsApp</b>' + esc(wa) + '</span><span><b>Ciudad</b>' + esc(C.ciudad) + "</span>";
+  $("bio").textContent = S.bio;
+  var T = D.trayectoria;
+  var edu = T.filter(function (t) { return /Técnico|Diseño Crossmedia/.test(t.que); });
+  $("edu").innerHTML = edu.map(function (t) { return '<div class="edu"><b>' + esc(t.que.replace(" · 8.º semestre", "")) + "</b><span>" + (t.cuando === "Hoy" ? "Universidad Cooperativa de Colombia · 8.º semestre (en curso)" : esc(t.cuando)) + "</span></div>"; }).join("");
+  $("oficios").innerHTML = S.oficios.map(function (o) { return "<span>" + esc(o) + "</span>"; }).join("");
+  $("tools").innerHTML = (S.herramientas || []).map(function (o) { return "<span>" + esc(o) + "</span>"; }).join("");
+  var res = T.filter(function (t) { return t.resultado && t.resultado !== "Proyecto universitario"; });
+  $("res").innerHTML = res.map(function (t) { var m = t.resultado.match(/^([+\d.,% ]+\S*)\s*(.*)$/); var big = /^\+/.test(t.resultado) ? t.resultado.split(" ").slice(0, t.resultado.indexOf("%") > -1 ? 2 : 1).join(" ") : "Telecafé"; var rest = /^\+/.test(t.resultado) ? t.resultado.slice(big.length).trim() : "Emisión en TV"; return "<div><b>" + esc(big) + "</b><span>" + esc(rest) + " · " + esc(t.que.split(" · ")[0]) + "</span></div>"; }).join("");
+  var work = T.filter(function (t) { return edu.indexOf(t) < 0; });
+  $("film").innerHTML = work.map(function (t) { return '<li><span class="y">' + esc(t.cuando) + "</span><div><b>" + esc(t.que) + "</b><span>" + esc(t.donde) + "</span>" + (t.resultado ? "<em>" + esc(t.resultado) + "</em>" : "") + "</div></li>"; }).join("");
+})();
+</script>
+</body>
+</html>

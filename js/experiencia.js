@@ -204,23 +204,63 @@
   // la página actual también se marca en la lista (shell.js ya puso .on donde corresponde)
   if (page === "inicio") { var a0 = $('.mnu-list a[data-sec="inicio"]'); if (a0) { a0.classList.add("on"); a0.setAttribute("aria-current", "page"); } }
 
-  /* ---------- 3 · Corte de edición entre páginas ---------- */
+  /* ---------- 3 · Transición entre páginas: el diafragma de un lente ----------
+     Al salir, las hojas del iris giran y se cierran hacia el centro; en la página nueva se abren.
+     Se dibuja en un canvas: un polígono (la apertura) y, por fuera, una cuña por cada hoja. */
   var cut = $("#cut");
   if (cut) {
-    var reset = function () {
-      cut.classList.add("still"); cut.classList.remove("go", "leave");
-      void cut.offsetWidth;
-      requestAnimationFrame(function () { cut.classList.remove("still"); });
+    var cv = $("canvas", cut), cx = cv.getContext("2d"), IR = { n: 7, raf: 0, w: 0, h: 0, dpr: 1 };
+    var irSize = function () {
+      IR.dpr = Math.min(window.devicePixelRatio || 1, 2); IR.w = innerWidth; IR.h = innerHeight;
+      cv.width = Math.round(IR.w * IR.dpr); cv.height = Math.round(IR.h * IR.dpr);
+      cx.setTransform(IR.dpr, 0, 0, IR.dpr, 0, 0);
+    };
+    // t = 0 abierto del todo, t = 1 cerrado del todo
+    var irDraw = function (t) {
+      var w = IR.w, h = IR.h, n = IR.n, ox = w / 2, oy = h / 2, half = Math.hypot(w, h) / 2;
+      var rMax = half / Math.cos(Math.PI / n) * 1.08, r = rMax * (1 - t), rot = -Math.PI / 2 + t * 1.25, far = half * 6;
+      cx.clearRect(0, 0, w, h);
+      if (t >= .999) { cx.fillStyle = "#0B1315"; cx.fillRect(0, 0, w, h); return; }
+      var v = [];
+      for (var i = 0; i < n; i++) { var a = rot + i * 2 * Math.PI / n; v.push([ox + r * Math.cos(a), oy + r * Math.sin(a)]); }
+      var dir = function (i) { var p = v[i], q = v[(i + 1) % n], dx = q[0] - p[0], dy = q[1] - p[1], l = Math.hypot(dx, dy) || 1; return [dx / l, dy / l]; };
+      for (var k = 0; k < n; k++) {
+        var p0 = v[k], p1 = v[(k + 1) % n], d0 = dir(k), d1 = dir((k + 1) % n);
+        var f0 = [p0[0] + d0[0] * far, p0[1] + d0[1] * far], f1 = [p1[0] + d1[0] * far, p1[1] + d1[1] * far];
+        // la hoja: cuña entre el borde k (prolongado) y el borde k+1 (prolongado)
+        var g = cx.createLinearGradient(p1[0], p1[1], p1[0] + (d0[0] + d1[0]) * half * .6, p1[1] + (d0[1] + d1[1]) * half * .6);
+        g.addColorStop(0, k % 2 ? "#26393e" : "#1d2f33"); g.addColorStop(.55, "#0e181a"); g.addColorStop(1, "#060a0b");
+        cx.beginPath(); cx.moveTo(p1[0], p1[1]); cx.lineTo(f0[0], f0[1]); cx.lineTo(f1[0], f1[1]); cx.closePath();
+        cx.fillStyle = g; cx.fill();
+      }
+      // el filo de cada hoja, con un brillo arena que se apaga lejos del centro
+      cx.lineWidth = 1.2;
+      for (var j = 0; j < n; j++) {
+        var q0 = v[j], dj = dir(j), q2 = [q0[0] + dj[0] * half * 1.4, q0[1] + dj[1] * half * 1.4];
+        var gl = cx.createLinearGradient(q0[0], q0[1], q2[0], q2[1]);
+        gl.addColorStop(0, "rgba(242,197,114,.8)"); gl.addColorStop(1, "rgba(242,197,114,0)");
+        cx.strokeStyle = gl; cx.beginPath(); cx.moveTo(q0[0], q0[1]); cx.lineTo(q2[0], q2[1]); cx.stroke();
+      }
+      // la apertura: un aro suave alrededor del hueco
+      cx.beginPath(); for (var m = 0; m <= n; m++) { var pv = v[m % n]; m ? cx.lineTo(pv[0], pv[1]) : cx.moveTo(pv[0], pv[1]); }
+      cx.strokeStyle = "rgba(46,166,144,.35)"; cx.lineWidth = 2; cx.stroke();
+    };
+    var irRun = function (from, to, ms, done) {
+      cancelAnimationFrame(IR.raf); irSize(); cut.classList.add("on");
+      var t0 = performance.now(), ease = to > from ? function (x) { return x * x * (3 - 2 * x); } : function (x) { return 1 - Math.pow(1 - x, 3); };
+      var step = function (now) {
+        var x = Math.min(1, (now - t0) / ms), t = from + (to - from) * ease(x);
+        irDraw(t);
+        if (x < 1) IR.raf = requestAnimationFrame(step);
+        else { if (to === 0) { cut.classList.remove("on"); cx.clearRect(0, 0, IR.w, IR.h); } if (done) done(); }
+      };
+      IR.raf = requestAnimationFrame(step);
     };
     if (html.classList.contains("cutting")) {
       try { sessionStorage.removeItem("ap-cut"); } catch (e) {}
-      cut.classList.add("go", "still");
+      irSize(); cut.classList.add("on"); irDraw(1);
       html.classList.remove("cutting");
-      requestAnimationFrame(function () { requestAnimationFrame(function () {
-        cut.classList.remove("still"); cut.classList.add("leave");
-        // al terminar, las franjas vuelven a su sitio SIN animación (antes cruzaban la pantalla otra vez)
-        setTimeout(function () { reset(); }, 700);
-      }); });
+      setTimeout(function () { irRun(1, 0, 900); }, 140); // un respiro con el lente cerrado y se abre
     }
     document.addEventListener("click", function (e) {
       if (reduce || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -232,10 +272,9 @@
       e.preventDefault();
       try { sessionStorage.setItem("ap-cut", "1"); } catch (er) {}
       closeMenu();
-      cut.classList.add("go");
-      setTimeout(function () { location.href = url.href; }, 420);
+      irRun(0, 1, 620, function () { location.href = url.href; });
     });
-    window.addEventListener("pageshow", function (e) { if (e.persisted) reset(); });
+    window.addEventListener("pageshow", function (e) { if (e.persisted) { cancelAnimationFrame(IR.raf); cut.classList.remove("on"); cx.clearRect(0, 0, IR.w, IR.h); } });
   }
 
   /* ---------- 4 · Videos que se reproducen al pasar el mouse ---------- */
@@ -553,52 +592,13 @@
       '<a class="nc-back" href="' + CHAPS[chIdx - 1][0] + '">← ' + esc(T("Capítulo anterior")) + ": " + esc(T(CHAPS[chIdx - 1][3])) + "</a></nav>");
   }
 
-  // los adelantos de la portada (gráfico, editorial, web), armados con data.js
-  var gEl = $("#gfx"), wtEl = $("#wtrav");
-  // capítulo 03 · diseño gráfico «uno a uno»: una pieza grande a la vez; con el scroll se aparta como una hoja y entra la siguiente
-  if (gEl && D.grafico) {
-    var G = D.grafico.slice(0, 5), gBox = $("#gfx-box"), gInfo = $("#gfx-info"), gTh = $("#gfx-th");
-    var gSrc = function (g) { return g.portada || (g.paginas || [])[0] || (g.imagenes || [])[0] || ""; };
-    var gPieces = G.map(function (g, i) {
-      var el = document.createElement("a"); el.className = "gp" + (i ? " in" : ""); el.href = "grafico.html";
-      el.innerHTML = '<img src="' + esc(gSrc(g)) + '" alt="' + esc(g.titulo) + '" loading="lazy">';
-      var im = el.firstChild, setW = function () { if (im.naturalWidth) el.style.setProperty("--ar", (im.naturalWidth / im.naturalHeight).toFixed(4)); };
-      if (im.complete) setW(); else im.addEventListener("load", setW);
-      gBox.appendChild(el); return el;
-    });
-    gTh.innerHTML = G.map(function (g) { return '<button type="button" style="background-image:url(\'' + esc(gSrc(g)) + '\')" aria-label="' + esc(g.titulo) + '"></button>'; }).join("");
-    var gThumbs = $$("button", gTh), gCur = -1, gT = 0;
-    var gSet = function (i) {
-      if (i === gCur) return; gCur = i;
-      gPieces.forEach(function (el, k) { el.classList.toggle("out", k < i); el.classList.toggle("in", k > i); el.style.transform = ""; el.tabIndex = k === i ? 0 : -1; });
-      gThumbs.forEach(function (b, k) { b.classList.toggle("on", k === i); b.setAttribute("aria-current", k === i ? "true" : "false"); });
-      gInfo.classList.add("swap"); clearTimeout(gT);
-      gT = setTimeout(function () {
-        var g = G[i];
-        $(".gi-ct", gInfo).textContent = pad(i + 1) + " / " + pad(G.length); $(".gi-k", gInfo).textContent = T(g.tipo);
-        $(".gi-t", gInfo).textContent = g.titulo; $(".gi-p", gInfo).textContent = T(g.texto || ""); gInfo.classList.remove("swap");
-      }, reduce ? 0 : 260);
-    };
-    gSet(0);
-    if (reduce) { gEl.classList.add("static"); gThumbs.forEach(function (b, k) { b.addEventListener("click", function () { gSet(k); }); }); }
-    else {
-      var gTick = false;
-      var gUpd = function () { gTick = false; var r = gEl.getBoundingClientRect(), span = gEl.offsetHeight - innerHeight, p = span > 0 ? clamp(-r.top / span, 0, 1) : 0; gSet(Math.min(G.length - 1, Math.floor(p * G.length * .999))); };
-      window.addEventListener("scroll", function () { if (!gTick) { gTick = true; requestAnimationFrame(gUpd); } }, { passive: true });
-      window.addEventListener("resize", gUpd); gUpd();
-      // las miniaturas llevan a su pieza
-      gThumbs.forEach(function (b, k) { b.addEventListener("click", function () { var span = gEl.offsetHeight - innerHeight; window.scrollTo({ top: gEl.getBoundingClientRect().top + scrollY + span * (k + .5) / G.length, behavior: "smooth" }); }); });
-      // la pieza se inclina con el mouse, como si la tuvieras en la mano
-      gBox.addEventListener("pointermove", function (e) { if (e.pointerType !== "mouse") return; var r = gBox.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5, el = gPieces[gCur]; if (el) el.style.transform = "rotateY(" + (x * 14).toFixed(2) + "deg) rotateX(" + (-y * 10).toFixed(2) + "deg)"; });
-      gBox.addEventListener("pointerleave", function () { var el = gPieces[gCur]; if (el) el.style.transform = ""; });
-    }
-  }
+  // los adelantos de la portada: gráfico (#gcomp) y web (#wcomp) son composiciones quietas en index.html; aquí solo la mesa de editorial
   // capítulo 04 · editorial «la mesa de revisión»: las publicaciones abiertas sobre una tabla de corte;
-  // el scroll recorre la mesa y el cursor es un cuentahílos que agranda la página (copia de la mesa escalada dentro del lente)
+  // el scroll recorre la mesa (el cuentahílos se quitó: pedido del profe, menos interacción en el home)
   var mrEl = $("#mesar");
   if (mrEl && D.editorial) {
-    var mrSt = $("#mr-st"), mrMat = $("#mr-mat"), mrLp = $("#mr-lp"), mrZin = $(".mr-zin", mrLp), mrRet = $(".mr-ret", mrLp);
-    var mrZ = 2.6, mrW = 0, mrH = 0, mrL = 0, mrX = null, mrY = null, mrAuto = true, mrPX = 0, mrPY = 0;
+    var mrSt = $("#mr-st"), mrMat = $("#mr-mat");
+    var mrW = 0, mrH = 0, mrPX = 0, mrPY = 0;
     // páginas en orden; las dobles (una imagen = dos páginas) se parten en mitad izquierda y derecha
     var mrPubs = D.editorial.slice(0, 4).map(function (b) {
       var pg = b.paginas || [], dob = b.dobles || [], out = [{ u: b.portada || pg[0], h: "" }];
@@ -628,19 +628,6 @@
         h += '<span class="mr-tag" style="left:' + (x0 + w * .04) + "px;top:" + (y0 + hh + 10) + "px;transform:rotate(" + o.r * .6 + 'deg)">' + esc(P.b.titulo) + "<small>" + esc(P.b.tipo) + "</small></span>";
       });
       mrMat.innerHTML = h;
-      // la copia que se ve dentro del lente
-      mrZin.innerHTML = ""; var cl = mrMat.cloneNode(true); cl.removeAttribute("id");
-      $$("a", cl).forEach(function (a) { a.tabIndex = -1; a.removeAttribute("aria-label"); });
-      mrZin.appendChild(cl); mrZin.style.transform = "scale(" + mrZ + ")";
-      mrL = Math.min(240, Math.max(140, sw * .2)); mrLp.style.setProperty("--L", mrL + "px");
-      var n = mrL / 2, r = '<i style="left:50%;top:18%;width:1px;height:64%"></i><i style="top:50%;left:18%;height:1px;width:64%"></i>';
-      for (var t = -6; t <= 6; t++) { var tl = t % 5 === 0 ? 10 : 5; r += '<i style="left:' + (n + t * mrL * .05) + "px;top:" + (n - tl) + 'px;width:1px;height:' + tl + 'px"></i>'; }
-      mrRet.innerHTML = r;
-    };
-    var mrPlace = function () {
-      if (mrAuto) { var o = MR_LAY[1]; mrX = mrW * (o.x + o.w * .3) + mrPX; mrY = mrH * (o.y + .12) + mrPY; } // en reposo, sobre Voces Libres
-      mrLp.style.transform = "translate(" + (mrX - mrL / 2) + "px," + (mrY - mrL / 2) + "px)";
-      var cl = mrZin.firstChild; if (cl) cl.style.transform = "translate(" + (mrL / 2 / mrZ - (mrX - mrPX)) + "px," + (mrL / 2 / mrZ - (mrY - mrPY)) + "px)";
     };
     var mrTick = false;
     var mrUpd = function () {
@@ -649,58 +636,12 @@
       if (!reduce) { var r = mrEl.getBoundingClientRect(), span = mrEl.offsetHeight - innerHeight; p = span > 0 ? clamp(-r.top / span, 0, 1) : 0; }
       mrPX = -(mrW - mrSt.clientWidth) * p; mrPY = -(mrH - mrSt.clientHeight) * p;
       mrMat.style.transform = "translate(" + mrPX + "px," + mrPY + "px)";
-      mrPlace();
     };
-    var mrPoint = function (e) { var r = mrSt.getBoundingClientRect(); mrAuto = false; mrX = e.clientX - r.left; mrY = e.clientY - r.top; mrPlace(); };
-    mrSt.addEventListener("pointermove", function (e) { if (e.pointerType === "mouse") mrPoint(e); });
-    mrSt.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") mrPoint(e); });
     if (reduce) mrEl.classList.add("static");
     else window.addEventListener("scroll", function () { if (!mrTick) { mrTick = true; requestAnimationFrame(mrUpd); } }, { passive: true });
     window.addEventListener("resize", function () { mrBuild(); mrUpd(); });
     mrBuild(); mrUpd();
   }
-  // capítulo 05 · travelling: la sección se fija y las ventanas pasan de derecha a izquierda;
-  // la del centro se endereza y su captura baja sola, como si alguien la navegara
-  if (wtEl && D.web) {
-    var W = D.web, rail = $("#wt-rail"), wcap = $("#wt-cap");
-    var whost = function (u) { try { var x = new URL(u); return x.host.replace(/^www\./, "") + (x.pathname.length > 1 ? x.pathname.replace(/\/$/, "") : ""); } catch (e) { return u; } };
-    rail.innerHTML = W.map(function (w, i) {
-      var src = w.larga || w.img;
-      var body = src ? '<img src="' + esc(src) + '" alt="' + esc(T("Captura de") + " " + w.titulo) + '" loading="lazy">'
-        : '<span class="wt-tile"><b>' + esc(w.titulo) + "</b><small>" + esc(T(w.tipo)) + "</small></span>";
-      return '<a class="wt-win" href="web.html" style="--i:' + i + '"><span class="wb-bar" aria-hidden="true"><i></i><i></i><i></i><span class="wb-url">' + esc(whost(w.url)) + '</span></span><span class="wt-view">' + body + "</span></a>";
-    }).join("");
-    var wins = $$(".wt-win", rail), wNear = -1;
-    var wtCap = function (i) {
-      var w = W[i]; if (!w) return;
-      wcap.innerHTML = '<span class="wt-n">' + pad(i + 1) + " / " + pad(W.length) + '</span><b>' + esc(w.titulo) + "</b><span>" + esc(T(w.tipo)) + '</span><em class="wt-chip' + (w.grupo === "cero" ? "" : " wp") + '">' + esc(T(w.grupo === "cero" ? "Hechas de cero" : "Páginas que sumé")) + "</em>";
-    };
-    var wtSet = function (p) {
-      var c = p * (W.length - 1), near = Math.round(c);
-      var span = wins[0] ? wins[0].offsetWidth * 1.08 : 400;
-      wins.forEach(function (el, k) {
-        var d = k - c, ad = Math.abs(d);
-        el.style.transform = "translate(-50%,-50%) translate3d(" + (d * span).toFixed(1) + "px,0," + (-ad * 170).toFixed(1) + "px) rotateY(" + Math.max(-50, Math.min(50, -d * 34)).toFixed(2) + "deg)";
-        el.style.opacity = Math.max(0, 1 - ad * .34).toFixed(3);
-        el.style.zIndex = 100 - Math.round(ad * 10);
-        el.style.setProperty("--sy", clamp(.5 - d * .85, 0, 1).toFixed(3)); // entra arriba, baja mientras cruza
-        el.classList.toggle("on", k === near);
-      });
-      if (near !== wNear) { wNear = near; wtCap(near); }
-    };
-    if (reduce) { wtEl.classList.add("static"); wtCap(0); }
-    else {
-      var wtTick = false;
-      var wtUpd = function () {
-        wtTick = false;
-        var r = wtEl.getBoundingClientRect(), span = wtEl.offsetHeight - innerHeight;
-        wtSet(span > 0 ? clamp(-r.top / span, 0, 1) : 0);
-      };
-      window.addEventListener("scroll", function () { if (!wtTick) { wtTick = true; requestAnimationFrame(wtUpd); } }, { passive: true });
-      window.addEventListener("resize", wtUpd); wtUpd();
-    }
-  }
-
   // --p de 0 a 1 mientras el elemento cruza la pantalla (los adelantos se arman con el scroll)
   var scrubs = $$("[data-scrub]"), words = $$("[data-words]");
   // la frase del capítulo 01: cada palabra se «enciende» al bajar

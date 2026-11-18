@@ -3,7 +3,7 @@ Lee style.css, sets.css e impresos.css, busca colores fijos pensados para fondo
 oscuro y escribe la versión para fondo claro, solo bajo html[data-theme="light"].
 Las "islas oscuras" (portada, claqueta, visor, sets, pantallas) no se tocan."""
 import re,sys
-ISL=".hero,.pre,.viewer,.stage,.screen,.sc-media,.tlx,.phone,.tv,.keys-box,.prog-stage,.mnu,.corte,.entry,.nxt-go,.crt,.sala,.wt-view,.set,.mr-st"
+ISL=".hero,.pre,.viewer,.stage,.screen,.sc-media,.tlx,.phone,.tv,.keys-box,.prog-stage,.mnu,.corte,.entry,.nxt-go,.crt,.sala,.set,.mr-st,.gcomp,.wcomp"
 ISL_SET=set(x.strip() for x in ISL.split(','))
 def strip_comments(s): return re.sub(r'/\*.*?\*/','',s,flags=re.S)
 def rules(css):

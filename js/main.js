@@ -561,7 +561,9 @@
     var put = function (sel, html, text) { var el = $(sel); if (!el) return; if (text) el.textContent = html; else el.innerHTML = html; };
     $$("[data-bio]").forEach(function (el) { el.textContent = s.bio || ""; });
     put("#bio", s.bio || "", true);
-    put("#manifest", s.manifiesto || "", true);
+    var mf = s.manifiesto;
+    if (Array.isArray(mf)) put("#manifest", mf.map(function (l, i) { return '<p' + (i === s.negativa ? ' class="neg"' : "") + ">" + esc(l) + "</p>"; }).join("") + '<p class="cr-sign">— Alex Pino</p>');
+    else put("#manifest", mf || "", true);
     var colors = ["var(--teal)", "var(--petrol)", "var(--sand)"];
     put("#steps", (s.pasos || []).map(function (p, i) {
       return '<li class="step reveal" style="--c:' + colors[i % 3] + '"><span class="n">' + pad(i + 1) + "</span><h3>" + esc(p.verbo) + ".</h3><p>" + esc(p.texto) + "</p></li>";
@@ -577,19 +579,19 @@
         return '<li class="og-line reveal" style="--i:' + i + '">' + esc(l) + "</li>";
       }).join("");
     }
-    var man = $("#manifest"); if (man && !s.manifiesto) man.remove();
+    var man = $("#manifest"); if (man && !(s.manifiesto && s.manifiesto.length)) { var nb = man.closest(".cr-note") || man; nb.remove(); }
     var off = s.fueraDeCamara || [];
     if (off.length && $("#offcam")) { put("#offcam-list", off.map(function (o) { return '<span class="chip">' + esc(o) + "</span>"; }).join("")); $("#offcam").hidden = false; }
   }
 
-  // línea de tiempo: cada hito es un clip sobre la pista
+  // filmografía (Sobre mí): año · proyecto · rol · resultado, una fila por hito
   function renderTray(list) {
     var ol = $("#tray"); if (!ol) return;
     if (!list || !list.length) { if ($("#trayectoria")) $("#trayectoria").hidden = true; return; }
     ol.innerHTML = list.map(function (t, i) {
       var tag = t.href ? "a" : "div", attr = t.href ? ' href="' + esc(t.href) + '"' : "";
-      return '<li class="tr-item reveal" style="--i:' + i + '"><span class="tr-when">' + esc(t.cuando) + '</span><span class="tr-dot" aria-hidden="true"></span>' +
-        "<" + tag + ' class="tr-clip"' + attr + "><b>" + esc(t.que) + "</b><span>" + esc(t.donde || "") + "</span>" + (t.href ? '<i aria-hidden="true">Ver →</i>' : "") + "</" + tag + "></li>";
+      return '<li class="cr-row reveal" style="--i:' + i + '"><' + tag + attr + ' class="cr-rl"><span class="cr-y">' + esc(t.cuando) + "</span><b>" + esc(t.que) + "</b><span class=\"cr-r\">" + esc(t.donde || "") + "</span>" +
+        '<em class="cr-res">' + esc(t.resultado || "") + "</em>" + (t.href ? '<i aria-hidden="true">→</i>' : "<i></i>") + "</" + tag + "></li>";
     }).join("");
   }
 
@@ -758,22 +760,70 @@
     form.hidden = false;
     form.closest(".contact-card").classList.add("has-brief");
     var name = $("#brief-name"), out = $("#brief-msg"), label = $(".wa-label", wa);
+    var mail = $("#mail"), mLabel = mail ? $(".mail-label", mail) : null, mBox = $("#brief-mail");
     function picked(k) { return $$('.opts[data-k="' + k + '"] .opt[aria-pressed="true"]', form).map(function (b) { return b.textContent; }); }
     var en = window.I18N && I18N.lang === "en";
     function list(a) { return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + (en ? " and " : " y ") + a[a.length - 1]; }
+    var RULE = "━━━━━━━━━━━━━━━━━━━━";
+    function cap(x) { return x.charAt(0).toUpperCase() + x.slice(1); }
+    // WhatsApp: cercano, con emojis y *negritas* (WhatsApp las respeta)
+    function waMsg(who, que, cu, pr) {
+      var L = [];
+      if (en) {
+        L.push("👋 Hi Alex!" + (who ? " I'm *" + who + "*." : ""), "I saw your portfolio and I'd love to start a project with you 🎬", "");
+        if (que.length) L.push("📌 *What I need:* " + list(que).toLowerCase());
+        if (cu.length) L.push("🗓️ *Timing:* " + cu[0].toLowerCase());
+        if (pr.length) L.push("💰 *Budget:* " + pr[0]);
+        L.push("", "Shall we talk? 🙌");
+      } else {
+        L.push("👋 ¡Hola Alex!" + (who ? " Soy *" + who + "*." : ""), "Vi tu portafolio y quiero arrancar un proyecto contigo 🎬", "");
+        if (que.length) L.push("📌 *Lo que necesito:* " + list(que).toLowerCase());
+        if (cu.length) L.push("🗓️ *Para cuándo:* " + cu[0].toLowerCase());
+        if (pr.length) L.push("💰 *Presupuesto:* " + pr[0].toLowerCase());
+        L.push("", "¿Hablamos? 🙌");
+      }
+      return L.join("\n");
+    }
+    // correo: texto plano (es lo único que deja un enlace mailto), ordenado como una ficha
+    function mailMsg(who, que, cu, pr, any) {
+      var sub = en ? (who ? "🎬 New project · " + who : "🎬 I want to make a project with you") : (who ? "🎬 Proyecto nuevo · " + who : "🎬 Quiero hacer un proyecto contigo");
+      var L = [en ? "Hi Alex 👋" : "Hola Alex 👋", ""];
+      if (any) {
+        L.push(en ? "I'm writing from your portfolio. Here's my brief:" : "Te escribo desde tu portafolio. Este es mi pedido:", "", RULE, en ? "🎬  MY PROJECT" : "🎬  MI PROYECTO", RULE);
+        if (who) L.push((en ? "👤  Who I am: " : "👤  Quién soy: ") + who);
+        if (que.length) L.push((en ? "📌  What I need: " : "📌  Lo que necesito: ") + cap(list(que).toLowerCase()));
+        if (cu.length) L.push((en ? "🗓️  Timing: " : "🗓️  Para cuándo: ") + cu[0]);
+        if (pr.length) L.push((en ? "💰  Budget: " : "💰  Presupuesto: ") + pr[0]);
+        L.push(RULE, "");
+      } else L.push(en ? "I saw your portfolio and I'd love to talk about a project with you 🎬" : "Vi tu portafolio y quiero hablar de un proyecto contigo 🎬", "");
+      L.push(en ? "✍️  The idea in a few words:" : "✍️  La idea en pocas palabras:", en ? "(tell me what you want to achieve, references or links)" : "(cuéntame qué quieres lograr, referencias o links)", "", en ? "Talk soon! 🙌" : "¡Quedo pendiente! 🙌");
+      if (who) L.push(who);
+      return { sub: sub, body: L.join("\n") };
+    }
+    var view = "wa";
     function build() {
       var que = picked("que"), cu = picked("cuando"), pr = picked("presupuesto"), who = name.value.trim();
       var any = que.length || cu.length || pr.length || who;
-      var lines = [en ? "Hi Alex" + (who ? ", I'm " + who : "") + ". I saw your portfolio." : "Hola Alex" + (who ? ", soy " + who : "") + ". Vi tu portafolio."];
-      if (que.length) lines.push((en ? "I need: " : "Necesito: ") + list(que).toLowerCase() + ".");
-      if (cu.length) lines.push((en ? "Timing: " : "Para: ") + cu[0].toLowerCase() + ".");
-      if (pr.length) lines.push((en ? "Budget: " + pr[0] : "Presupuesto: " + pr[0].toLowerCase()) + ".");
-      var msg = any ? lines.join("\n") : tr(C.mensajeWhatsapp);
+      var msg = any ? waMsg(who, que, cu, pr) : tr(C.mensajeWhatsapp);
       wa.href = waLink(msg);
-      out.textContent = msg;
+      out.innerHTML = esc(msg).replace(/\*([^*\n]+)\*/g, "<b>$1</b>");
+      if (mail && C.correo) {
+        var em = mailMsg(who, que, cu, pr, any);
+        mail.href = "mailto:" + C.correo + "?subject=" + encodeURIComponent(em.sub) + "&body=" + encodeURIComponent(em.body);
+        $("#bm-to").textContent = C.correo; $("#bm-sub").textContent = em.sub; $("#bm-body").textContent = em.body;
+        mLabel.textContent = tr(any ? "Enviar mi pedido por correo" : "Escríbeme un correo");
+      }
       form.classList.toggle("ready", !!any);
-      label.textContent = any ? "Enviar mi pedido por WhatsApp" : "Escríbeme por WhatsApp";
+      label.textContent = tr(any ? "Enviar mi pedido por WhatsApp" : "Escríbeme por WhatsApp");
     }
+    // pestañas de la vista previa: cómo llega por WhatsApp y cómo llega por correo
+    $$(".bo-t", form).forEach(function (t) {
+      t.addEventListener("click", function () {
+        view = t.dataset.v;
+        $$(".bo-t", form).forEach(function (x) { x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+        out.hidden = view !== "wa"; if (mBox) mBox.hidden = view !== "mail";
+      });
+    });
     form.addEventListener("click", function (e) {
       var b = e.target.closest(".opt"); if (!b) return;
       var box = b.parentNode, on = b.getAttribute("aria-pressed") !== "true";
