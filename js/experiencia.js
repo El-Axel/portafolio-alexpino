@@ -204,23 +204,63 @@
   // la página actual también se marca en la lista (shell.js ya puso .on donde corresponde)
   if (page === "inicio") { var a0 = $('.mnu-list a[data-sec="inicio"]'); if (a0) { a0.classList.add("on"); a0.setAttribute("aria-current", "page"); } }
 
-  /* ---------- 3 · Corte de edición entre páginas ---------- */
+  /* ---------- 3 · Transición entre páginas: el diafragma de un lente ----------
+     Al salir, las hojas del iris giran y se cierran hacia el centro; en la página nueva se abren.
+     Se dibuja en un canvas: un polígono (la apertura) y, por fuera, una cuña por cada hoja. */
   var cut = $("#cut");
   if (cut) {
-    var reset = function () {
-      cut.classList.add("still"); cut.classList.remove("go", "leave");
-      void cut.offsetWidth;
-      requestAnimationFrame(function () { cut.classList.remove("still"); });
+    var cv = $("canvas", cut), cx = cv.getContext("2d"), IR = { n: 7, raf: 0, w: 0, h: 0, dpr: 1 };
+    var irSize = function () {
+      IR.dpr = Math.min(window.devicePixelRatio || 1, 2); IR.w = innerWidth; IR.h = innerHeight;
+      cv.width = Math.round(IR.w * IR.dpr); cv.height = Math.round(IR.h * IR.dpr);
+      cx.setTransform(IR.dpr, 0, 0, IR.dpr, 0, 0);
+    };
+    // t = 0 abierto del todo, t = 1 cerrado del todo
+    var irDraw = function (t) {
+      var w = IR.w, h = IR.h, n = IR.n, ox = w / 2, oy = h / 2, half = Math.hypot(w, h) / 2;
+      var rMax = half / Math.cos(Math.PI / n) * 1.08, r = rMax * (1 - t), rot = -Math.PI / 2 + t * 1.25, far = half * 6;
+      cx.clearRect(0, 0, w, h);
+      if (t >= .999) { cx.fillStyle = "#0B1315"; cx.fillRect(0, 0, w, h); return; }
+      var v = [];
+      for (var i = 0; i < n; i++) { var a = rot + i * 2 * Math.PI / n; v.push([ox + r * Math.cos(a), oy + r * Math.sin(a)]); }
+      var dir = function (i) { var p = v[i], q = v[(i + 1) % n], dx = q[0] - p[0], dy = q[1] - p[1], l = Math.hypot(dx, dy) || 1; return [dx / l, dy / l]; };
+      for (var k = 0; k < n; k++) {
+        var p0 = v[k], p1 = v[(k + 1) % n], d0 = dir(k), d1 = dir((k + 1) % n);
+        var f0 = [p0[0] + d0[0] * far, p0[1] + d0[1] * far], f1 = [p1[0] + d1[0] * far, p1[1] + d1[1] * far];
+        // la hoja: cuña entre el borde k (prolongado) y el borde k+1 (prolongado)
+        var g = cx.createLinearGradient(p1[0], p1[1], p1[0] + (d0[0] + d1[0]) * half * .6, p1[1] + (d0[1] + d1[1]) * half * .6);
+        g.addColorStop(0, k % 2 ? "#26393e" : "#1d2f33"); g.addColorStop(.55, "#0e181a"); g.addColorStop(1, "#060a0b");
+        cx.beginPath(); cx.moveTo(p1[0], p1[1]); cx.lineTo(f0[0], f0[1]); cx.lineTo(f1[0], f1[1]); cx.closePath();
+        cx.fillStyle = g; cx.fill();
+      }
+      // el filo de cada hoja, con un brillo arena que se apaga lejos del centro
+      cx.lineWidth = 1.2;
+      for (var j = 0; j < n; j++) {
+        var q0 = v[j], dj = dir(j), q2 = [q0[0] + dj[0] * half * 1.4, q0[1] + dj[1] * half * 1.4];
+        var gl = cx.createLinearGradient(q0[0], q0[1], q2[0], q2[1]);
+        gl.addColorStop(0, "rgba(242,197,114,.8)"); gl.addColorStop(1, "rgba(242,197,114,0)");
+        cx.strokeStyle = gl; cx.beginPath(); cx.moveTo(q0[0], q0[1]); cx.lineTo(q2[0], q2[1]); cx.stroke();
+      }
+      // la apertura: un aro suave alrededor del hueco
+      cx.beginPath(); for (var m = 0; m <= n; m++) { var pv = v[m % n]; m ? cx.lineTo(pv[0], pv[1]) : cx.moveTo(pv[0], pv[1]); }
+      cx.strokeStyle = "rgba(46,166,144,.35)"; cx.lineWidth = 2; cx.stroke();
+    };
+    var irRun = function (from, to, ms, done) {
+      cancelAnimationFrame(IR.raf); irSize(); cut.classList.add("on");
+      var t0 = performance.now(), ease = to > from ? function (x) { return x * x * (3 - 2 * x); } : function (x) { return 1 - Math.pow(1 - x, 3); };
+      var step = function (now) {
+        var x = Math.min(1, (now - t0) / ms), t = from + (to - from) * ease(x);
+        irDraw(t);
+        if (x < 1) IR.raf = requestAnimationFrame(step);
+        else { if (to === 0) { cut.classList.remove("on"); cx.clearRect(0, 0, IR.w, IR.h); } if (done) done(); }
+      };
+      IR.raf = requestAnimationFrame(step);
     };
     if (html.classList.contains("cutting")) {
       try { sessionStorage.removeItem("ap-cut"); } catch (e) {}
-      cut.classList.add("go", "still");
+      irSize(); cut.classList.add("on"); irDraw(1);
       html.classList.remove("cutting");
-      requestAnimationFrame(function () { requestAnimationFrame(function () {
-        cut.classList.remove("still"); cut.classList.add("leave");
-        // al terminar, las franjas vuelven a su sitio SIN animación (antes cruzaban la pantalla otra vez)
-        setTimeout(function () { reset(); }, 700);
-      }); });
+      setTimeout(function () { irRun(1, 0, 900); }, 140); // un respiro con el lente cerrado y se abre
     }
     document.addEventListener("click", function (e) {
       if (reduce || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -232,10 +272,9 @@
       e.preventDefault();
       try { sessionStorage.setItem("ap-cut", "1"); } catch (er) {}
       closeMenu();
-      cut.classList.add("go");
-      setTimeout(function () { location.href = url.href; }, 420);
+      irRun(0, 1, 620, function () { location.href = url.href; });
     });
-    window.addEventListener("pageshow", function (e) { if (e.persisted) reset(); });
+    window.addEventListener("pageshow", function (e) { if (e.persisted) { cancelAnimationFrame(IR.raf); cut.classList.remove("on"); cx.clearRect(0, 0, IR.w, IR.h); } });
   }
 
   /* ---------- 4 · Videos que se reproducen al pasar el mouse ---------- */

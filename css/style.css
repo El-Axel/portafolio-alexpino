@@ -1527,15 +1527,10 @@ html[data-theme="light"] .hero::after{background:linear-gradient(0deg,rgba(11,19
 @media (prefers-reduced-motion:reduce){.mnu .cs-r i{animation:none}.mnu .cam-prm u.roll{animation:none}}
 html.menu-open{overflow:hidden}
 
-/* ---- corte de edición entre páginas ---- */
-.corte{position:fixed;inset:0;z-index:200;pointer-events:none;display:grid;grid-template-rows:repeat(6,1fr)}
-.corte i{display:block;background:#0B1315;transform:translateX(-101%);transition:transform .38s var(--ease-io);box-shadow:0 1px 0 rgba(46,166,144,.55),0 -1px 0 rgba(217,103,78,.45)}
-.corte i:nth-child(even){transform:translateX(101%)}
-.corte.go i{transform:none}
-.corte i:nth-child(2){transition-delay:.03s}.corte i:nth-child(3){transition-delay:.06s}.corte i:nth-child(4){transition-delay:.02s}.corte i:nth-child(5){transition-delay:.05s}.corte i:nth-child(6){transition-delay:.08s}
-.corte.still i{transition:none}
-.corte.leave i{transform:translateX(101%)}
-.corte.leave i:nth-child(even){transform:translateX(-101%)}
+/* ---- transición entre páginas: el diafragma de un lente (lo dibuja experiencia.js §3 en un canvas) ---- */
+.corte{position:fixed;inset:0;z-index:200;pointer-events:none;display:none}
+.corte.on{display:block}
+.corte canvas{display:block;width:100%;height:100%}
 html.cutting body::after{content:"";position:fixed;inset:0;z-index:199;background:#0B1315}
 
 /* ---- presentación cinética («¿Quién soy?») ---- */
