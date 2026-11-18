@@ -758,22 +758,70 @@
     form.hidden = false;
     form.closest(".contact-card").classList.add("has-brief");
     var name = $("#brief-name"), out = $("#brief-msg"), label = $(".wa-label", wa);
+    var mail = $("#mail"), mLabel = mail ? $(".mail-label", mail) : null, mBox = $("#brief-mail");
     function picked(k) { return $$('.opts[data-k="' + k + '"] .opt[aria-pressed="true"]', form).map(function (b) { return b.textContent; }); }
     var en = window.I18N && I18N.lang === "en";
     function list(a) { return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + (en ? " and " : " y ") + a[a.length - 1]; }
+    var RULE = "━━━━━━━━━━━━━━━━━━━━";
+    function cap(x) { return x.charAt(0).toUpperCase() + x.slice(1); }
+    // WhatsApp: cercano, con emojis y *negritas* (WhatsApp las respeta)
+    function waMsg(who, que, cu, pr) {
+      var L = [];
+      if (en) {
+        L.push("👋 Hi Alex!" + (who ? " I'm *" + who + "*." : ""), "I saw your portfolio and I'd love to start a project with you 🎬", "");
+        if (que.length) L.push("📌 *What I need:* " + list(que).toLowerCase());
+        if (cu.length) L.push("🗓️ *Timing:* " + cu[0].toLowerCase());
+        if (pr.length) L.push("💰 *Budget:* " + pr[0]);
+        L.push("", "Shall we talk? 🙌");
+      } else {
+        L.push("👋 ¡Hola Alex!" + (who ? " Soy *" + who + "*." : ""), "Vi tu portafolio y quiero arrancar un proyecto contigo 🎬", "");
+        if (que.length) L.push("📌 *Lo que necesito:* " + list(que).toLowerCase());
+        if (cu.length) L.push("🗓️ *Para cuándo:* " + cu[0].toLowerCase());
+        if (pr.length) L.push("💰 *Presupuesto:* " + pr[0].toLowerCase());
+        L.push("", "¿Hablamos? 🙌");
+      }
+      return L.join("\n");
+    }
+    // correo: texto plano (es lo único que deja un enlace mailto), ordenado como una ficha
+    function mailMsg(who, que, cu, pr, any) {
+      var sub = en ? (who ? "🎬 New project · " + who : "🎬 I want to make a project with you") : (who ? "🎬 Proyecto nuevo · " + who : "🎬 Quiero hacer un proyecto contigo");
+      var L = [en ? "Hi Alex 👋" : "Hola Alex 👋", ""];
+      if (any) {
+        L.push(en ? "I'm writing from your portfolio. Here's my brief:" : "Te escribo desde tu portafolio. Este es mi pedido:", "", RULE, en ? "🎬  MY PROJECT" : "🎬  MI PROYECTO", RULE);
+        if (who) L.push((en ? "👤  Who I am: " : "👤  Quién soy: ") + who);
+        if (que.length) L.push((en ? "📌  What I need: " : "📌  Lo que necesito: ") + cap(list(que).toLowerCase()));
+        if (cu.length) L.push((en ? "🗓️  Timing: " : "🗓️  Para cuándo: ") + cu[0]);
+        if (pr.length) L.push((en ? "💰  Budget: " : "💰  Presupuesto: ") + pr[0]);
+        L.push(RULE, "");
+      } else L.push(en ? "I saw your portfolio and I'd love to talk about a project with you 🎬" : "Vi tu portafolio y quiero hablar de un proyecto contigo 🎬", "");
+      L.push(en ? "✍️  The idea in a few words:" : "✍️  La idea en pocas palabras:", en ? "(tell me what you want to achieve, references or links)" : "(cuéntame qué quieres lograr, referencias o links)", "", en ? "Talk soon! 🙌" : "¡Quedo pendiente! 🙌");
+      if (who) L.push(who);
+      return { sub: sub, body: L.join("\n") };
+    }
+    var view = "wa";
     function build() {
       var que = picked("que"), cu = picked("cuando"), pr = picked("presupuesto"), who = name.value.trim();
       var any = que.length || cu.length || pr.length || who;
-      var lines = [en ? "Hi Alex" + (who ? ", I'm " + who : "") + ". I saw your portfolio." : "Hola Alex" + (who ? ", soy " + who : "") + ". Vi tu portafolio."];
-      if (que.length) lines.push((en ? "I need: " : "Necesito: ") + list(que).toLowerCase() + ".");
-      if (cu.length) lines.push((en ? "Timing: " : "Para: ") + cu[0].toLowerCase() + ".");
-      if (pr.length) lines.push((en ? "Budget: " + pr[0] : "Presupuesto: " + pr[0].toLowerCase()) + ".");
-      var msg = any ? lines.join("\n") : tr(C.mensajeWhatsapp);
+      var msg = any ? waMsg(who, que, cu, pr) : tr(C.mensajeWhatsapp);
       wa.href = waLink(msg);
-      out.textContent = msg;
+      out.innerHTML = esc(msg).replace(/\*([^*\n]+)\*/g, "<b>$1</b>");
+      if (mail && C.correo) {
+        var em = mailMsg(who, que, cu, pr, any);
+        mail.href = "mailto:" + C.correo + "?subject=" + encodeURIComponent(em.sub) + "&body=" + encodeURIComponent(em.body);
+        $("#bm-to").textContent = C.correo; $("#bm-sub").textContent = em.sub; $("#bm-body").textContent = em.body;
+        mLabel.textContent = tr(any ? "Enviar mi pedido por correo" : "Escríbeme un correo");
+      }
       form.classList.toggle("ready", !!any);
-      label.textContent = any ? "Enviar mi pedido por WhatsApp" : "Escríbeme por WhatsApp";
+      label.textContent = tr(any ? "Enviar mi pedido por WhatsApp" : "Escríbeme por WhatsApp");
     }
+    // pestañas de la vista previa: cómo llega por WhatsApp y cómo llega por correo
+    $$(".bo-t", form).forEach(function (t) {
+      t.addEventListener("click", function () {
+        view = t.dataset.v;
+        $$(".bo-t", form).forEach(function (x) { x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+        out.hidden = view !== "wa"; if (mBox) mBox.hidden = view !== "mail";
+      });
+    });
     form.addEventListener("click", function (e) {
       var b = e.target.closest(".opt"); if (!b) return;
       var box = b.parentNode, on = b.getAttribute("aria-pressed") !== "true";

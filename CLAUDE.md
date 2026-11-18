@@ -179,3 +179,9 @@
 - Marcado en js/shell.js (TOP), lógica en experiencia.js §2 (`camSelect`, `camStep`, `camGo`), CSS en style.css «menú: el respaldo de una cámara» (todas las reglas van con prefijo `.mnu ` para que gen_light.py las salte).
 - Ojo con nombres que ya existían en el sitio: `.rec` (puntito rojo), `.sel`, y la función `step` de la sala. Por eso el estado es `.is-rec`, la fila elegida `.cam-on` y las funciones llevan prefijo `cam`.
 - Celular (≤900px): sin vista previa; la rueda y los botones quedan debajo de la pantalla; los switches de tema/idioma viven en `#mnu-prefs`.
+
+## Contacto: WhatsApp + correo (nov. 2026)
+- «Arma tu pedido» (main.js, función `brief`) arma DOS mensajes con lo que el visitante elige: `waMsg` (WhatsApp, con emojis y *negritas* que WhatsApp respeta) y `mailMsg` (correo: asunto «🎬 Proyecto nuevo · nombre» y cuerpo tipo ficha con separadores ━━━ y emojis, más un espacio para que cuente la idea).
+- Botones en contacto.html: `#wa` y `#mail` (mailto a `D.contacto.correo`), más la línea «o escríbeme directo a…». La vista previa tiene pestañas WhatsApp / Correo (`.bo-t`, `.bo-wa`, `.bo-mail`).
+- Límite: un enlace mailto solo lleva TEXTO PLANO (sin colores, imágenes ni HTML). Un correo con diseño de verdad necesita un servicio de envío (EmailJS, Formspree o Resend con una función de Netlify) y la cuenta de Alex.
+- El mensaje por defecto (`mensajeWhatsapp` en data.js) también lleva emojis; su traducción en i18n.js usa la frase exacta.

@@ -7,7 +7,7 @@ window.PORTFOLIO = {
     correo: "alexpinocaro@gmail.com",
     ciudad: "Pereira, Risaralda",
     whatsapp: "573042969936", // mensaje inicial abajo
-    mensajeWhatsapp: "Hola Alex, vi tu portafolio y quiero hablar de un proyecto.", // mensaje si no eligen nada
+    mensajeWhatsapp: "👋 ¡Hola Alex! Vi tu portafolio y quiero hablar de un proyecto contigo 🎬", // mensaje si no eligen nada (WhatsApp y correo)
     /* "Arma tu pedido": tres preguntas rápidas que llenan el mensaje de WhatsApp.
        Cambia, quita o agrega opciones. Si borras "presupuesto", esa pregunta desaparece. */
     brief: {
