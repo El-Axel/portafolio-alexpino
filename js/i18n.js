@@ -107,7 +107,6 @@
     "Serie documental para televisión": "Documentary series for TV",
     "Escena 00 · Toma 01": "Scene 00 · Take 01",
     "Bienvenido al set.": "Welcome to the set.",
-    "Diseñador crossmedia · Director audiovisual": "Crossmedia designer · Video director",
     "Encender el PC": "Turn on the PC",
     "Enciende el PC": "Turn on the PC",
     "Dale play": "Hit play",

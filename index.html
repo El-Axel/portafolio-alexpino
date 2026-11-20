@@ -67,7 +67,7 @@
     <video id="set-scr" src="assets/set/pantalla.mp4" muted loop playsinline preload="auto" aria-hidden="true" class="set-src"></video>
     <div class="set-ui">
       <div class="set-bar"><b>Alex Pino</b><span class="set-r"><button class="set-chip" id="set-snd" type="button" aria-pressed="false"><i class="set-snd-i" aria-hidden="true"></i>Sonido</button><button class="set-chip" id="set-skip" type="button"><span class="lg">Saltar al portafolio</span><span class="sm">Saltar</span></button></span></div>
-      <div class="set-hello" id="set-hello"><h2 id="set-t">Bienvenido al set.</h2><p>Diseñador crossmedia · Director audiovisual</p><button class="set-chip set-power" id="set-power" type="button"><i aria-hidden="true">⏻</i> Encender el PC</button></div>
+      <div class="set-hello" id="set-hello"><h2 id="set-t">Bienvenido al set.</h2><p>Diseñador Crossmedia</p><button class="set-chip set-power" id="set-power" type="button"><i aria-hidden="true">⏻</i> Encender el PC</button></div>
       <button class="set-hit" id="set-hit-pc" type="button" aria-label="Encender el PC"></button>
       <span class="set-ring" id="set-ring" aria-hidden="true"></span>
       <span class="set-hint" id="set-hint-pc" aria-hidden="true">Enciende el PC</span>
@@ -92,6 +92,23 @@
         <div class="nle-row"><i>A1</i><div class="nle-lane a"><span class="nle-wave"></span></div></div>
         <div class="nle-headwrap"><span class="nle-head" id="nle-head"></span></div>
       </div>
+    </div>
+    <!-- logo final: el contorno se dibuja → el color sube → el isotipo se acomoda → el nombre sale desde abajo (CSS en la sección 36, se dispara con .go) -->
+    <div class="set-logo" id="set-logo" aria-hidden="true">
+      <svg viewBox="0 0 800 450" focusable="false">
+        <defs>
+          <linearGradient id="lg-sand" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F8DC9B"/><stop offset=".48" stop-color="#F2C572"/><stop offset="1" stop-color="#F29863"/></linearGradient>
+          <clipPath id="lg-cn"><rect x="100" y="310" width="600" height="56"/></clipPath>
+          <clipPath id="lg-cs"><rect x="100" y="376" width="600" height="30"/></clipPath>
+          <clipPath id="lg-cf" clipPathUnits="userSpaceOnUse"><rect class="lg-fc" x="90" y="60" width="320" height="345"/></clipPath>
+        </defs>
+        <g class="lg-mv"><g transform="translate(400 175) scale(.5) translate(-248 -230)">
+          <path class="lg-fill" d="M117 384 Q106 384 111 374 L246 104 Q262 72 278 104 L331 230 C368 244 389 288 387 322 C385 362 357 389 319 389 C288 389 263 373 257 352 C254 340 262 333 271 341 C283 351 300 355 317 351 C337 345 345 323 341 300 C337 276 323 259 304 259 C279 259 259 285 247 318 C239 340 233 362 227 375 C200 383 150 384 117 384 Z" fill="url(#lg-sand)" clip-path="url(#lg-cf)"/>
+          <path class="lg-stroke" pathLength="1" d="M117 384 Q106 384 111 374 L246 104 Q262 72 278 104 L331 230 C368 244 389 288 387 322 C385 362 357 389 319 389 C288 389 263 373 257 352 C254 340 262 333 271 341 C283 351 300 355 317 351 C337 345 345 323 341 300 C337 276 323 259 304 259 C279 259 259 285 247 318 C239 340 233 362 227 375 C200 383 150 384 117 384 Z"/>
+        </g></g>
+        <g clip-path="url(#lg-cn)"><text class="lg-wm" x="400" y="352" text-anchor="middle">ALEX PINO</text></g>
+        <g clip-path="url(#lg-cs)"><text class="lg-sub" id="set-logo-sub" x="400" y="398" text-anchor="middle">DISEÑADOR CROSSMEDIA</text></g>
+      </svg>
     </div>
     <div class="set-flash" id="set-flash" aria-hidden="true"></div>
     <div class="set-shutter" aria-hidden="true"><i class="t"></i><i class="b"></i></div>

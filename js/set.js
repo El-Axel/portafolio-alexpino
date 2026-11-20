@@ -5,8 +5,9 @@
    3 · Pantallas: izquierda = reproductor con el Play; derecha = recap de proyectos.
    4 · Play: dolly de 1 s directo a la pantalla izquierda (pantallas rastreadas cuadro a cuadro).
    5 · Edición en vivo: dentro del PC está abierto el editor; leader 3·2·1, el
-       tráiler corre en el monitor de programa, los títulos son clips de la pista V2.
-   6 · El monitor de programa llena la pantalla, destello, obturador y portada.
+       tráiler (24,6 s, música opcional) corre en el monitor de programa, los títulos son clips de la pista V2.
+   6 · Fundido a negro, el editor se disuelve y aparece el logo animado (contorno → relleno → nombre).
+   7 · Destello, obturador y portada.
    Sale al entrar desde fuera del sitio y en cada recarga; no al volver al Inicio desde otra página del portafolio (gate en el <head> de index.html). «Saltar» o Esc entra directo. Sin «reducir movimiento».
    Las pantallas se dibujan como LUZ (modo trama): el humo pasa por delante y alumbran el cuarto.
    Medios en assets/set/ (escena generada con IA en Magnific; reemplazable por el set real).
@@ -38,10 +39,10 @@
 
     /* ---------- sonido: apagado por defecto, sutil ---------- */
     var sound = false, AC = null, buf = {}, room = null, roomGain = null;
-    var SFX = { room: .5, power: .7, screens: .55, dolly: .6, play: .6, shutter: .55, hit: .6, riser: .5 };
+    var SFX = { room: .5, power: .7, screens: .55, dolly: .6, play: .6, shutter: .55, hit: .4, music: .6 };
     function ensureAudio() {
       if (AC) return; AC = new (window.AudioContext || window.webkitAudioContext)();
-      Object.keys(SFX).forEach(function (k) { fetch("assets/set/sfx/" + k + ".mp3").then(function (r) { return r.arrayBuffer(); }).then(function (a) { return AC.decodeAudioData(a); }).then(function (b) { buf[k] = b; if (k === "room" && sound) startRoom(); }).catch(function () {}); });
+      Object.keys(SFX).forEach(function (k) { fetch("assets/set/sfx/" + k + ".mp3").then(function (r) { return r.arrayBuffer(); }).then(function (a) { return AC.decodeAudioData(a); }).then(function (b) { buf[k] = b; if (k === "room" && sound) startRoom(); if (k === "music" && sound) musicPlay(); }).catch(function () {}); });
     }
     function sfx(k, delay, len) {
       if (!sound || !AC || !buf[k]) return; var s = AC.createBufferSource(), g = AC.createGain(), t = AC.currentTime + (delay || 0);
@@ -51,10 +52,25 @@
     function startRoom() { if (room || !buf.room) return; room = AC.createBufferSource(); room.buffer = buf.room; room.loop = true; roomGain = AC.createGain(); roomGain.gain.value = 0; room.connect(roomGain); roomGain.connect(AC.destination); room.start(); roomGain.gain.linearRampToValueAtTime(SFX.room, AC.currentTime + 2.5); }
     function stopRoom(d) { if (!roomGain) return; roomGain.gain.linearRampToValueAtTime(0, AC.currentTime + (d || .6)); var r = room; room = null; roomGain = null; setTimeout(function () { try { r.stop(); } catch (e) {} }, (d || .6) * 1000 + 100); }
     function beep(f, d, v) { if (!sound || !AC) return; var o = AC.createOscillator(), g = AC.createGain(); o.type = "sine"; o.frequency.value = f; g.gain.value = v || .05; g.gain.exponentialRampToValueAtTime(.0001, AC.currentTime + d); o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime + d); }
+    /* música del tráiler: arranca con el montaje y se puede encender a mitad (entra en el segundo que va) */
+    var mSrc = null, mGain = null;
+    function musicPlay() {
+      if (!sound || !AC || !buf.music || mSrc || (state !== "edit" && state !== "logo") || !montOn) return;
+      var off = state === "logo" ? VID + (performance.now() - logoT) / 1000 : (mont.currentTime || 0);
+      if (off > buf.music.duration - .5) return;
+      mSrc = AC.createBufferSource(); mGain = AC.createGain(); mSrc.buffer = buf.music; mGain.gain.value = 0;
+      mSrc.connect(mGain); mGain.connect(AC.destination); mSrc.start(0, Math.max(0, off));
+      mGain.gain.linearRampToValueAtTime(SFX.music, AC.currentTime + .8);
+    }
+    function musicStop(d) {
+      if (!mSrc) return; var s_ = mSrc, g = mGain; mSrc = null; mGain = null; d = d || .3;
+      g.gain.cancelScheduledValues(AC.currentTime); g.gain.setValueAtTime(g.gain.value, AC.currentTime); g.gain.linearRampToValueAtTime(0, AC.currentTime + d);
+      setTimeout(function () { try { s_.stop(); } catch (e) {} }, d * 1000 + 80);
+    }
     $("set-snd").addEventListener("click", function () {
       sound = !sound; this.setAttribute("aria-pressed", sound);
       ensureAudio(); if (AC.state === "suspended") AC.resume();
-      if (sound) startRoom(); else stopRoom();
+      if (sound) { if (state !== "edit" && state !== "logo") startRoom(); musicPlay(); } else { stopRoom(); musicStop(.3); }
     });
 
     /* ---------- encuadre ---------- */
@@ -147,11 +163,13 @@
     dol.addEventListener("ended", function () { if (state === "dolly") startEdit(); });
 
     /* ---------- Edición en vivo ---------- */
-    var LEAD = 1.5, END = 8.9; // en segundos de la línea de tiempo; el montaje (7,4 s) empieza en LEAD
+    // tiempos en segundos. Tráiler (montaje.mp4) de VID s con fundidos a negro entre capítulos; el logo sale después.
+    var LEAD = 1.8, PER = .6, VID = 24.64, END = LEAD + VID; // el montaje empieza en LEAD
+    var BEATS = [[1.8, 4.56], [6.16, 9.52], [11.12, 14.32], [15.92, 20.44], [20.44, 24.64]]; // planos (empuje lento de cámara por plano)
     // segmentos del montaje (segundos del video): planos y títulos (pista V2)
-    var SHOTS = [[.6, 1.6, "telecafe", "Por encima de la mesa"], [2.1, 3.1, "paisajes", "Paisajes Íntimos"], [3.6, 4.6, "austin", "Austin Marchese"], [5.1, 5.6, "lacepa", "La Cepa"], [5.6, 6.1, "pregon", "Pregón de la plaza"], [6.1, 7.4, "campo", "Por encima de la mesa"]];
-    var TITLES = [[0, .6, "Alex Pino presenta", "s"], [1.6, 2.1, "Grabo."], [3.1, 3.6, "Edito."], [4.6, 5.1, "Cuento historias."], [6.1, 7.4, "¿Quién soy?", "b"]];
-    var nle = $("nle"), v1 = $("nle-v1"), v2 = $("nle-v2"), ruler = $("nle-ruler"), head = $("nle-head"), lead = $("nle-lead"), leadN = $("nle-n"), ttl = $("nle-ttl"), nTc = $("nle-tc");
+    var SHOTS = [[1.8, 4.56, "telecafe", "Por encima de la mesa"], [6.16, 9.52, "paisajes", "Paisajes Íntimos"], [11.12, 14.32, "austin", "Austin Marchese"], [15.92, 18.2, "lacepa", "La Cepa"], [18.2, 20.44, "pregon", "Pregón de la plaza"], [20.44, 24.64, "campo", "Por encima de la mesa"]];
+    var TITLES = [[.25, 1.65, "Alex Pino presenta", "s"], [4.7, 6.1, "Grabo."], [9.66, 11.06, "Edito."], [14.46, 15.86, "Cuento historias."], [21.3, 24.1, "¿Quién soy?", "b"]];
+    var logoEl = $("set-logo"), logoSub = $("set-logo-sub"), logoT = 0, nle = $("nle"), v1 = $("nle-v1"), v2 = $("nle-v2"), ruler = $("nle-ruler"), head = $("nle-head"), lead = $("nle-lead"), leadN = $("nle-n"), ttl = $("nle-ttl"), nTc = $("nle-tc");
     function pct(t) { return (t / END * 100).toFixed(3) + "%"; }
     var html = '<span class="nle-clip lead" style="left:0;width:calc(' + pct(LEAD) + ' - 2px)"><em>Leader 3·2·1</em></span>';
     SHOTS.forEach(function (s, i) { html += '<span class="nle-clip" style="left:' + pct(LEAD + s[0]) + ';width:calc(' + pct(s[1] - s[0]) + ' - 2px);--i:' + (i + 1) + '"><img src="assets/set/clips/' + s[2] + '.jpg" alt=""><em>' + s[3] + "</em></span>"; });
@@ -159,30 +177,42 @@
     v2.innerHTML = TITLES.map(function (t, i) { return '<span class="nle-clip ttl" style="left:' + pct(LEAD + t[0]) + ';width:calc(' + pct(t[1] - t[0]) + ' - 2px);--i:' + (i + 2) + '"><em>T · ' + T_(t[2]) + "</em></span>"; }).join("");
     ttl.innerHTML = TITLES.map(function (t) { return '<span class="' + (t[3] || "") + '">' + T_(t[2]) + "</span>"; }).join("");
     var ttlEls = ttl.children, rh = "";
-    for (var r = 0; r <= 8; r++) rh += '<span style="left:' + pct(r) + '">' + tc(r).slice(3, 8) + "</span>";
+    for (var r = 0; r <= END; r += 5) rh += '<span style="left:' + pct(r) + '">' + tc(r).slice(3, 8) + "</span>";
     ruler.innerHTML = rh;
-    var tEdit = 0, lastTitle = -1, lastN = 0, riser = false, montOn = false, outT = 0;
+    if (logoSub) logoSub.textContent = T_("Diseñador Crossmedia").toUpperCase();
+    var tEdit = 0, lastTitle = -1, lastN = 0, montOn = false;
     function startEdit() {
-      state = "edit"; tEdit = performance.now(); lastTitle = -1; lastN = 0; riser = false; montOn = false;
-      set.classList.add("editing");
+      state = "edit"; tEdit = performance.now(); lastTitle = -1; lastN = 0; montOn = false;
+      set.classList.add("editing"); stopRoom(.8);
       try { mont.currentTime = 0; } catch (e) {}
     }
     function editTime() { return montOn ? LEAD + (mont.currentTime || 0) : (performance.now() - tEdit) / 1000; }
     function tickEdit() {
       var t = editTime();
       if (!montOn && t >= LEAD) { montOn = true; play(mont); }
+      if (montOn) musicPlay();
       // leader 3·2·1
-      var n = t < LEAD ? Math.ceil((LEAD - t) / .5) : 0; // 3·2·1, medio segundo cada uno
+      var n = t < LEAD ? Math.ceil((LEAD - t) / PER) : 0;
       lead.classList.toggle("on", n > 0);
       if (n !== lastN) { lastN = n; if (n > 0) { leadN.textContent = n; leadN.classList.remove("tick"); void leadN.offsetWidth; leadN.classList.add("tick"); beep(1000, .12, .035); } }
       // títulos (pista V2), sincronizados con el montaje
       var m = t - LEAD, on = -1;
       if (m >= 0) for (var i = 0; i < TITLES.length; i++) if (m >= TITLES[i][0] && m < TITLES[i][1]) on = i;
       if (on !== lastTitle) { for (var j = 0; j < ttlEls.length; j++) ttlEls[j].classList.toggle("on", j === on); if (on >= 0) sfx("hit"); lastTitle = on; }
-      if (!riser && m >= 5.2) { riser = true; sfx("riser"); }
+      // empuje lento de cámara dentro de cada plano
+      var z = 1;
+      for (var q = 0; q < BEATS.length; q++) if (m >= BEATS[q][0] && m < BEATS[q][1]) z = 1 + .045 * ((m - BEATS[q][0]) / (BEATS[q][1] - BEATS[q][0]));
+      mont.style.transform = z > 1 ? "scale(" + z.toFixed(4) + ")" : "";
       head.style.left = pct(Math.min(END, t));
       nTc.textContent = tc(t);
-      if (t >= END && state === "edit") { state = "out"; outT = performance.now(); set.classList.add("exiting"); setTimeout(function () { finish(false); }, 650); }
+      if ((t >= END - .03 || mont.ended) && state === "edit") startLogo();
+    }
+    /* fundido a negro → el editor se disuelve → logo animado → obturador y portada */
+    function startLogo() {
+      state = "logo"; logoT = performance.now(); mont.style.transform = ""; musicPlay();
+      set.classList.add("logo");
+      setTimeout(function () { logoEl.classList.add("go"); }, 700);
+      setTimeout(function () { finish(false); }, 700 + 4700);
     }
 
     /* ---------- salida a la portada ---------- */
@@ -190,7 +220,7 @@
     function finish(fast) {
       if (done) return; done = true;
       try { sessionStorage.setItem("ap-rec", "1"); localStorage.setItem("ap-set", "1"); } catch (e) {}
-      sfx("shutter"); stopRoom(1.2);
+      sfx("shutter"); stopRoom(1.2); musicStop(1.1);
       root.classList.add("revealing");
       set.classList.add("opening");
       flash.style.opacity = fast ? 0 : .85;
@@ -221,9 +251,9 @@
       var V = view(), sinceS = (now - tState) / 1000;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = "#030405"; ctx.fillRect(0, 0, W, H);
       var z = 1, cx = W / 2, cy = H / 2, src = amb, fi = 0;
-      if (state === "dolly" || state === "edit" || state === "out") { src = dol; fi = Math.min(TRK.length - 1, (dol.currentTime || 0) * 84); }
+      if (state === "dolly" || state === "edit" || state === "logo") { src = dol; fi = Math.min(TRK.length - 1, (dol.currentTime || 0) * 84); }
       // un solo movimiento directo a la pantalla izquierda
-      if (state === "dolly" || state === "edit" || state === "out") {
+      if (state === "dolly" || state === "edit" || state === "logo") {
         var k = state === "dolly" ? ease(clamp((dol.currentTime || 0) / (dol.duration || 1.13), 0, 1)) : 1;
         var i0 = Math.floor(fi), tt = fi - i0, P = TRK[i0][0], Q = TRK[Math.min(TRK.length - 1, i0 + 1)][0];
         var L = [P[0] + (Q[0] - P[0]) * tt, P[1] + (Q[1] - P[1]) * tt, P[2] + (Q[2] - P[2]) * tt, P[3] + (Q[3] - P[3]) * tt];
@@ -231,7 +261,7 @@
         z = 1 + (Math.max(W / (b[0] - a[0]), H / (b[1] - a[1])) * 1.03 - 1) * k;
         cx = W / 2 + ((a[0] + b[0]) / 2 - W / 2) * k; cy = H / 2 + ((a[1] + b[1]) / 2 - H / 2) * k;
       }
-      if (state !== "edit" && state !== "out") {
+      if (state !== "edit" && state !== "logo") {
         ctx.setTransform(dpr * z, 0, 0, dpr * z, dpr * (W / 2 - cx * z), dpr * (H / 2 - cy * z));
         ctx.translate(V.ox, V.oy); ctx.scale(V.s, V.s);
         if (src.readyState >= 2) ctx.drawImage(src, 0, 0, IW, IH); else if (poster.complete && poster.naturalWidth) ctx.drawImage(poster, 0, 0, IW, IH);
